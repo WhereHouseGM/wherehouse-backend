@@ -22,7 +22,11 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^3.6.1",
     "@typescript-eslint/parser": "^3.6.1",
+    "del": "^5.1.0",
     "eslint": "^7.4.0",
+    "gulp": "^4.0.2",
+    "gulp-eslint": "^6.0.0",
+    "gulp-typescript": "^6.0.0-alpha.1",
     "prettier": "^2.0.5",
     "typescript": "^3.9.6"
   }
