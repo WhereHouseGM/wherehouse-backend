@@ -3,7 +3,7 @@ import { DataTypes } from 'sequelize';
 import Warehouse from './warehouse';
 
 @Table
-class WarehouseLocation extends Model<WarehouseLocation> {
+class WarehouseAttachment extends Model<WarehouseAttachment> {
     @Column(DataTypes.INTEGER)
     @PrimaryKey
     @AutoIncrement
@@ -11,12 +11,9 @@ class WarehouseLocation extends Model<WarehouseLocation> {
 
     @BelongsTo(() => Warehouse)
     warehouse: Warehouse;
-  
-    @Column(DataTypes.INTEGER)
-    latitude: number;
 
-    @Column(DataTypes.STRING(1024))
-    longitude: string;
+    @Column(DataTypes.STRING(30))
+    url: string;
 }
 
-export default WarehouseLocation;
+export default WarehouseAttachment;
