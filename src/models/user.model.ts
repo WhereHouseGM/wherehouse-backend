@@ -2,7 +2,7 @@ import { Table, Column, Model, PrimaryKey, AllowNull, AutoIncrement, Default } f
 import { DataTypes } from 'sequelize';
 
 @Table
-class UserModel extends Model<UserModel> {
+class User extends Model<User> {
   @Column(DataTypes.INTEGER)
   @PrimaryKey
   @AutoIncrement
@@ -27,3 +27,5 @@ class UserModel extends Model<UserModel> {
   @Default('USER')
   role: string;
 }
+
+export default User;
