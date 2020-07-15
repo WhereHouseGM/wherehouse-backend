@@ -15,5 +15,9 @@ export default (sequelize, DataTypes) => {
     timestamps: false
   });
 
+  UserDemand.associate = (models) => {
+    UserDemand.belongsTo(models.warehouseType);
+  };
+  
   return UserDemand;
 }
