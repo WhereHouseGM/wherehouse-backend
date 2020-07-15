@@ -1,6 +1,6 @@
 import { Table, Column, PrimaryKey, AutoIncrement, Model, BelongsTo } from 'sequelize-typescript';
 import { DataTypes } from 'sequelize';
-import User from './user.model';
+import User from './user';
 
 @Table
 class WarehouseReview extends Model<WarehouseReview> {

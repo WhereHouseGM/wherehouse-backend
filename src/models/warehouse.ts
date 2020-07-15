@@ -1,7 +1,7 @@
 import { Table, Column, Model, PrimaryKey, AutoIncrement, BelongsTo, Default, AllowNull } from 'sequelize-typescript';
 import { DataTypes } from 'sequelize';
-import WarehouseType from './warehouse-type.model';
-import User from './user.model';
+import WarehouseType from './warehouse-type';
+import User from './user';
 
 @Table
 class Warehouse extends Model<Warehouse> {
@@ -100,4 +100,4 @@ class Warehouse extends Model<Warehouse> {
   canPark: boolean;
 }
 
-export default Warehouse;
+export default Warehouse
