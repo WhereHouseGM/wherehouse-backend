@@ -2,30 +2,38 @@ import { Table, Column, Model, PrimaryKey, AllowNull, AutoIncrement, Default } f
 import { DataTypes } from 'sequelize';
 
 @Table
-class User extends Model<User> {
-    @Column(DataTypes.INTEGER)
+class UserModel extends Model<UserModel> {
     @PrimaryKey
     @AutoIncrement
+    @Column(DataTypes.INTEGER)
     id: number;
+
     @Column(DataTypes.STRING(10))
     name: string;
+
     @Column(DataTypes.STRING(64))
     password: string;
+
     @Column(DataTypes.STRING(30))
     email: string;
+
     @Column(DataTypes.ENUM('SHIPPER', 'OWNER'))
     type: string;
-    @Column(DataTypes.STRING(20))
+
     @AllowNull(true)
+    @Column(DataTypes.STRING(20))
     telephoneNumber?: string;
-    @Column(DataTypes.STRING(20))
+
     @AllowNull(true)
+    @Column(DataTypes.STRING(20))
     companyName?: string;
+
     @Column(DataTypes.STRING(20))
     phoneNumber: string;
-    @Column(DataTypes.ENUM('USER', 'ADMIN'))
+
     @Default('USER')
+    @Column(DataTypes.ENUM('USER', 'ADMIN'))
     role: string;
 }
 
-export default User;
+export default UserModel;

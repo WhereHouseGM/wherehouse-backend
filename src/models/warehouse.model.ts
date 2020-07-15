@@ -1,23 +1,41 @@
-import { Table, Column, Model, PrimaryKey, AutoIncrement, BelongsTo, Default, AllowNull } from 'sequelize-typescript';
+import {
+    Table,
+    Column,
+    Model,
+    PrimaryKey,
+    AutoIncrement,
+    BelongsTo,
+    Default,
+    AllowNull,
+    ForeignKey,
+} from 'sequelize-typescript';
 import { DataTypes } from 'sequelize';
-import WarehouseType from './warehouse-type';
-import User from './user';
+import WarehouseTypeModel from './warehouse-type.model';
+import UserModel from './user.model';
 
 @Table
-class Warehouse extends Model<Warehouse> {
-    @Column(DataTypes.INTEGER)
+class WarehouseModel extends Model<WarehouseModel> {
     @PrimaryKey
     @AutoIncrement
+    @Column(DataTypes.INTEGER)
     id: number;
 
     @Column(DataTypes.BOOLEAN)
     canUse: boolean;
 
-    @BelongsTo(() => WarehouseType)
-    type: WarehouseType;
+    @ForeignKey(() => WarehouseTypeModel)
+    @Column(DataTypes.INTEGER)
+    typeId: number;
 
-    @BelongsTo(() => User)
-    owner: User;
+    @BelongsTo(() => WarehouseTypeModel)
+    type: WarehouseTypeModel;
+
+    @ForeignKey(() => UserModel)
+    @Column(DataTypes.INTEGER)
+    userId: number;
+
+    @BelongsTo(() => UserModel)
+    owner: UserModel;
 
     @Column(DataTypes.INTEGER)
     size: number;
@@ -40,8 +58,8 @@ class Warehouse extends Model<Warehouse> {
     @Column(DataTypes.TIME)
     closeAt: Date;
 
-    @Column(DataTypes.STRING(100))
     @AllowNull(true)
+    @Column(DataTypes.STRING(100))
     availableTimeDetail: string;
 
     @Column(DataTypes.INTEGER)
@@ -53,51 +71,51 @@ class Warehouse extends Model<Warehouse> {
     @Column(DataTypes.INTEGER)
     maintenanceFee: number;
 
-    @Column(DataTypes.INTEGER)
     @AllowNull(true)
+    @Column(DataTypes.INTEGER)
     minUseTerm: number;
 
-    @Column(DataTypes.BOOLEAN)
     @Default(false)
+    @Column(DataTypes.BOOLEAN)
     cctvExist: boolean;
 
-    @Column(DataTypes.BOOLEAN)
     @Default(false)
+    @Column(DataTypes.BOOLEAN)
     securityCompanyExist: boolean;
 
-    @Column(DataTypes.STRING(100))
     @AllowNull(true)
     @Default(null)
+    @Column(DataTypes.STRING(100))
     securityCompanyName: string;
 
-    @Column(DataTypes.BOOLEAN)
     @Default(false)
+    @Column(DataTypes.BOOLEAN)
     doorlockExist: boolean;
 
-    @Column(DataTypes.ENUM('HEATING', 'COOLING', 'NONE'))
     @Default('NONE')
+    @Column(DataTypes.ENUM('HEATING', 'COOLING', 'NONE'))
     airConditioningType: string;
 
-    @Column(DataTypes.BOOLEAN)
     @Default(false)
+    @Column(DataTypes.BOOLEAN)
     workerExist: boolean;
 
-    @Column(DataTypes.BOOLEAN)
     @Default(false)
+    @Column(DataTypes.BOOLEAN)
     insuranceExist: boolean;
 
-    @Column(DataTypes.STRING(100))
     @AllowNull(true)
     @Default(null)
+    @Column(DataTypes.STRING(100))
     insuranceName: string;
 
-    @Column(DataTypes.BOOLEAN)
     @Default(false)
+    @Column(DataTypes.BOOLEAN)
     canPickup: boolean;
 
-    @Column(DataTypes.BOOLEAN)
     @Default(false)
+    @Column(DataTypes.BOOLEAN)
     canPark: boolean;
 }
 
-export default Warehouse;
+export default WarehouseModel;

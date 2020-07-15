@@ -1,33 +1,47 @@
-import { Table, Column, Model, PrimaryKey, AutoIncrement, BelongsTo } from 'sequelize-typescript';
+import { Table, Column, Model, PrimaryKey, AutoIncrement, BelongsTo, ForeignKey } from 'sequelize-typescript';
 import { DataTypes } from 'sequelize';
-import WarehouseType from './warehouse-type';
+import WarehouseTypeModel from './warehouse-type.model';
 
 @Table
-class UserDemand extends Model<UserDemand> {
-    @Column(DataTypes.INTEGER)
+class UserDemandModel extends Model<UserDemandModel> {
     @PrimaryKey
     @AutoIncrement
+    @Column(DataTypes.INTEGER)
     id: number;
+
     @Column(DataTypes.INTEGER)
     minSize: number;
+
     @Column(DataTypes.INTEGER)
     maxSize: number;
+
     @Column(DataTypes.DATE)
     startDate: Date;
+
     @Column(DataTypes.DATE)
     endDate: Date;
+
     @Column(DataTypes.STRING(20))
     username: string;
+
     @Column(DataTypes.STRING(20))
     companyName: string;
+
     @Column(DataTypes.STRING(20))
     phoneNumber: string;
+
     @Column(DataTypes.STRING(30))
     email: string;
+
     @Column(DataTypes.STRING(1024))
     description: string;
-    @BelongsTo(() => WarehouseType)
-    type: WarehouseType;
+
+    @ForeignKey(() => WarehouseTypeModel)
+    @Column(DataTypes.INTEGER)
+    typeId: number;
+
+    @BelongsTo(() => WarehouseTypeModel)
+    type: WarehouseTypeModel;
 }
 
-export default UserDemand;
+export default UserDemandModel;

@@ -2,13 +2,14 @@ import { Table, Column, PrimaryKey, AutoIncrement, Model } from 'sequelize-types
 import { DataTypes } from 'sequelize';
 
 @Table
-class WarehouseType extends Model<WarehouseType> {
-    @Column(DataTypes.INTEGER)
+class WarehouseTypeModel extends Model<WarehouseTypeModel> {
     @PrimaryKey
     @AutoIncrement
+    @Column(DataTypes.INTEGER)
     id: number;
+
     @Column(DataTypes.STRING(20))
     name: string;
 }
 
-export default WarehouseType;
+export default WarehouseTypeModel;
