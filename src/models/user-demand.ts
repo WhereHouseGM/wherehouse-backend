@@ -1,4 +1,4 @@
-import { Table, Column, Model, PrimaryKey, AllowNull, AutoIncrement, Default, BelongsTo } from 'sequelize-typescript';
+import { Table, Column, Model, PrimaryKey, AutoIncrement, BelongsTo } from 'sequelize-typescript';
 import { DataTypes } from 'sequelize';
 import WarehouseType from './warehouse-type.model';
 
