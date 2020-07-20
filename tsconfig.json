@@ -9,6 +9,7 @@
 		"baseUrl": "./src",
 		"paths": {
 			"@configs": ["configs"],
+			"@configs/*": ["configs/*"],
 			"@models": ["models"],
 			"@resources": ["resources"],
 			"@resources/*": ["resources/*"]
