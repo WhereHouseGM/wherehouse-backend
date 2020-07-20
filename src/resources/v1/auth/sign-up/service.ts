@@ -5,18 +5,18 @@ import db from '@models';
 
 const models = db.models;
 
-export function validateRequest(body: any) {
-  try {
-    const result = signUpRequestValidator.validate(body);
+export function validateRequest(body: any): void {
+    try {
+        const result = signUpRequestValidator.validate(body);
 
-    if(result.error) throw new Error(result.error)
-  } catch(error) {
-    console.error(error)
-    throw error
-  }
+        if(result.error) throw new Error(result.error);
+    } catch(error) {
+        console.error(error);
+        throw error;
+    }
 }
 
 export async function createUserAndBuildTokenResponse(body: any): Promise<TokenResponse> {
-  const newUser = await models['users'].create(body) as UserModel;
-  return buildTokenResponse(newUser.id);
+    const newUser = await models['users'].create(body) as UserModel;
+    return buildTokenResponse(newUser.id);
 }
