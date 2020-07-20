@@ -36,7 +36,6 @@ class UserModel extends Model<UserModel> {
     @Column(DataTypes.STRING(20))
     phoneNumber: string;
 
-    @AllowNull(false)
     @Default('USER')
     @Column(DataTypes.ENUM('USER', 'ADMIN'))
     role: string;
