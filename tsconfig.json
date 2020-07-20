@@ -11,6 +11,7 @@
 			"@configs": ["configs"],
 			"@configs/*": ["configs/*"],
 			"@models": ["models"],
+			"@models/*": ["models/*"],
 			"@resources": ["resources"],
 			"@resources/*": ["resources/*"]
 		}

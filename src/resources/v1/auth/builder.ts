@@ -1,13 +1,13 @@
 import * as jwt from 'jsonwebtoken';
 import authConfig from '@configs/auth';
 
-interface TokenResponse {
+export interface TokenResponse {
     accessToken: string;
     refreshToken: string;
     tokenType: string;
 }
 
-export default function (userId: number): TokenResponse {
+export function buildTokenResponse(userId: number): TokenResponse {
     const accessToken = jwt.sign({
         userId: userId,
         expiresIn: authConfig.jwt.accessTokenExpiresIn

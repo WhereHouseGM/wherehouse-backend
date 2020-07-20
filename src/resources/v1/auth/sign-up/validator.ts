@@ -1,6 +1,6 @@
 import * as Joi from 'joi';
 
-export default Joi.object({
+export const signUpRequestValidator = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string().min(64).max(64).required(),
