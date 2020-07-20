@@ -1,5 +1,6 @@
-import resources from './resources';
-import sequelize from "./models";
+import 'module-alias/register';
+import resources from '@resources';
+import db from "@models";
 import * as express from "express";
 import * as bodyParser from "body-parser";
 
@@ -7,9 +8,9 @@ const app = express();
 app.use(bodyParser.json());
 
 async function startServer(): Promise<void> {
-    await sequelize.sync();
+    await db.sync();
 
-    resources(app, sequelize.models);
+    resources(app);
 
     await app.listen(3000);
 

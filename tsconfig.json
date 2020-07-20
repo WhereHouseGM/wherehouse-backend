@@ -5,7 +5,14 @@
 		"module": "commonjs",
 		"outDir": "dist",
 		"sourceMap": true,
-		"strictNullChecks": true
+		"strictNullChecks": true,
+		"baseUrl": "./src",
+		"paths": {
+			"@configs": ["configs"],
+			"@models": ["models"],
+			"@resources": ["resources"],
+			"@resources/*": ["resources/*"]
+		}
 	},
 	"include": [
 		"src/**/*.ts"
