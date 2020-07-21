@@ -1,12 +1,16 @@
-import { HttpError } from './http-error';
-import { BadRequestError } from './bad-request-error';
+import { HttpError } from '@errors/http-error';
+import { BadRequestError } from '@errors/bad-request-error';
 import { NotFoundError } from '@errors/not-found-error';
+import { ConflictError } from '@errors/conflict-error';
 
 import { UserNotFoundError } from '@errors/user-not-found-error';
+import { EmailAlreadyExistError } from '@errors/email-already-exist-error';
 
 export default {
     HttpError,
     BadRequestError,
     NotFoundError,
-    UserNotFoundError
+    ConflictError,
+    UserNotFoundError,
+    EmailAlreadyExistError
 };

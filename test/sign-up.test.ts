@@ -36,7 +36,7 @@ describe('sign up', function () {
 
   it('failed due to invalid body', async function () {
     await db.sync({ force: true });
-    
+
     const signUpRequest = {
       name: "name",
       email: "email@naver.com",
@@ -52,4 +52,26 @@ describe('sign up', function () {
     expect(res.body).not.to.be.empty
     expect(res.body.message).not.to.be.empty
   })
+
+  it('failed due to dulicate email', async function() {
+    await db.sync({ force: true });
+
+    let res;
+    const signUpRequest = {
+      name: "name",
+      email: "email@naver.com",
+      password: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      type: "SHIPPER",
+      telephoneNumber: "027020123",
+      companyName: "company",
+      phoneNumber: "01034231234"
+    }
+
+    await signUp(signUpRequest)
+    res = await signUp(signUpRequest)
+
+    expect(res.status).to.equal(409)
+    expect(res.body).not.to.be.empty
+    expect(res.body.message).not.to.be.empty
+  });
 });

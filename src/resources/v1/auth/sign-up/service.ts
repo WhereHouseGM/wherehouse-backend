@@ -3,6 +3,7 @@ import UserModel from '@models/user.model';
 import { buildTokenResponse, TokenResponse } from '@resources/v1/auth/builder';
 import db from '@models';
 import { BadRequestError } from '@errors/bad-request-error';
+import { EmailAlreadyExistError } from '@errors/email-already-exist-error';
 
 const models = db.models;
 
@@ -18,6 +19,11 @@ export function validateRequest(body: any): void {
 }
 
 export async function createUserAndBuildTokenResponse(body: any): Promise<TokenResponse> {
-    const newUser = await models['users'].create(body) as UserModel;
-    return buildTokenResponse(newUser.id);
+    try {
+        const newUser = await models['users'].create(body) as UserModel;
+        return buildTokenResponse(newUser.id);
+    } catch(e) {
+        console.log(e);
+        throw new EmailAlreadyExistError();
+    }
 }
