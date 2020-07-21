@@ -10,7 +10,7 @@ export function validateRequest(body: any): void {
     try {
         const result = signUpRequestValidator.validate(body);
 
-        if(result.error) throw new BadRequestError(result.error);
+        if(result.error) throw new BadRequestError("회원가입에 필요한 정보를 다시 확인해주세요");
     } catch(error) {
         console.error(error);
         throw error;
