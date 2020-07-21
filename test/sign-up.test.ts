@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import app from '../dist/app';
 import {agent as request} from 'supertest';
+import db from '../dist/models'
 
 const signUpUrl = '/v1/auth/sign-up'
 
@@ -12,6 +13,8 @@ export async function signUp(signUpRequest) {
 
 describe('sign up', function () {
   it('success', async function () {
+    await db.sync({force: true});
+
     const signUpRequest = {
       name: "name",
       email: "email@naver.com",
@@ -32,6 +35,8 @@ describe('sign up', function () {
   })
 
   it('failed due to invalid body', async function () {
+    await db.sync({ force: true });
+    
     const signUpRequest = {
       name: "name",
       email: "email@naver.com",

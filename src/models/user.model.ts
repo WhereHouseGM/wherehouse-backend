@@ -16,6 +16,7 @@ class UserModel extends Model<UserModel> {
     @Column(DataTypes.STRING(64))
     password: string;
 
+    @Unique
     @AllowNull(false)
     @Column(DataTypes.STRING(30))
     email: string;
