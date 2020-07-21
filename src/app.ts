@@ -1,7 +1,6 @@
 import 'module-alias/register';
 import resources from '@resources';
 import * as express from "express";
-import { NextFunction } from 'express';
 import * as bodyParser from "body-parser";
 import { HttpError } from '@errors/http-error';
 
@@ -9,7 +8,7 @@ const app = express();
 app.use(bodyParser.json());
 resources(app);
 
-app.use(function(error: Error, req: express.Request, res: express.Response, next: NextFunction) {
+app.use(function(error: Error, req: express.Request, res: express.Response) {
     if (error instanceof HttpError) res.status(error.statusCode).send({ message: error.message, timestamp: error.timestamp });
     else {
         const httpError = new HttpError();
@@ -17,7 +16,7 @@ app.use(function(error: Error, req: express.Request, res: express.Response, next
     }
 });
 
-app.use(function(req: express.Request, res: express.Response, next: NextFunction) {
+app.use(function(req: express.Request, res: express.Response) {
     res.status(404).send({ message: "존재하지 않는 URL입니다" });
 });
 
