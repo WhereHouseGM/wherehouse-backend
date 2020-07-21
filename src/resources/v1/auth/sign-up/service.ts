@@ -2,6 +2,7 @@ import { signUpRequestValidator } from '@resources/v1/auth/sign-up/validator';
 import UserModel from '@models/user.model';
 import { buildTokenResponse, TokenResponse } from '@resources/v1/auth/builder';
 import db from '@models';
+import { BadRequestError } from '@errors/bad-request-error';
 
 const models = db.models;
 
@@ -9,7 +10,7 @@ export function validateRequest(body: any): void {
     try {
         const result = signUpRequestValidator.validate(body);
 
-        if(result.error) throw new Error(result.error);
+        if(result.error) throw new BadRequestError(result.error);
     } catch(error) {
         console.error(error);
         throw error;

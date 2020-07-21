@@ -12,7 +12,8 @@
   "_moduleAliases": {
     "@configs": "dist/configs",
     "@models": "dist/models",
-    "@resources": "dist/resources"
+    "@resources": "dist/resources",
+    "@errors": "dist/errors"
   },
   "repository": {
     "type": "git",

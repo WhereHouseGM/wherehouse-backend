@@ -1,5 +1,5 @@
-import app from './dist/app'
-import db from './dist/db'
+const app = require('./dist/app').default
+const db = require('./dist/models').default
 
 async function startServer() {
   await db.sync();

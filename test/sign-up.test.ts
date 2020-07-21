@@ -4,7 +4,7 @@ import {agent as request} from 'supertest';
 
 const signUpUrl = '/v1/auth/sign-up'
 
-function signUp(signUpRequest) {
+async function signUp(signUpRequest) {
   return request(app)
     .post(signUpUrl)
     .send(signUpRequest);
