@@ -1,7 +1,5 @@
 import * as express from "express";
 import { NextFunction } from 'express';
-import UserModel from '@models/user.model';
-import { UserNotFoundError } from "@errors/user-not-found-error";
 import { buildTokenResponse } from '@resources/v1/auth/builder';
 import { checkUserEmailAndPassword, validateRequest } from '@resources/v1/auth/sign-in/service';
 
