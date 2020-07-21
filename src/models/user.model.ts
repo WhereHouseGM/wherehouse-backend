@@ -1,4 +1,4 @@
-import { Table, Column, Model, PrimaryKey, AllowNull, AutoIncrement, Default } from 'sequelize-typescript';
+import { Table, Column, Model, PrimaryKey, AllowNull, AutoIncrement, Default, Unique } from 'sequelize-typescript';
 import { DataTypes } from 'sequelize';
 
 @Table({ modelName: "users" })
@@ -16,6 +16,7 @@ class UserModel extends Model<UserModel> {
     @Column(DataTypes.STRING(64))
     password: string;
 
+    @Unique
     @AllowNull(false)
     @Column(DataTypes.STRING(30))
     email: string;

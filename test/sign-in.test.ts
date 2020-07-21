@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import app from '../dist/app';
 import {agent as request} from 'supertest';
 import { signUp } from './sign-up.test';
+import db from '../dist/models'
 
 const signInUrl = '/v1/auth/sign-in'
 
@@ -13,6 +14,8 @@ export async function signIn(signInRequest) {
 
 describe('sign in', function () {
   it('success', async function () {
+    await db.sync({force: true});
+
     const signUpRequest = {
       name: "name",
       email: "email@naver.com",
@@ -40,6 +43,8 @@ describe('sign in', function () {
   })
 
   it('failed since user not exists', async function () {
+    await db.sync({force: true});
+
     const signInRequest = {
       email: "email1@naver.com",
       password: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
