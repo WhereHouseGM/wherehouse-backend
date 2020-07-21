@@ -1,6 +1,6 @@
-import auth from './auth/sign-up';
+import auth from './auth';
 import * as express from "express";
 
 export default function(app: express.Application): void {
-    auth(app);
+    auth.forEach(resource => resource(app));
 }
