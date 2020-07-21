@@ -9,7 +9,6 @@ export function signUp (app: express.Application): void {
             const tokenResponse = await createUserAndBuildTokenResponse(req.body);
             res.status(201).send(tokenResponse);
         } catch(e) {
-            console.log(e);
             res.status(400).send({
                 message: "잘못된 요청입니다"
             });
