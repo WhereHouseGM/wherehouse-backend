@@ -4,7 +4,17 @@
 		"target": "es6",
 		"module": "commonjs",
 		"outDir": "dist",
-		"sourceMap": true
+		"sourceMap": true,
+		"strictNullChecks": true,
+		"baseUrl": "./src",
+		"paths": {
+			"@configs": ["configs"],
+			"@configs/*": ["configs/*"],
+			"@models": ["models"],
+			"@models/*": ["models/*"],
+			"@resources": ["resources"],
+			"@resources/*": ["resources/*"]
+		}
 	},
 	"include": [
 		"src/**/*.ts"
