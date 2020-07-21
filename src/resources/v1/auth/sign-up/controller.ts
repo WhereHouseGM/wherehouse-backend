@@ -9,6 +9,7 @@ export function signUp (app: express.Application): void {
             const tokenResponse = await createUserAndBuildTokenResponse(req.body);
             res.status(201).send(tokenResponse);
         } catch(e) {
+            console.error(e);
             next(e);
         }
     });
