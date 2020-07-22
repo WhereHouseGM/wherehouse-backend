@@ -20,7 +20,7 @@ class WarehouseLocationModel extends Model<WarehouseLocationModel> {
     latitude: number;
 
     @Column(DataTypes.STRING(1024))
-    longitude: string;
+    longitude: number;
 }
 
 export default WarehouseLocationModel;

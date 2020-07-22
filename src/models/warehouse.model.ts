@@ -20,6 +20,9 @@ class WarehouseModel extends Model<WarehouseModel> {
     @Column(DataTypes.INTEGER)
     id: number;
 
+    @Column(DataTypes.STRING(20))
+    name: string;
+
     @Column(DataTypes.BOOLEAN)
     canUse: boolean;
 
