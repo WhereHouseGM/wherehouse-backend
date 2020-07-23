@@ -33,8 +33,7 @@ export async function getWarehouses(option: any): Promise<SimplifiedWarehouse[]>
         queryOptions = { limit, offset };
     else if(!isPaged(option) && !isSearch(option))
         queryOptions = {};
-    console.log('test');
-    console.log(queryOptions);
+
     const warehouses = await WarehouseModel.findAll(queryOptions);
     const warehouseInfos: SimplifiedWarehouse[] = [];
     for (const warehouse of warehouses) {
