@@ -7,7 +7,8 @@
     "test": "gulp && mocha -r ts-node/register test/**/*.test.ts",
     "build": "tsc",
     "lint": "eslint 'src/**/*.ts'",
-    "format": "eslint 'src/**/*.ts' --fix"
+    "format": "eslint 'src/**/*.ts' --fix",
+    "start": "npm run format && gulp && node server.js"
   },
   "_moduleAliases": {
     "@configs": "dist/configs",
