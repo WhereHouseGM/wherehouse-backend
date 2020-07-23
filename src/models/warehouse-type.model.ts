@@ -1,7 +1,7 @@
 import { Table, Column, PrimaryKey, AutoIncrement, Model } from 'sequelize-typescript';
 import { DataTypes } from 'sequelize';
 
-@Table
+@Table({ modelName: "warehouse_types", timestamps: false })
 class WarehouseTypeModel extends Model<WarehouseTypeModel> {
     @PrimaryKey
     @AutoIncrement

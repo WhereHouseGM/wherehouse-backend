@@ -1,7 +1,7 @@
 import { Table, Column, Model, PrimaryKey, AllowNull, AutoIncrement, Default, Unique } from 'sequelize-typescript';
 import { DataTypes } from 'sequelize';
 
-@Table({ modelName: "users" })
+@Table({ modelName: "users", timestamps: false })
 class UserModel extends Model<UserModel> {
     @PrimaryKey
     @AutoIncrement
