@@ -4,8 +4,11 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import { HttpError } from '@errors/http-error';
 import { NextFunction } from 'express';
+import * as cors from "cors";
 
 const app = express();
+
+app.use(cors());
 app.use(bodyParser.json());
 resources(app);
 

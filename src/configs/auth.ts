@@ -1,8 +1,8 @@
 export default {
     jwt: {
-        accessTokenExpiresIn: "3h",
-        refreshTokenExpiresIn: "4d",
-        tokenType: "Bearer",
-        secret: "secret"
+        accessTokenExpiresIn: process.env.ACCESS_TOKEN_EXPIRESIN || "3h",
+        refreshTokenExpiresIn: process.env.REFRESH_TOKEN_EXPIRESIN || "4d",
+        tokenType: process.env.TOKEN_TYPE || "Bearer",
+        secret: process.env.JWT_SECRET as string
     }
 };
