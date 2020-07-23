@@ -2,7 +2,7 @@ import { Table, Column, PrimaryKey, AutoIncrement, Model, BelongsTo, ForeignKey 
 import { DataTypes } from 'sequelize';
 import WarehouseModel from './warehouse.model';
 
-@Table
+@Table({ modelName: "warehouse_attachments" })
 class WarehouseAttachmentModel extends Model<WarehouseAttachmentModel> {
     @PrimaryKey
     @AutoIncrement

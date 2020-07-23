@@ -2,7 +2,7 @@ import { Table, Column, PrimaryKey, AutoIncrement, Model, BelongsTo, ForeignKey 
 import { DataTypes } from 'sequelize';
 import WarehouseModel from './warehouse.model';
 
-@Table
+@Table({ modelName: "warehouse_locations", timestamps: false })
 class WarehouseLocationModel extends Model<WarehouseLocationModel> {
     @PrimaryKey
     @AutoIncrement
@@ -11,16 +11,16 @@ class WarehouseLocationModel extends Model<WarehouseLocationModel> {
 
     @ForeignKey(() => WarehouseModel)
     @Column(DataTypes.INTEGER)
-    typeId: number;
+    warehouseId: number;
 
     @BelongsTo(() => WarehouseModel)
     warehouse: WarehouseModel;
   
-    @Column(DataTypes.INTEGER)
+    @Column(DataTypes.DOUBLE)
     latitude: number;
 
-    @Column(DataTypes.STRING(1024))
-    longitude: string;
+    @Column(DataTypes.DOUBLE)
+    longitude: number;
 }
 
 export default WarehouseLocationModel;
