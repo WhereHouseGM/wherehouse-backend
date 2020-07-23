@@ -2,7 +2,7 @@ import { Table, Column, Model, PrimaryKey, AutoIncrement, BelongsTo, ForeignKey 
 import { DataTypes } from 'sequelize';
 import WarehouseTypeModel from './warehouse-type.model';
 
-@Table
+@Table({ modelName: "user_demands" })
 class UserDemandModel extends Model<UserDemandModel> {
     @PrimaryKey
     @AutoIncrement

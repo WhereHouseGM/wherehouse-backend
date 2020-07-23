@@ -3,7 +3,7 @@ import { DataTypes } from 'sequelize';
 import UserModel from './user.model';
 import WarehouseModel from './warehouse.model';
 
-@Table
+@Table({ modelName: "warehouse_reviews" })
 class WarehouseReviewModel extends Model<WarehouseReviewModel> {
     @PrimaryKey
     @AutoIncrement
