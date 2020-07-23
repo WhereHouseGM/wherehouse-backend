@@ -23,7 +23,7 @@ export async function createUserAndBuildTokenResponse(body: any): Promise<TokenR
         const newUser = await models['users'].create(body) as UserModel;
         return buildTokenResponse(newUser.id);
     } catch(e) {
-        console.log(e);
+        console.error(e);
         throw new EmailAlreadyExistError();
     }
 }
