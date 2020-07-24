@@ -11,10 +11,12 @@ export async function signUp(signUpRequest) {
     .send(signUpRequest);
 }
 
+before(async function () {
+  await db.sync({ force : true });
+});
+
 describe('sign up', function () {
   it('success', async function () {
-    await db.sync({force: true});
-
     const signUpRequest = {
       name: "name",
       email: "email@naver.com",
@@ -35,8 +37,6 @@ describe('sign up', function () {
   })
 
   it('failed due to invalid body', async function () {
-    await db.sync({ force: true });
-
     const signUpRequest = {
       name: "name",
       email: "email@naver.com",
