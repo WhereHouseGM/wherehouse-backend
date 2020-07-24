@@ -19,6 +19,10 @@ class UserDemandModel extends Model<UserDemandModel> {
     id: number;
 
     @AllowNull(false)
+    @Column(DataTypes.STRING(20))
+    address: string;
+
+    @AllowNull(false)
     @Column(DataTypes.INTEGER)
     minSize: number;
 
