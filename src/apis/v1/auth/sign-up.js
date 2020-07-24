@@ -2,6 +2,7 @@ const Joi = require("joi");
 const db = require("../../../models");
 const jwt = require("jsonwebtoken");
 const authConfig = require("../../../config/auth");
+const sha256 = require("js-sha256");
 
 const signUpRequestValidator = Joi.object({
 	name: Joi.string().max(10).required(),
@@ -22,8 +23,10 @@ module.exports = (router) => {
 			if(error) throw error;
 
 			// save request data
+			const hashedPassword = sha256(value.password);
+
 			const newUser = await db.users.create({
-				password: value.password,
+				password: hashedPassword,
 				name: value.name,
 				email: value.email,
 				type: value.type,
