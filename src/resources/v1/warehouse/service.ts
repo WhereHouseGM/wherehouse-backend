@@ -3,6 +3,7 @@ import WarehouseLocationModel from '@models/warehouse-location.model';
 import WarehouseAttachmentModel from '@models/warehouse-attachment.model';
 import { NotFoundError } from '@errors/not-found-error';
 import { Op } from "sequelize";
+import { BadRequestError } from '@errors/bad-request-error';
 
 interface Location {
     latitude: number;
@@ -33,7 +34,8 @@ export async function getWarehouses(option: any): Promise<SimplifiedWarehouse[]>
         queryOptions = { limit, offset };
     else if(!isPaged(option) && !isSearch(option))
         queryOptions = {};
-
+    else
+        throw new BadRequestError("쿼리 값을 다시 확인해주세요");
     const warehouses = await WarehouseModel.findAll(queryOptions);
     const warehouseInfos: SimplifiedWarehouse[] = [];
     for (const warehouse of warehouses) {
