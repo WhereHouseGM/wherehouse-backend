@@ -12,9 +12,12 @@ export async function signIn(signInRequest) {
     .send(signInRequest);
 }
 
+before(async function () {
+  await db.sync({ force : true });
+});
+
 describe('sign in', function () {
   it('success', async function () {
-    await db.sync({force: true});
 
     const signUpRequest = {
       name: "name",
@@ -43,8 +46,6 @@ describe('sign in', function () {
   })
 
   it('failed since user not exists', async function () {
-    await db.sync({force: true});
-
     const signInRequest = {
       email: "email1@naver.com",
       password: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"

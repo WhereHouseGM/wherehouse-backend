@@ -4,7 +4,7 @@
   "description": "wherehouse api server",
   "main": "index.js",
   "scripts": {
-    "test": "gulp && mocha -r ts-node/register test/**/*.test.ts",
+    "test": "npm run format && gulp && mocha -r ts-node/register test/**/*.test.ts --timeout 5000",
     "build": "tsc",
     "lint": "eslint 'src/**/*.ts'",
     "format": "eslint 'src/**/*.ts' --fix",
