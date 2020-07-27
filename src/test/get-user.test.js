@@ -36,9 +36,9 @@ describe("get user", function() {
 	it("should success", async function() {
 		const res = await getUser(signUpResponse.body.user.id, signUpResponse.body.tokenType, signUpResponse.body.accessToken);
 
+		console.log(res.body)
 		expect(res.status).to.equal(200);
 		expect(res.body).not.to.be.empty;
-		expect(res.body.id).not.to.be.empty;
 		expect(res.body.name).not.to.be.empty;
 		expect(res.body.email).not.to.be.empty;
 		expect(res.body.type).not.to.be.empty;
@@ -56,7 +56,7 @@ describe("get user", function() {
 	it("should fail due to another users access token", async function() {
 		const signUpRequest = {
 			name: "string122",
-			email: "use21@exa2mple.com22",
+			email: "use2122@exa2mple.com",
 			password: "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
 			type: "SHIPPER",
 			telephoneNumber: "string",
@@ -66,7 +66,7 @@ describe("get user", function() {
 
 		const anotherSignUpResponse = await signUp(signUpRequest);
 
-		const res = await getUser(anotherSignUpResponse.body.user.id, anotherSignUpResponse.body.tokenType, anotherSignUpResponse.body.accessToken);
+		const res = await getUser(signUpResponse.body.user.id, anotherSignUpResponse.body.tokenType, anotherSignUpResponse.body.accessToken);
 
 		expect(res.status).to.equal(403);
 		expect(res.body).not.to.be.empty;

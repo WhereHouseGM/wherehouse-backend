@@ -36,7 +36,7 @@ module.exports = (router) => {
 			});
 
 			// return jwt response
-			const tokenResponse = generateTokenResponse(newUser.id, authConfig);
+			const tokenResponse = generateTokenResponse(newUser, authConfig);
 			res.status(201).json(tokenResponse);
 		} catch(err) {
 			next(err);
