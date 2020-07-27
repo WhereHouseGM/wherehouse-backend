@@ -1,3 +1,4 @@
+const { describe, it, before } = require("mocha");
 const { signUp } = require("./sign-up.test");
 const chai = require("chai");
 const db = require("../models");
@@ -16,7 +17,6 @@ async function signIn(signInRequest) {
 
 describe("sign in", function() {
 	before(async function() {
-		console.log("=========== sign in before ===========");
 		await db.sequelize.sync({ force: true });
 	});
 

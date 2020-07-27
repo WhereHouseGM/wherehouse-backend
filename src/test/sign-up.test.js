@@ -1,3 +1,4 @@
+const { describe, it, before } = require("mocha");
 const chai = require("chai");
 const db = require("../models");
 const expect = require("chai").expect;
@@ -11,11 +12,10 @@ async function signUp(signUpRequest) {
 	return chai.request(app)
 		.post("/v1/auth/sign-up")
 		.send(signUpRequest);
-};
+}
 
 describe("sign up", function() {
 	before(async function() {
-		console.log("=========== sign up before ===========");
 		await db.sequelize.sync({ force: true });
 	});
 

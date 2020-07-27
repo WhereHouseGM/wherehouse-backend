@@ -1,7 +1,7 @@
+const { describe, it, before } = require("mocha");
 const { signUp } = require("./sign-up.test");
 const chai = require("chai");
 const db = require("../models");
-const jwt = require("jsonwebtoken");
 const expect = require("chai").expect;
 const chaiHttp = require("chai-http");
 const app = require("../app");
@@ -12,12 +12,11 @@ chai.should();
 async function refreshToken(tokenType, refreshToken) {
 	return chai.request(app)
 		.post("/v1/auth/refresh-token")
-		.set("Authorization", `${tokenType} ${refreshToken}`)
+		.set("Authorization", `${tokenType} ${refreshToken}`);
 }
 
 describe("refresh token", function() {
 	before(async function() {
-		console.log("=========== refresh token before ===========");
 		await db.sequelize.sync({ force: true });
 	});
 	
