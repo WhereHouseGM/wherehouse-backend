@@ -14,11 +14,12 @@ async function signIn(signInRequest) {
 		.send(signInRequest);
 }
 
-before(async function() {
-	await db.sequelize.sync({ force: true });
-});
-
 describe("sign in", function() {
+	before(async function() {
+		console.log("=========== sign in before ===========");
+		await db.sequelize.sync({ force: true });
+	});
+
 	it("should success", async function() {
 		// TODO: create user factory
 		const signUpRequest = {

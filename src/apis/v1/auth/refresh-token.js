@@ -8,12 +8,10 @@ module.exports = function (router) {
 			// validate jwt
 			const authorizationHeader = req.header("Authorization");
 			const token = getTokenFrom(authorizationHeader);
-			const { value, error } = jwt.verify(token, authConfig.jwt.secret);
-
-			if(error) throw error;
+			const decoded = jwt.verify(token, authConfig.jwt.secret);
 
 			// return jwt response
-			const tokenResponse = generateTokenResponse(value.userId, authConfig);
+			const tokenResponse = generateTokenResponse(decoded.userId, authConfig);
 			res.status(200).json(tokenResponse);
 		} catch(err) {
 			next(err);
