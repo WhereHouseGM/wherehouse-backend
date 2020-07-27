@@ -9,9 +9,6 @@ function authorize(options) {
 			const token = getTokenFrom(authorizationHeader);
 			const decoded = jwt.verify(token, authConfig.jwt.secret);
 
-			console.log("########################################");
-			console.log(decoded);
-
 			res.locals.userId = decoded.userId;
 			next();
 		} catch (err) {

@@ -36,13 +36,13 @@ describe("get user", function() {
 	it("should success", async function() {
 		const res = await getUser(signUpResponse.body.user.id, signUpResponse.body.tokenType, signUpResponse.body.accessToken);
 
-		console.log(res.body)
 		expect(res.status).to.equal(200);
 		expect(res.body).not.to.be.empty;
-		expect(res.body.name).not.to.be.empty;
-		expect(res.body.email).not.to.be.empty;
-		expect(res.body.type).not.to.be.empty;
-		expect(res.body.phoneNumber).not.to.be.empty;
+		expect(res.body.id).to.be.a("number");
+		expect(res.body.name).to.be.a("string");
+		expect(res.body.email).to.be.a("string");
+		expect(res.body.type).to.be.a("string");
+		expect(res.body.phoneNumber).to.be.a("string");
 	});
 
 	it("should fail due to wrong access token", async function() {
@@ -50,7 +50,7 @@ describe("get user", function() {
 
 		expect(res.status).to.equal(401);
 		expect(res.body).not.to.be.empty;
-		expect(res.body.message).not.to.be.empty;
+		expect(res.body.message).to.be.a("string");
 	});
 
 	it("should fail due to another users access token", async function() {
@@ -70,7 +70,7 @@ describe("get user", function() {
 
 		expect(res.status).to.equal(403);
 		expect(res.body).not.to.be.empty;
-		expect(res.body.message).not.to.be.empty;
+		expect(res.body.message).to.be.a("string");
 	});
 
 	it("should fail due to not existing user", async function() {
@@ -78,7 +78,7 @@ describe("get user", function() {
 
 		expect(res.status).to.equal(404);
 		expect(res.body).not.to.be.empty;
-		expect(res.body.message).not.to.be.empty;
+		expect(res.body.message).to.be.a("string");
 	});
 });
 

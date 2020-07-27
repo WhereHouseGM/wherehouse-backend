@@ -34,9 +34,10 @@ describe("sign up", function() {
 
 		expect(res.status).to.equal(201);
 		expect(res.body).not.to.be.empty;
-		expect(res.body.accessToken).not.to.be.empty;
-		expect(res.body.refreshToken).not.to.be.empty;
-		expect(res.body.tokenType).not.to.be.empty;
+		expect(res.body.accessToken).to.be.a("string");
+		expect(res.body.refreshToken).to.be.a("string");
+		expect(res.body.tokenType).to.be.a("string");
+		expect(res.body.user).not.to.be.empty;
 	});
 
 	it("should fail due to conflict error", async function() {
@@ -54,7 +55,7 @@ describe("sign up", function() {
 
 		expect(res.status).to.equal(409);
 		expect(res.body).not.to.be.empty;
-		expect(res.body.message).not.to.be.empty;
+		expect(res.body.message).to.be.a("string");
 	});
 });
 

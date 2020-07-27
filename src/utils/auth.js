@@ -25,7 +25,7 @@ function generateTokenResponse(user, authConfig) {
 		telephoneNumber: user.telephoneNumber,
 		phoneNumber: user.phoneNumber,
 		companyName: user.companyName
-	}
+	};
 
 	return {
 		accessToken,

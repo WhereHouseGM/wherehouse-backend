@@ -8,7 +8,7 @@ module.exports = function (router) {
 		try {
 			// return jwt response
 			const userId = res.locals.userId;
-			const user = db.users.findByPk(userId);
+			const user = await db.users.findByPk(userId);
 
 			const tokenResponse = generateTokenResponse(user, authConfig);
 			res.status(200).json(tokenResponse);
