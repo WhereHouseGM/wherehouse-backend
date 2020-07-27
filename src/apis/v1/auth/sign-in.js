@@ -38,7 +38,7 @@ module.exports = (router) => {
 
 			const tokenType = authConfig.jwt.tokenType;
 
-			res.status(201).json({
+			res.status(200).json({
 				accessToken,
 				refreshToken,
 				tokenType
