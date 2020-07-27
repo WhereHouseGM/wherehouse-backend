@@ -1,3 +1,4 @@
+const { describe, it, before } = require("mocha");
 const { signUp } = require("./sign-up.test");
 const chai = require("chai");
 const db = require("../models");
@@ -16,7 +17,6 @@ async function signIn(signInRequest) {
 
 describe("sign in", function() {
 	before(async function() {
-		console.log("=========== sign in before ===========");
 		await db.sequelize.sync({ force: true });
 	});
 
@@ -42,8 +42,9 @@ describe("sign in", function() {
 
 		expect(res.status).to.equal(200);
 		expect(res.body).not.to.be.empty;
-		expect(res.body.accessToken).not.to.be.empty;
-		expect(res.body.refreshToken).not.to.be.empty;
-		expect(res.body.tokenType).not.to.be.empty;
+		expect(res.body.accessToken).to.be.a("string");
+		expect(res.body.refreshToken).to.be.a("string");
+		expect(res.body.tokenType).to.be.a("string");
+		expect(res.body.user).not.to.be.empty;
 	});
 });

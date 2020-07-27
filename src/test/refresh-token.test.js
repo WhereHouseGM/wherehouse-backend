@@ -1,7 +1,7 @@
+const { describe, it, before } = require("mocha");
 const { signUp } = require("./sign-up.test");
 const chai = require("chai");
 const db = require("../models");
-const jwt = require("jsonwebtoken");
 const expect = require("chai").expect;
 const chaiHttp = require("chai-http");
 const app = require("../app");
@@ -12,12 +12,11 @@ chai.should();
 async function refreshToken(tokenType, refreshToken) {
 	return chai.request(app)
 		.post("/v1/auth/refresh-token")
-		.set("Authorization", `${tokenType} ${refreshToken}`)
+		.set("Authorization", `${tokenType} ${refreshToken}`);
 }
 
 describe("refresh token", function() {
 	before(async function() {
-		console.log("=========== refresh token before ===========");
 		await db.sequelize.sync({ force: true });
 	});
 	
@@ -38,9 +37,10 @@ describe("refresh token", function() {
 
 		expect(res.status).to.equal(200);
 		expect(res.body).not.to.be.empty;
-		expect(res.body.accessToken).not.to.be.empty;
-		expect(res.body.refreshToken).not.to.be.empty;
-		expect(res.body.tokenType).not.to.be.empty;
+		expect(res.body.accessToken).to.be.a("string");
+		expect(res.body.refreshToken).to.be.a("string");
+		expect(res.body.tokenType).to.be.a("string");
+		expect(res.body.user).not.to.be.empty;
 	});
 
 	it("should fail due to expired refresh token", async function() {
@@ -48,6 +48,6 @@ describe("refresh token", function() {
 
 		expect(res.status).to.equal(401);
 		expect(res.body).not.to.be.empty;
-		expect(res.body.message).not.to.be.empty;
+		expect(res.body.message).to.be.a("string");
 	});
 });
