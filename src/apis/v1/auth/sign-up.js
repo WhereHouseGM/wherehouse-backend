@@ -1,8 +1,8 @@
 const Joi = require("joi");
 const db = require("../../../models");
-const jwt = require("jsonwebtoken");
 const authConfig = require("../../../config/auth");
 const sha256 = require("js-sha256");
+const { generateTokenResponse } = require("../../../utils/auth");
 
 const signUpRequestValidator = Joi.object({
 	name: Joi.string().max(10).required(),
@@ -36,23 +36,8 @@ module.exports = (router) => {
 			});
 
 			// return jwt response
-			const accessToken = jwt.sign({
-				userId: newUser.id,
-				expiresIn: authConfig.jwt.accessTokenExpiresIn
-			}, authConfig.jwt.secret);
-
-			const refreshToken = jwt.sign({
-				userId: newUser.id,
-				expiresIn: authConfig.jwt.refreshTokenExpiresIn
-			}, authConfig.jwt.secret);
-
-			const tokenType = authConfig.jwt.tokenType;
-
-			res.status(201).json({
-				accessToken,
-				refreshToken,
-				tokenType
-			});
+			const tokenResponse = generateTokenResponse(newUser.id, authConfig);
+			res.status(201).json(tokenResponse);
 		} catch(err) {
 			next(err);
 		}
