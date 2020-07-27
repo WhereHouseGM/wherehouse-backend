@@ -7,13 +7,17 @@ function getTokenFrom(authorizationHeader) {
 function generateTokenResponse(user, authConfig) {
 	const accessToken = jwt.sign({
 		userId: user.id,
+	}, authConfig.jwt.secret,
+	{
 		expiresIn: authConfig.jwt.accessTokenExpiresIn
-	}, authConfig.jwt.secret);
+	});
 
 	const refreshToken = jwt.sign({
 		userId: user.id,
+	}, authConfig.jwt.secret, 
+	{
 		expiresIn: authConfig.jwt.refreshTokenExpiresIn
-	}, authConfig.jwt.secret);
+	});
 
 	const tokenType = authConfig.jwt.tokenType;
 
