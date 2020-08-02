@@ -2,7 +2,7 @@ const Joi = require("joi");
 const db = require("../../../models");
 const authConfig = require("../../../config/auth");
 const sha256 = require("js-sha256");
-const { generateTokenResponse } = require("../../../utils/auth");
+const { generateTokenResponse } = require("../../../services/auth");
 
 const signInRequestValidator = Joi.object({
 	email: Joi.string().email().max(30).required(),

@@ -27,7 +27,7 @@
     "sequelize-cli": "^6.2.0"
   },
   "scripts": {
-    "test": "mocha src/test --timeout 10000",
+    "test": "mocha test --timeout 10000",
     "start": "node server.js"
   },
   "repository": {

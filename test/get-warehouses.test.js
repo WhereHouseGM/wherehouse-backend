@@ -2,8 +2,8 @@ const { describe, before, it } = require("mocha");
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const expect = require("chai").expect;
-const db = require("../models");
-const app = require("../app");
+const db = require("../src/models");
+const app = require("../src/app");
 
 chai.use(chaiHttp);
 chai.should();

@@ -1,6 +1,6 @@
 const authConfig = require("../../../config/auth");
 const db = require("../../../models");
-const { generateTokenResponse } = require("../../../utils/auth");
+const { generateTokenResponse } = require("../../../services/auth");
 const { authorize } = require("../../../middlewares/auth");
 
 module.exports = function (router) {

@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const authConfig = require("../config/auth");
-const { getTokenFrom } = require("../utils/auth");
+const { getTokenFrom } = require("../services/auth");
 
 function authorize(options) {
 	return function(req, res, next) {
