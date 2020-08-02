@@ -5,7 +5,7 @@ const { getTokenFrom } = require("../services/token");
 function authorize(options) {
 	return function(req, res, next) {
 		try {
-			const authorizationHeader = req.header("Authorization") || "";
+			const authorizationHeader = req.header("Authorization");
 			const token = getTokenFrom(authorizationHeader);
 			const decoded = jwt.verify(token, authConfig.jwt.secret);
 
