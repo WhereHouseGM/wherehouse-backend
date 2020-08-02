@@ -9,4 +9,6 @@ require("./user")(router);
 
 require("./warehouse")(router);
 
+require("./attachment")(router);
+
 module.exports = router;

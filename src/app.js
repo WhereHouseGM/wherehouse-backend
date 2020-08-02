@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const path = require("path");
 
 const app = express();
 
@@ -14,6 +15,8 @@ db.sequelize.sync();
 // import apis
 const v1 = require("./apis/v1");
 app.use("/v1", v1);
+
+app.use("/uploads", express.static(path.join(__dirname+"/../uploads")));
 
 // 404 handler
 app.use(function(req, res) {
