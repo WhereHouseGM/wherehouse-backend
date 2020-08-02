@@ -12,7 +12,7 @@ module.exports = (router) => {
 
 			const attachments = await postAttachments(req.files);
 			res.status(201).json(attachments);
-		} catch (err) {
+		} catch(err) {
 			next(err);
 		}
 	});
