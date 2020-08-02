@@ -1,10 +1,10 @@
 const jwt = require("jsonwebtoken");
 
-function getTokenFrom(authorizationHeader) {
+exports.getTokenFrom = function (authorizationHeader) {
 	return authorizationHeader.split(" ")[1];
-}
+};
 
-function generateTokenResponse(user, authConfig) {
+exports.generateTokenResponse = function (user, authConfig) {
 	const accessToken = jwt.sign({
 		userId: user.id,
 	}, authConfig.jwt.secret,
@@ -37,7 +37,4 @@ function generateTokenResponse(user, authConfig) {
 		tokenType,
 		user: userInfo
 	};
-}
-
-exports.getTokenFrom = getTokenFrom;
-exports.generateTokenResponse = generateTokenResponse;
+};
