@@ -15,7 +15,7 @@ async function getWarehouses() {
 
 describe("get warehouses", function() {
 	before(async function() {
-		await db.sequelize.sync();
+		await db.sequelize.sync({ force: true });
 	});
 
 	it("success", async function() {
