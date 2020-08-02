@@ -31,7 +31,6 @@ async function findWarehouses(query) {
 			{ model: db.warehouseLocations, required: true },
 			{ model: db.warehouseAttachments },
 			{ model: db.generalWarehouseDetails, where: sizeQuery },
-			{ model: db.agencyWarehouseDetails }
 		],
 		where: addressQuery
 	});
