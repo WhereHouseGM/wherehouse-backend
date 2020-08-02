@@ -6,4 +6,6 @@ require("./auth/refresh-token")(router);
 
 require("./user")(router);
 
+require("./warehouse")(router);
+
 module.exports = router;

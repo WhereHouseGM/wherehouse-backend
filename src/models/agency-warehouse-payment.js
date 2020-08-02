@@ -4,7 +4,6 @@ module.exports = (sequelize, DataTypes) => {
 
 	const AgencyWarehousePayment = sequelize.define(modelName, {
 		id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-		agencyWarehouseDetailId: { type: DataTypes.INTEGER, allowNull: false },
 		unit: { type: DataTypes.STRING(10), allowNull: false },
 		cost: { type: DataTypes.INTEGER, allowNull: false },
 		description: { type: DataTypes.STRING(40), allowNull: false },

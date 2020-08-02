@@ -4,10 +4,9 @@ module.exports = (sequelize, DataTypes) => {
 
 	const WarehouseLocation = sequelize.define(modelName, {
 		id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-		warehouseId: { type: DataTypes.INTEGER, allowNull: false },
 		latitude: { type: DataTypes.DOUBLE, allowNull: false },
 		longitude: { type: DataTypes.DOUBLE, allowNull: false }
 	}, { tableName: tableName, timestamps: false });
 
 	return WarehouseLocation;
-}
+};

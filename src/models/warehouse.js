@@ -5,8 +5,8 @@ module.exports = (sequelize, DataTypes) => {
 	const Warehouse = sequelize.define(modelName, {
 		id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 		canUse: { type: DataTypes.BOOLEAN, defaultValue: true, allowNull: false },
+		name: { type: DataTypes.STRING(20), allowNull: false },
 		serviceType: { type: DataTypes.ENUM("GENERAL", "AGENCY"), allowNull: false },
-		ownerId: { type: DataTypes.INTEGER, allowNull: false },
 		address: { type: DataTypes.STRING(100), allowNull: false },
 		addressDetail: { type: DataTypes.STRING(100), allowNull: false },
 		description: { type: DataTypes.STRING(400), allowNull: false },
@@ -25,6 +25,14 @@ module.exports = (sequelize, DataTypes) => {
 		canPickup: { type: DataTypes.BOOLEAN, defaultValue: false, allowNull: false },
 		canPark: { type: DataTypes.BOOLEAN, defaultValue: false, allowNull: false }
 	}, { tableName: tableName, timestamps: false });
+
+	Warehouse.associate = function (db) {
+		db.warehouses.hasOne(db.generalWarehouseDetails, { onUpdate: "cascade", onDelete: "cascade"});
+		db.warehouses.hasOne(db.agencyWarehouseDetails, { onUpdate: "cascade", onDelete: "cascade"});
+		db.warehouses.hasOne(db.warehouseLocations, { onUpdate: "cascade", onDelete: "cascade"});
+		db.warehouses.hasMany(db.warehouseAttachments, { onUpdate: "cascade", onDelete: "cascade"});
+		db.warehouses.belongsTo(db.users);
+	};
 
 	return Warehouse;
 };
