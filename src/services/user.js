@@ -1,5 +1,6 @@
 const HTTPError = require("node-http-error");
 const db = require("../models");
+const SimplifiedUserDto = require("../dtos/simplified-user");
 
 exports.getUser = async function (userIdFromToken, userIdParam) {
 	const user = await db.users.findByPk(userIdParam);
@@ -7,15 +8,7 @@ exports.getUser = async function (userIdFromToken, userIdParam) {
 	if(user === null) throw new HTTPError(404, "Not Found Error");
 	if(userIdFromToken !== userIdParam) throw new HTTPError(403, "Forbidden Error");
 
-	return {
-		id: user.id,
-		name: user.name,
-		email: user.email,
-		type: user.type,
-		telephoneNumber: user.telephoneNumber,
-		phoneNumber: user.phoneNumber,
-		companyName: user.companyName
-	};
+	return SimplifiedUserDto(user);
 };
 
 exports.patchUser = async function (userIdFromToken, userIdParam, patchUserRequest) {
@@ -36,13 +29,5 @@ exports.patchUser = async function (userIdFromToken, userIdParam, patchUserReque
 
 	await user.save();
 
-	return {
-		id: user.id,
-		name: user.name,
-		email: user.email,
-		type: user.type,
-		telephoneNumber: user.telephoneNumber,
-		phoneNumber: user.phoneNumber,
-		companyName: user.companyName
-	};
+	return SimplifiedUserDto(user);
 };

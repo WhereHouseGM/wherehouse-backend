@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const SimplifiedUserDto = require("../dtos/simplified-user");
 
 exports.getTokenFrom = function (authorizationHeader) {
 	return authorizationHeader.split(" ")[1];
@@ -21,15 +22,7 @@ exports.generateTokenResponse = function (user, authConfig) {
 
 	const tokenType = authConfig.jwt.tokenType;
 
-	const userInfo = {
-		id: user.id,
-		name: user.name,
-		email: user.email,
-		type: user.type,
-		telephoneNumber: user.telephoneNumber,
-		phoneNumber: user.phoneNumber,
-		companyName: user.companyName
-	};
+	const userInfo = SimplifiedUserDto(user);
 
 	return {
 		accessToken,
