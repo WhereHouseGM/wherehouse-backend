@@ -1,7 +1,6 @@
 const { authorize } = require("../../middlewares/auth");
-const db = require("../../models");
-const HTTPError = require("node-http-error");
 const Joi = require("joi");
+const { getUser, patchUser } = require("../../services/user");
 
 const patchUserRequestValidator = Joi.object({
 	name: Joi.string().max(10),
@@ -19,20 +18,8 @@ module.exports = (router) => {
 			const userIdFromToken = res.locals.userId;
 			const userIdParam = parseInt(req.params.userId);
 
-			const user = await db.users.findByPk(userIdParam);
-
-			if(user === null) throw new HTTPError(404, "Not Found Error");
-			if(userIdFromToken !== userIdParam) throw new HTTPError(403, "Forbidden Error");
-
-			res.status(200).json({
-				id: user.id,
-				name: user.name,
-				email: user.email,
-				type: user.type,
-				telephoneNumber: user.telephoneNumber,
-				phoneNumber: user.phoneNumber,
-				companyName: user.companyName
-			});
+			const user = await getUser(userIdFromToken, userIdParam);
+			res.status(200).json(user);
 		} catch(err) {
 			next(err);
 		}
@@ -43,38 +30,14 @@ module.exports = (router) => {
 			const userIdFromToken = res.locals.userId;
 			const userIdParam = parseInt(req.params.userId);
 
-			const user = await db.users.findByPk(userIdParam);
-
-			if(user === null) throw new HTTPError(404, "Not Found Error");
-			if(userIdFromToken !== userIdParam) throw new HTTPError(403, "Forbidden Error");
-
 			// validate request
 			const { value, error } = await patchUserRequestValidator.validate(req.body);
-
 			if(error) throw error;
 
-			// TODO 함수 분리하기
-			user.name = value.name || user.name;
-			user.email = value.email || user.email;
-			user.password = value.password || user.password;
-			user.type = value.type || user.type;
-			user.phoneNumber = value.phoneNumber || user.phoneNumber;
-			user.telephoneNumber = value.telephoneNumber || user.telephoneNumber;
-			user.companyName = value.companyName || user.companyName;
-
-			await user.save();
-
-			res.status(200).json({
-				id: user.id,
-				name: user.name,
-				email: user.email,
-				type: user.type,
-				telephoneNumber: user.telephoneNumber,
-				phoneNumber: user.phoneNumber,
-				companyName: user.companyName
-			});
+			const user = await patchUser(userIdFromToken, userIdParam, value);
+			res.status(200).json(user);
 		} catch(err) {
 			next(err);
 		}
-	})
+	});
 };
