@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const authConfig = require("../config/auth");
 const { getTokenFrom } = require("../services/token");
 
-function authorize(options) {
+exports.authorize = function (options) {
 	return function(req, res, next) {
 		try {
 			const authorizationHeader = req.header("Authorization") || "";
@@ -15,6 +15,4 @@ function authorize(options) {
 			next(err);
 		}
 	};
-}
-
-exports.authorize = authorize;
+};
