@@ -27,11 +27,11 @@ module.exports = (sequelize, DataTypes) => {
 	}, { tableName: tableName, timestamps: false });
 
 	Warehouse.associate = function (db) {
-		db.warehouses.hasOne(db.generalWarehouseDetails, { onUpdate: "cascade", onDelete: "cascade"});
-		db.warehouses.hasOne(db.agencyWarehouseDetails, { onUpdate: "cascade", onDelete: "cascade"});
-		db.warehouses.hasOne(db.warehouseLocations, { onUpdate: "cascade", onDelete: "cascade"});
-		db.warehouses.hasMany(db.warehouseAttachments, { onUpdate: "cascade", onDelete: "cascade"});
-		db.warehouses.belongsTo(db.users);
+		db.warehouses.hasOne(db.generalWarehouseDetails, { as: "generalDetail", foreignKey: "warehouseId", onUpdate: "cascade", onDelete: "cascade"});
+		db.warehouses.hasOne(db.agencyWarehouseDetails, { as: "agencyDetail", foreignKey: "warehouseId", onUpdate: "cascade", onDelete: "cascade"});
+		db.warehouses.hasOne(db.warehouseLocations, { as: "location", foreignKey: "warehouseId", onUpdate: "cascade", onDelete: "cascade"});
+		db.warehouses.hasMany(db.warehouseAttachments, { as: "attachments", onUpdate: "cascade", onDelete: "cascade"});
+		db.warehouses.belongsTo(db.users, { as: "owner" });
 	};
 
 	return Warehouse;

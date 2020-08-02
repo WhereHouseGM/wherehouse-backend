@@ -1,5 +1,6 @@
 const Joi = require("joi");
-const { getWarehouses } = require("../../services/warehouse");
+const { getWarehouses, getWarehouse } = require("../../services/warehouse");
+const { authorize } = require("../../middlewares/auth");
 
 const getWarehousesQueryValidator = Joi.object({
 	address: Joi.string(),
@@ -16,6 +17,18 @@ module.exports = (router) => {
 			const warehouses = await getWarehouses(query);
 
 			res.status(200).json(warehouses);
+		} catch(err) {
+			next(err);
+		}
+	});
+
+	router.get("/warehouses/:warehouseId", authorize(), async function (req, res, next) {
+		try {
+			const warehouseId = req.params.warehouseId;
+
+			const warehouse = await getWarehouse(warehouseId);
+
+			res.status(200).json(warehouse);
 		} catch(err) {
 			next(err);
 		}

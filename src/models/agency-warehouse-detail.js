@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
 	}, { tableName: tableName, timestamps: false });
 
 	AgencyWarehouseDetail.associate = function (db) {
-		db.agencyWarehouseDetails.hasMany(db.agencyWarehousePayments, { onUpdate: "cascade", onDelete: "cascade" });
+		db.agencyWarehouseDetails.hasMany(db.agencyWarehousePayments, { as: "payments", onUpdate: "cascade", onDelete: "cascade" });
 	};
 
 	return AgencyWarehouseDetail;
