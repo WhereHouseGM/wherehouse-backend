@@ -1,5 +1,6 @@
 const { Op } = require("sequelize");
 const db = require("../models");
+const HTTPError = require("node-http-error");
 
 exports.getWarehouses = async function (query) {
 	let addressQuery, sizeQuery;
@@ -40,4 +41,23 @@ exports.getWarehouses = async function (query) {
 			};
 		})
 	};
+};
+
+exports.getWarehouse = async function (warehouseId) {
+	const warehouse = await db.warehouses.findByPk(warehouseId, {
+		include: [
+			{ model: db.users, required: true },
+			{ model: db.warehouseLocations, required: true },
+			{ model: db.warehouseAttachments },
+			{ model: db.generalWarehouseDetails },
+			{
+				model: db.agencyWarehouseDetails,
+				include: [ db.agencyWarehousePayments ]
+			}
+		]
+	});
+
+	if(warehouse === null) throw new HTTPError(404, "Not Found Error");
+
+	return warehouse;
 };
