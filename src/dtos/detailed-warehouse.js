@@ -5,7 +5,6 @@ const AgencyWarehouseDetailDto = require("./agency-warehouse-detail");
 const GeneralWarehouseDetailDto = require("./general-warehouse-detail");
 
 module.exports = function(warehouse) {
-	console.log(warehouse.serviceType);
 	let additionalInfo;
 
 	if(warehouse.serviceType == "AGENCY")

@@ -55,3 +55,84 @@ exports.getWarehouse = async function (warehouseId) {
 
 	return DetailedWarehouseDto(warehouse);
 };
+
+exports.postWarehouse = async function (userId, postWarehouseRequest) {
+	const warehouseId = await db.sequelize.transaction(async function(t) {
+		// create warehouse
+		const _warehouse = await db.warehouses.create({
+			ownerId: userId,
+			name: postWarehouseRequest.name,
+			serviceType: postWarehouseRequest.serviceType,
+			address: postWarehouseRequest.address,
+			addressDetail: postWarehouseRequest.addressDetail,
+			description: postWarehouseRequest.description,
+			availableWeekdays: postWarehouseRequest.availableWeekdays,
+			openAt: postWarehouseRequest.openAt,
+			closeAt: postWarehouseRequest.closeAt,
+			availableTimeDetail: postWarehouseRequest.availableTimeDetail,
+			cctvExist: postWarehouseRequest.cctvExist,
+			securityCompanyExist: postWarehouseRequest.securityCompanyExist,
+			securityCompanyName: postWarehouseRequest.securityCompanyName,
+			doorLockExist: postWarehouseRequest.doorLockExist,
+			airConditioningType: postWarehouseRequest.airConditioningType,
+			workerExist: postWarehouseRequest.workerExist,
+			insuranceExist: postWarehouseRequest.insuranceExist,
+			insuranceName: postWarehouseRequest.insuranceName,
+			canPickup: postWarehouseRequest.canPickup,
+			canPark: postWarehouseRequest.canPark,
+		}, { transaction: t });
+
+		//create location
+		const location = postWarehouseRequest.location;
+		await db.warehouseLocations.create({
+			latitude: location.latitude,
+			longitude: location.longitude,
+			warehouseId: _warehouse.id
+		}, { transaction: t });
+
+		// create detail
+		const serviceType = postWarehouseRequest.serviceType;
+		const additionalInfo = postWarehouseRequest.additionalInfo;
+
+		if (serviceType === "GENERAL") {
+			await db.generalWarehouseDetails.create({
+				type: additionalInfo.type,
+				size: additionalInfo.size,
+				monthlyFee: additionalInfo.monthlyFee,
+				depositFee: additionalInfo.depositFee,
+				maintenanceFee: additionalInfo.maintenanceFee,
+				minUseTerm: additionalInfo.minUseTerm,
+				warehouseId: _warehouse.id
+			}, { transaction: t });
+		} else {
+			const agencyDetail = await db.agencyWarehouseDetails.create({
+				type: additionalInfo.type,
+				mainItemType: additionalInfo.mainItemType,
+				storageType: additionalInfo.storageType,
+				warehouseId: _warehouse.id
+			}, { transaction: t });
+
+			await Promise.all[additionalInfo.payments.map(async payment => {
+				await db.agencyWarehousePayments.create({
+					unit: payment.unit,
+					cost: payment.cost,
+					description: payment.description,
+					type: payment.type,
+					agencyWarehouseDetailId: agencyDetail.id
+				}, { transaction: t });
+			})];
+		}
+
+		// update attachments
+		await Promise.all(postWarehouseRequest.attachmentIds.map(async _ => {
+			await db.warehouseAttachments.update(
+				{ warehouseId: _warehouse.id },
+				{ where: { id: _ }, transaction: t }
+			);
+		}));
+
+		return _warehouse.id;
+	});
+
+	return await exports.getWarehouse(warehouseId);
+};
