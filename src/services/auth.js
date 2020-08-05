@@ -2,6 +2,7 @@ const authConfig = require("../config/auth");
 const db = require("../models");
 const sha256 = require("js-sha256");
 const { generateTokenResponse } = require("../services/token");
+const HTTPError = require("node-http-error");
 
 exports.refreshToken = async function (userId) {
 	const user = await db.users.findByPk(userId);
@@ -13,10 +14,13 @@ exports.signIn = async function (signInRequest) {
 	const hashedPassword = sha256(signInRequest.password);
 
 	const user = await db.users.findOne({
-		email: signInRequest.email,
-		password: hashedPassword
+		where: {
+			email: signInRequest.email,
+			password: hashedPassword
+		}
 	});
 
+	if(user === null) throw new HTTPError(404, "User not found");
 	// return jwt response
 	return generateTokenResponse(user, authConfig);
 };

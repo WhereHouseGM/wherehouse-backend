@@ -1,8 +1,6 @@
 const { Op } = require("sequelize");
 const db = require("../models");
 const HTTPError = require("node-http-error");
-const DetailedWarehouseDto = require("../dtos/detailed-warehouse");
-const SimplifiedWarehouseDto = require("../dtos/simplified-warehouse");
 
 exports.getWarehouses = async function (query) {
 	let addressQuery, sizeQuery;
@@ -31,9 +29,7 @@ exports.getWarehouses = async function (query) {
 		where: addressQuery
 	});
 
-	return {
-		warehouses: warehouses.map(_ => SimplifiedWarehouseDto(_))
-	};
+	return warehouses;
 };
 
 exports.getWarehouse = async function (warehouseId) {
@@ -53,7 +49,7 @@ exports.getWarehouse = async function (warehouseId) {
 
 	if(warehouse === null) throw new HTTPError(404, "Not Found Error");
 
-	return DetailedWarehouseDto(warehouse);
+	return warehouse;
 };
 
 exports.postWarehouse = async function (userId, postWarehouseRequest) {
@@ -132,6 +128,44 @@ exports.postWarehouse = async function (userId, postWarehouseRequest) {
 		}));
 
 		return _warehouse.id;
+	});
+
+	return await exports.getWarehouse(warehouseId);
+};
+
+exports.patchWarehouse = async function (userId, warehouseId, patchWarehouseRequest) {
+	const warehouse = await exports.getWarehouse(warehouseId);
+
+	if(warehouse.ownerId !== userId) throw new HTTPError(403, "Only owner can patch");
+
+	const { attachmentIds, additionalInfo, location, ...warehouseFields } = patchWarehouseRequest;
+	let updatedAttachmentIds = attachmentIds || [];
+
+	await db.sequelize.transaction(async t => {
+		await warehouse.update(warehouseFields, { transaction: t });
+		await warehouse.location.update(location, { transaction: t });
+
+		console.log(warehouse.agencyDetail);
+		console.log(warehouse.generalDetail);
+		if(warehouse.serviceType === "GENERAL") await warehouse.generalDetail.update(additionalInfo, { transaction: t });
+		else if(warehouse.serviceType === "AGENCY") await warehouse.agencyDetail.update(additionalInfo, { transaction: t });
+
+		const originalAttachmentIds = warehouse.attachments.map(attachment => attachment.id);
+		const deleteAttachmentIds = originalAttachmentIds.filter(id => !updatedAttachmentIds.includes(id));
+		const newAttachmentIds = updatedAttachmentIds.filter(id => !originalAttachmentIds.includes(id));
+
+		await Promise.all(deleteAttachmentIds.map(async id => {
+			await db.warehouseAttachments.destroy({ where: { id: id }, transaction: t });
+		}));
+
+		await Promise.all(newAttachmentIds.map(async id => {
+			const updatedRows = await db.warehouseAttachments.update(
+				{ warehouseId: warehouse.id },
+				{ where: { id: id }, transaction: t }
+			);
+
+			if(updatedRows[0] === 0) throw new HTTPError(404, `Attachment ${id} not found`);
+		}));
 	});
 
 	return await exports.getWarehouse(warehouseId);
