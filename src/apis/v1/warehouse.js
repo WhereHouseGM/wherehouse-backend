@@ -143,6 +143,19 @@ module.exports = (router) => {
 		}
 	});
 
+	router.post("/warehouses", authorize(), async function (req, res, next) {
+		try {
+			const userId = res.locals.userId;
+			const { value, error } = postWarehouseRequestValidator.validate(req.body);
+			if(error) throw error;
+
+			const warehouse = await postWarehouse(userId, value);
+			res.status(201).json(warehouse);
+		} catch(err) {
+			next(err);
+		}
+	});
+
 	router.get("/warehouses/:warehouseId", authorize(), async function (req, res, next) {
 		try {
 			const warehouseId = req.params.warehouseId;
