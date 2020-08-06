@@ -136,7 +136,7 @@ exports.postWarehouse = async function (userId, postWarehouseRequest) {
 exports.patchWarehouse = async function (userId, warehouseId, patchWarehouseRequest) {
 	const warehouse = await exports.getWarehouse(warehouseId);
 
-	if(warehouse.ownerId !== userId) throw new HTTPError(403, "Only owner can patch");
+	if(warehouse.owner.id !== userId) throw new HTTPError(403, "Only owner can patch");ㅅ
 
 	const { attachmentIds, additionalInfo, location, ...warehouseFields } = patchWarehouseRequest;
 	let updatedAttachmentIds = attachmentIds || [];
@@ -169,4 +169,13 @@ exports.patchWarehouse = async function (userId, warehouseId, patchWarehouseRequ
 	});
 
 	return await exports.getWarehouse(warehouseId);
+};
+
+exports.deleteWarehouse = async function (userId, warehouseId) {
+	const warehouse = await exports.getWarehouse(warehouseId);
+
+	if(warehouse === null) throw new HTTPError(404, "warehouse does not exist");
+	if(warehouse.owner.id !== userId) throw new HTTPError(403, "Only owner can patch");
+
+	await warehouse.destroy();
 };

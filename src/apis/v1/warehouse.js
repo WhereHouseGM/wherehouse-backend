@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const { getWarehouses, getWarehouse, postWarehouse, patchWarehouse } = require("../../services/warehouse");
+const { getWarehouses, getWarehouse, postWarehouse, patchWarehouse, deleteWarehouse } = require("../../services/warehouse");
 const { authorize } = require("../../middlewares/auth");
 const SimplifiedWarehouseDto = require("../../dtos/simplified-warehouse");
 const DetailedWarehouseDto = require("../../dtos/detailed-warehouse");
@@ -178,6 +178,19 @@ module.exports = (router) => {
 			const warehouse = await patchWarehouse(userId, warehouseId, value);
 			res.status(201).json({warehouse: DetailedWarehouseDto(warehouse)});
 		} catch (err) {
+			next(err);
+		}
+	});
+
+	router.delete("/warehouses/:warehouseId", authorize(), async function (req, res, next) {
+		try {
+			const userId = res.locals.userId;
+			const warehouseId = req.params.warehouseId;
+
+			await deleteWarehouse(userId, warehouseId);
+
+			res.status(204).send({});
+		} catch(err) {
 			next(err);
 		}
 	});
