@@ -17,3 +17,19 @@ exports.postWarehouseReview = async function (userId, warehouseId, postWarehouse
 
 	return review;
 };
+
+exports.getWarehouseReviews = async function (userId, warehouseId, getWarehouseReviewQuery) {
+	await getWarehouse(warehouseId);
+
+	const queryOption = {
+		where: { warehouseId: warehouseId},
+		include: [{ model: db.users, as: "writer" }]
+	};
+	if(getWarehouseReviewQuery.limit !== undefined) queryOption.limit = getWarehouseReviewQuery.limit;
+	if(getWarehouseReviewQuery.offset !== undefined) queryOption.offset = getWarehouseReviewQuery.offset;
+
+	console.log(queryOption);
+	const reviews = await db.warehouseReviews.findAll(queryOption);
+
+	return reviews;
+};
