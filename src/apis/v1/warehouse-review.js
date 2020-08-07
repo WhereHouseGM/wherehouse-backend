@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const { postWarehouseReview, getWarehouseReviews } = require("../../services/warehouse-review");
+const { postWarehouseReview, getWarehouseReviews, deleteWarehouseReview } = require("../../services/warehouse-review");
 const { authorize } = require("../../middlewares/auth");
 const WarehouseReviewDto = require("../../dtos/warehouse-review");
 
@@ -45,4 +45,18 @@ module.exports = (router) => {
 			next(err);
 		}
 	});
+
+	router.delete("/warehouses/:warehouseId/reviews/:reviewId", authorize(), async function (req, res, next) {
+		try {
+			const userId = res.locals.userId;
+			const warehouseId = req.params.warehouseId;
+			const reviewId = req.params.reviewId;
+
+			await deleteWarehouseReview(userId, warehouseId, reviewId);
+
+			res.status(204).send({});
+		} catch (err) {
+			next(err);
+		}
+	})
 };
