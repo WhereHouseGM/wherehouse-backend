@@ -4,6 +4,7 @@ const chaiHttp = require("chai-http");
 const expect = require("chai").expect;
 const db = require("../src/models");
 const app = require("../src/app");
+const { setupDatabase } = require("./setup-database");
 
 chai.use(chaiHttp);
 chai.should();
@@ -15,7 +16,7 @@ async function getWarehouses() {
 
 describe("get warehouses", function() {
 	before(async function() {
-		await db.sequelize.sync({ force: true });
+		await setupDatabase(db);
 	});
 
 	it("success", async function() {

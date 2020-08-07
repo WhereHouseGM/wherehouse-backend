@@ -5,6 +5,7 @@ const expect = require("chai").expect;
 const chaiHttp = require("chai-http");
 const app = require("../src/app");
 const { signUp } = require("./sign-up.test");
+const { setupDatabase } = require("./setup-database");
 
 chai.use(chaiHttp);
 chai.should();
@@ -21,7 +22,7 @@ describe("patch user", function() {
 	let patchUserRequest = {};
 
 	before(async function() {
-		await db.sequelize.sync({ force: true });
+		await setupDatabase(db);
 
 		const signUpRequest = {
 			name: "string1",

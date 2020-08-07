@@ -5,6 +5,7 @@ const db = require("../src/models");
 const expect = require("chai").expect;
 const chaiHttp = require("chai-http");
 const app = require("../src/app");
+const { setupDatabase } = require("./setup-database");
 
 chai.use(chaiHttp);
 chai.should();
@@ -17,7 +18,7 @@ async function signIn(signInRequest) {
 
 describe("sign in", function() {
 	before(async function() {
-		await db.sequelize.sync({ force: true });
+		await setupDatabase(db);
 	});
 
 	it("should success", async function() {
