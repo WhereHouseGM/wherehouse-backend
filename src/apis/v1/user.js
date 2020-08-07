@@ -1,6 +1,7 @@
 const { authorize } = require("../../middlewares/auth");
 const Joi = require("joi");
 const { getUser, patchUser } = require("../../services/user");
+const SimplifiedUserDto = require("../../dtos/simplified-user");
 
 const patchUserRequestValidator = Joi.object({
 	name: Joi.string().max(10),
@@ -19,7 +20,7 @@ module.exports = (router) => {
 			const userIdParam = parseInt(req.params.userId);
 
 			const user = await getUser(userIdFromToken, userIdParam);
-			res.status(200).json(user);
+			res.status(200).json({ user: SimplifiedUserDto(user) });
 		} catch(err) {
 			next(err);
 		}

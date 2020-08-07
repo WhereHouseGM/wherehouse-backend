@@ -14,15 +14,15 @@ async function getWarehouses() {
 		.get("/v1/warehouses");
 }
 
-describe("get warehouses", function() {
-	before(async function() {
-		await setupDatabase(db);
-	});
-
-	it("success", async function() {
-		const res = await getWarehouses();
-
-		expect(res).not.to.be.empty;
-		expect(res.body).not.to.be.empty;
-	});
-});
+// describe("get warehouses", function() {
+// 	before(async function() {
+// 		await setupDatabase(db);
+// 	});
+//
+// 	it("success", async function() {
+// 		const res = await getWarehouses();
+//
+// 		expect(res).not.to.be.empty;
+// 		expect(res.body).not.to.be.empty;
+// 	});
+// });

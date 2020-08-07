@@ -1,0 +1,1754 @@
+openapi: 3.0.0
+tags:
+  - name: v1
+    description: v1 apis
+  - name: warehouses
+    description: 창고 api
+  - name: warehouse-reviews
+    description: 창고 리뷰 api
+  - name: warehouse-types
+    description: 창고 종류 api
+  - name: users
+    description: 유저 api
+  - name: auth
+    description: 인증 api
+info:
+  title: WhereHouse API
+  version: '1.0'
+  description: WhereHouse API V1
+  contact:
+    name: wherehousegm
+    email: wherehousegm@gmail.com
+servers:
+  - url: 'https://wherehouse-backend.herokuapp.com/v1'
+paths:
+  /warehouses:
+    get:
+      summary: 창고 정보 목록 조회
+      tags:
+        - warehouses
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  warehouses:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SimplifiedWarehouseInfo'
+                required:
+                  - warehouses
+        '400':
+          description: "Bad Request\n잘못된 요청 보냈을 때 "
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      operationId: get-v1--warehouses
+      description: |-
+        창고 목록을 조회하는 API입니다
+        간단한 창고 정보를 불러오므로 검색 페이지에서 사용합니다
+        (창고사진, 창고명, 창고평수, 창고 임대 가능 여부, 창고 위치)
+      parameters:
+        - schema:
+            type: string
+            example: 경기 화성
+          in: query
+          name: addresss
+          description: 사용자가 검색한 주소입니다.
+        - schema:
+            type: integer
+          in: query
+          name: offset
+          description: 창고들 offset 값입니다.
+        - schema:
+            type: integer
+          in: query
+          name: limit
+          description: '불러올 창고 목록 개수입니다 '
+    post:
+      summary: 새로운 창고 등록
+      operationId: post-v1-warehouses
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  warehouse:
+                    $ref: '#/components/schemas/DetailedWarehouseInfo'
+                required:
+                  - warehouse
+              examples: {}
+        '400':
+          description: |-
+            Bad Request
+            잘못된 요청 보냈을 때
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: |-
+            Unauthorized
+            사용자가 로그인을 안했을떄
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      description: |-
+        새로운 창고를 등록합니다
+
+        창고주와 관리자만 등록할 수 있음
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          description: |-
+            Bearer 토큰 값입니다.
+            jwt 토큰을 사용합니다.
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewWarehouseForm'
+            examples:
+              new agency warehouse:
+                value:
+                  name: string
+                  serviceType: AGENCY
+                  address: 경기 성남시 야탑동 장미로 55
+                  addressDetail: 108동 101호
+                  description: string
+                  availableWeekdays: 0
+                  openAt: '08:00:00'
+                  closeAt: '19:00:00'
+                  availableTimeDetail: 금요일엔 1시간 일찍 닫음
+                  cctvExist: true
+                  securityCompanyExist: true
+                  securityCompanyName: string
+                  doorLockExist: true
+                  airConditioningType: HEATING
+                  workerExist: true
+                  insuranceExist: true
+                  insuranceName: string
+                  canPickup: true
+                  canPark: true
+                  attachmentIds:
+                    - 0
+                  location:
+                    latitude: 0
+                    longitude: 0
+                  additionalInfo:
+                    type: 3PL
+                    mainItemType: CLOTH
+                    payments:
+                      - unit: string
+                        cost: 0
+                        description: string
+                        type: STORE
+                      - unit: 다스
+                        cost: 1000
+                        description: 연필 보관
+                        type: STORE
+                      - unit: KG
+                        cost: 100
+                        description: 물건 옮기기
+                        type: WORK
+              new general warehouse:
+                value:
+                  name: string
+                  serviceType: GENERAL
+                  address: 경기 성남시 야탑동 장미로 55
+                  addressDetail: 108동 101호
+                  description: string
+                  availableWeekdays: 0
+                  openAt: '08:00:00'
+                  closeAt: '19:00:00'
+                  availableTimeDetail: 금요일엔 1시간 일찍 닫음
+                  cctvExist: true
+                  securityCompanyExist: true
+                  securityCompanyName: string
+                  doorLockExist: true
+                  airConditioningType: HEATING
+                  workerExist: true
+                  insuranceExist: true
+                  insuranceName: string
+                  canPickup: true
+                  canPark: true
+                  attachmentIds:
+                    - 0
+                  location:
+                    latitude: 0
+                    longitude: 0
+                  additionalInfo:
+                    type: ROOM_TEMPERATURE
+                    size: 100
+                    monthlyFee: 300
+                    depositFee: 5000
+                    maintenanceFee: 10
+                    minUseTerm: 1
+        description: ''
+      tags:
+        - warehouses
+    parameters: []
+  '/warehouses/{warehouseId}':
+    get:
+      summary: 창고 정보 조회
+      tags:
+        - warehouses
+      responses:
+        '200':
+          description: |-
+            OK
+            창고 정보를 정상적으로 불러옴
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  warehouse:
+                    $ref: '#/components/schemas/DetailedWarehouseInfo'
+                required:
+                  - warehouse
+        '400':
+          description: |-
+            Bad Request
+            잘못된 요청 보냈을 때
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: |-
+            Unauthorized
+            로그인 하지 않으면 창고 정보를 조회하지 못함
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+        '404':
+          description: |-
+            Not Found
+            warehouseId인 창고가 없는 경우임
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      operationId: get-v1-warehouse
+      description: "창고 상세정보를 가져옵니다.\n창고 상세정보 페이지에서 사용할 수 있습니다. "
+      parameters:
+        - schema:
+            type: string
+            example: ' Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
+          in: header
+          name: Authorization
+          description: |-
+            Bearer 토큰 값입니다.
+            jwt 토큰을 사용합니다.
+          required: true
+    parameters:
+      - schema:
+          type: string
+        name: warehouseId
+        in: path
+        required: true
+        description: '창고 id '
+    patch:
+      summary: 창고 정보 수정
+      operationId: patch-v1-warehouse-warehouseId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  warehouse:
+                    $ref: '#/components/schemas/DetailedWarehouseInfo'
+                required:
+                  - warehouse
+        '400':
+          description: |-
+            Bad Request
+            잘못된 요청 보냈을 때
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: |-
+            Unauthorized
+            사용자가 로그인 하지 않았을때
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '403':
+          description: |-
+            Forbidden
+            사용자에게 창고를 수정할 권한이 없을때
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      description: |-
+        창고 정보를 수정할 떄 사용함
+        창고를 등록한 사용자와 관리자만 수정할 수 있음
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditWarehouseForm'
+        description: |-
+          창고 수정할 때 사용함
+
+          창고주와 관리자만 수정할 수 있음
+      parameters:
+        - schema:
+            type: string
+          in: header
+          description: |-
+            Bearer 토큰 값입니다.
+            jwt 토큰을 사용합니다.
+          name: Authorization
+          required: true
+      tags:
+        - warehouses
+    delete:
+      summary: 창고 정보 삭제
+      operationId: delete-v1-warehouse-warehouseId
+      responses:
+        '204':
+          description: |-
+            No Content
+            창고 삭제 성공했을때
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: |-
+            Bad Request
+            잘못된 요청을 보냈을 때
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: |-
+            Unauthorized
+            사용자가 로그인하지 않았을 때
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '403':
+          description: |-
+            Forbidden
+            사용자에게 창고를 삭제할 권한이 없을때
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      description: |-
+        창고 정보를 삭제할 떄 사용함
+        창고를 등록한 사용자와 관리자만 삭제할 수 있음
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          required: true
+          description: |-
+            Bearer 토큰 값입니다.
+            jwt 토큰을 사용합니다.
+      tags:
+        - warehouses
+  '/warehouses/{warehouseId}/reviews':
+    parameters:
+      - schema:
+          type: integer
+        name: warehouseId
+        in: path
+        required: true
+        description: 창고 id
+    get:
+      summary: 창고 리뷰 목록 조회
+      tags:
+        - warehouse-reviews
+      responses:
+        '200':
+          description: |-
+            OK
+            창고 리뷰를 정상적으로 불러옴
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  warehouse:
+                    $ref: '#/components/schemas/WarehouseReviewInfo'
+                required:
+                  - warehouse
+        '400':
+          description: |-
+            Bad Request
+            잘못된 요청 보냈을 때
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: |-
+            Unauthorized
+            로그인 하지 않으면 창고 리뷰를 조회하지 못함
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+        '404':
+          description: |-
+            Not Found
+            warehouseId인 창고가 없는 경우임
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      operationId: get-v1-warehouse-warehouseId-reviews
+      parameters:
+        - schema:
+            type: string
+            example: ' Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
+          in: header
+          name: Authorization
+          description: |-
+            Bearer 토큰 값입니다.
+            jwt 토큰을 사용합니다.
+          required: true
+        - schema:
+            type: integer
+          in: query
+          name: offset
+          description: 창고 리뷰들 offset 값입니다.
+          required: true
+        - schema:
+            type: integer
+          in: query
+          required: true
+          name: limit
+          description: '불러올 리뷰 목록 개수입니다 '
+      description: 창고 리뷰 목록을 불러옵니다
+    post:
+      summary: 창고 리뷰 작성
+      operationId: post-v1-warehouse-warehouseId-reviews
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  warehouse:
+                    $ref: '#/components/schemas/WarehouseReviewInfo'
+                required:
+                  - warehouse
+              examples: {}
+          headers: {}
+        '400':
+          description: |-
+            Bad Request
+            잘못된 요청 보냈을 때
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: |-
+            Unauthorized
+            사용자가 로그인을 안했을떄
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '403':
+          description: |-
+            Forbidden
+            사용자가 로그인했지만 권한이 없을 때
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewWarehouseReviewForm'
+        description: ''
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          description: |-
+            Bearer 토큰 값입니다.
+            jwt 토큰을 사용합니다.
+          required: true
+      description: |
+        창고 리뷰를 작성할 때 사용함
+      tags:
+        - warehouse-reviews
+  '/warehouses/{warehouseId}/reviews/{reviewId}':
+    parameters:
+      - schema:
+          type: integer
+        name: warehouseId
+        in: path
+        required: true
+        description: 창고 id
+      - schema:
+          type: integer
+        name: reviewId
+        in: path
+        required: true
+        description: 리뷰 id
+    delete:
+      summary: 창고 리뷰 삭제
+      operationId: delete-v1-warehouse-warehouseId-reviews-reviewId
+      responses:
+        '204':
+          description: |-
+            No Content
+            리뷰 삭제 성공했을때
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: |-
+            Bad Request
+            잘못된 요청을 보냈을 때
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: |-
+            Unauthorized
+            사용자가 로그인하지 않았을 때
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '403':
+          description: |-
+            Forbidden
+            사용자에게 리뷰를 삭제할 권한이 없을때
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      description: |-
+        창고 리뷰를 삭제할 떄 사용함
+        리뷰를 등록한 사용자와 관리자만 삭제할 수 있음
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          required: true
+          description: |-
+            Bearer 토큰 값입니다.
+            jwt 토큰을 사용합니다.
+      tags:
+        - warehouse-reviews
+  /auth/sign-up:
+    post:
+      summary: 회원가입
+      tags:
+        - auth
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                  refreshToken:
+                    type: string
+                  tokenType:
+                    type: string
+                    description: "토큰 종류\naccessToken과 concat해서 사용하면 됨\n\nex. `${tokenType} ${accessToken}` \n\n     -> Bearer ${accessToken}"
+                    default: Bearer
+                  user:
+                    $ref: '#/components/schemas/SimplifiedUserInfo'
+                required:
+                  - accessToken
+                  - refreshToken
+                  - tokenType
+        '400':
+          description: Bad Request
+        '409':
+          description: "Conflict\n중복된 이메일로 회원가입을 시도했을 때입니다 "
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      operationId: get-v1-auth-sign-up
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignUpForm'
+      description: 회원가입할 때 사용함
+    parameters: []
+  /auth/sign-in:
+    post:
+      summary: 로그인
+      operationId: post-v1-auth-sign-in
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                  refreshToken:
+                    type: string
+                  tokenType:
+                    type: string
+                    description: "토큰 종류\naccessToken과 concat해서 사용하면 됨\n\nex. `${tokenType} ${accessToken}` \n\n     -> Bearer ${accessToken}"
+                    default: Bearer
+                  user:
+                    $ref: '#/components/schemas/SimplifiedUserInfo'
+                required:
+                  - accessToken
+                  - refreshToken
+                  - tokenType
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: |-
+            Not Found
+            존재하지 않는 사용자 정보로 로그인 시도했을때
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      description: 로그인 할 때 사용함
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignInForm'
+      tags:
+        - auth
+    parameters: []
+  '/users/{userId}':
+    parameters:
+      - schema:
+          type: integer
+        name: userId
+        in: path
+        required: true
+        description: 유저 id
+    get:
+      summary: 사용자 정보 조회
+      tags:
+        - users
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/SimplifiedUserInfo'
+                required:
+                  - user
+        '400':
+          description: |-
+            Bad Request
+            잘못된 요청 보냈을 때
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: "Unauthorized\n사용자가 로그인 하지 않았을때 또는 access token 값에 이상이 있을 때 "
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '403':
+          description: |-
+            Forbidden
+            사용자 정보를 볼 수 있는 권한이 없을 때
+            (다른 사용자의 access token으로 조회를 시도할 때 )
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: |-
+            Not Found
+            사용자가 존재하지 않을때
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      operationId: get-v1-users-userId
+      description: 사용자 정보를 조회함
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          description: |-
+            Bearer 토큰 값입니다.
+            jwt 토큰을 사용합니다.
+          required: true
+    patch:
+      summary: 사용자 정보 수정
+      operationId: patch-v1-users-userId
+      responses:
+        '200':
+          description: |-
+            OK
+            사용자 정보 수정 성공했을때
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/SimplifiedUserInfo'
+                required:
+                  - user
+        '400':
+          description: |-
+            Bad Request
+            잘못된 요청 보냈을 때
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: |-
+            Unauthorized
+            사용자가 로그인 하지 않았을때
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '403':
+          description: |-
+            Forbidden
+            사용자 정보를 수정할 수 있는 권한이 없을 때
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: |-
+            Not Found
+            사용자가 존재하지 않을때
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '409':
+          description: |-
+            Conflict
+            중복된 이메일로 수정하려 했을 때
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      description: 사용자 정보를 수정함
+      parameters:
+        - schema:
+            type: string
+          in: header
+          description: |-
+            Bearer 토큰 값입니다.
+            jwt 토큰을 사용합니다.
+          name: Authorization
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditUserForm'
+      tags:
+        - users
+  /auth/refresh-token:
+    post:
+      summary: 액세스 토큰 재발급
+      operationId: post-v1-auth-refresh-token
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                  refreshToken:
+                    type: string
+                  tokenType:
+                    type: string
+                    description: "토큰 종류\naccessToken과 concat해서 사용하면 됨\n\nex. `${tokenType} ${accessToken}` \n\n     -> Bearer ${accessToken}"
+                    default: Bearer
+                required:
+                  - accessToken
+                  - refreshToken
+                  - tokenType
+        '401':
+          description: 'refresh token 유효기간 지났을 때 '
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+      description: 액세스 토큰을 재발급할 때 사용합니다
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          description: |-
+            Bearer 토큰 값입니다.
+            jwt 토큰을 사용합니다.
+          required: true
+      tags:
+        - auth
+    parameters: []
+  /attachments:
+    post:
+      summary: 첨부파일 업로드
+      operationId: post-attachments
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  attachments:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/WarehouseAttachmentInfo'
+      description: 첨부파일 업로드하기
+      parameters:
+        - schema:
+            type: string
+          in: header
+          description: |-
+            Bearer 토큰 값입니다.
+            jwt 토큰을 사용합니다.
+          name: Authorization
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                attachments:
+                  type: array
+                  format: binary
+                  items:
+                    type: string
+                    format: binary
+        description: ''
+      tags:
+        - attachments
+components:
+  schemas:
+    SimplifiedWarehouseInfo:
+      title: SimplifiedWarehouse
+      type: object
+      description: ''
+      properties:
+        id:
+          type: integer
+          description: 창고 id
+        name:
+          type: string
+          description: '창고명 '
+        thumbnailUrl:
+          type: string
+          description: '창고 섬네일 이미지 링크 '
+        landArea:
+          type: integer
+          description: 창고 대지면적
+        totalArea:
+          type: integer
+          description: 창고 연면적
+        canUse:
+          type: boolean
+          description: '창고 임대 가능 여부 '
+        location:
+          $ref: '#/components/schemas/LocationInfo'
+      required:
+        - id
+        - name
+        - thumbnailUrl
+        - canUse
+        - location
+    LocationInfo:
+      title: Location
+      type: object
+      properties:
+        latitude:
+          type: number
+          example: 39.999999
+          description: 위도
+        longitude:
+          type: number
+          description: 경도
+          example: 128.888888
+      required:
+        - latitude
+        - longitude
+    GeneralWarehouseDetailInfo:
+      title: GeneralWarehouseDetailInfo
+      type: object
+      description: ''
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          enum:
+            - ROOM_TEMPERATURE
+            - LOW_TEMPERATURE
+            - BONDED
+            - SAVAGE
+            - HAZARDOUS
+            - SELF_STORAGE
+            - CONTAINER
+          description: |
+            창고 종류
+        size:
+          type: integer
+          description: '창고 평 수 (단위: 평)'
+          example: 32
+        monthlyFee:
+          type: integer
+          description: '월세 (단위: 만원)'
+          example: 100
+        depositFee:
+          type: integer
+          description: '보증금 (단위: 만원)'
+          example: 5000
+        maintenanceFee:
+          type: integer
+          description: '관리비 (단위: 만원)'
+          example: 50
+        minUseTerm:
+          type: integer
+          description: 최소 이 기간만큼은 사용해야함
+      required:
+        - id
+        - type
+        - size
+        - monthlyFee
+        - depositFee
+        - maintenanceFee
+        - minUseTerm
+    SimplifiedUserInfo:
+      title: User
+      type: object
+      description: ''
+      properties:
+        id:
+          type: integer
+          description: 사용자 id
+        name:
+          type: string
+          description: 사용자 이름
+        email:
+          type: string
+          description: 사용자 이메일
+          format: email
+        type:
+          type: string
+          description: '사용자 종류 (SHIPPER: 화주, OWNER: 창고주)'
+          enum:
+            - SHIPPER
+            - OWNER
+        telephoneNumber:
+          type: string
+          description: 사용자 유선 번호
+        phoneNumber:
+          type: string
+          description: 사용자 휴대폰 번호
+        companyName:
+          type: string
+      required:
+        - id
+        - name
+        - email
+        - type
+        - telephoneNumber
+        - phoneNumber
+        - companyName
+    NewWarehouseForm:
+      title: NewWarehouseForm
+      type: object
+      description: ''
+      x-examples: {}
+      properties:
+        name:
+          type: string
+          description: 창고 이름
+        serviceType:
+          type: string
+          description: |
+            창고 종류
+          enum:
+            - GENERAL
+            - AGENCY
+        address:
+          type: string
+          description: 창고 주소
+          example: 경기 성남시 야탑동 장미로 55
+        addressDetail:
+          type: string
+          description: 칭고 상세주소
+          example: 108동 101호
+        description:
+          type: string
+        availableWeekdays:
+          type: integer
+          description: |-
+            사용 가능한 요일에 대한 이진 플래그
+
+            2^0~2^6가 일~토에 매칭됨
+
+            ex.
+            모든 요일 불가능 -> 0
+            일요일만 가능 -> 1 (2^0)
+            월요일만 가능 -> 2 (2^1)
+            일요일, 월요일만 가능 -> 3 (2^0 | 2^1)
+            수요일만 가능 -> 16 (2^4)
+          example: 0
+        openAt:
+          type: string
+          description: 창고 여는 시간
+          format: time
+        closeAt:
+          type: string
+          description: '창고 닫는 시간 '
+          format: time
+        availableTimeDetail:
+          type: string
+          description: |
+            창고 운영시간에 대한 추가 정보
+          example: 금요일엔 1시간 일찍 닫음
+        cctvExist:
+          type: boolean
+          description: cctv 존재 여부
+        securityCompanyExist:
+          type: boolean
+          description: 경비업체 존재 여부
+        securityCompanyName:
+          type: string
+          description: '경비업체 이름, 없으면 null'
+        doorLockExist:
+          type: boolean
+          description: 잠금장치 존재 여부
+        airConditioningType:
+          type: string
+          enum:
+            - HEATING
+            - COOLING
+            - NONE
+          description: 냉난방 정보
+        workerExist:
+          type: boolean
+          description: 관리인력 존재 여부
+        insuranceExist:
+          type: boolean
+          description: 보험 가입여부
+        insuranceName:
+          type: string
+          description: '보험사 이름, 없으면 null'
+        canPickup:
+          type: boolean
+          description: |
+            픽업 서비스 여부
+        canPark:
+          type: boolean
+          description: 방문 시 주차 가능 여부
+        parkingScale:
+          type: integer
+          description: 주차장 규모
+        attachmentIds:
+          type: array
+          description: 창고 이미지 url 목록
+          items:
+            type: integer
+        location:
+          $ref: '#/components/schemas/NewLocationForm'
+        additionalInfo:
+          oneOf:
+            - $ref: '#/components/schemas/NewAgencyWarehouseDetailForm'
+            - $ref: '#/components/schemas/NewGeneralWarehouseDetailForm'
+          description: '일반 창고와 에이전시 창고에 따라 추가정보 내용이 다름 '
+      required:
+        - name
+        - serviceType
+        - address
+        - addressDetail
+        - description
+        - availableWeekdays
+        - cctvExist
+        - securityCompanyExist
+        - insuranceExist
+        - canPickup
+        - canPark
+        - attachmentIds
+        - location
+        - additionalInfo
+    EditWarehouseForm:
+      title: EditWarehouseForm
+      type: object
+      description: ''
+      properties:
+        name:
+          type: string
+          description: 창고 이름
+        serviceType:
+          type: string
+          description: |
+            창고 종류
+          enum:
+            - GENERAL
+            - AGENCY
+        address:
+          type: string
+          description: 창고 주소
+          example: 경기 성남시 야탑동 장미로 55
+        addressDetail:
+          type: string
+          description: 칭고 상세주소
+          example: 108동 101호
+        availableWeekdays:
+          type: integer
+          description: |-
+            사용 가능한 요일에 대한 이진 플래그
+
+            2^0~2^6가 일~토에 매칭됨
+
+            ex.
+            모든 요일 불가능 -> 0
+            일요일만 가능 -> 1 (2^0)
+            월요일만 가능 -> 2 (2^1)
+            일요일, 월요일만 가능 -> 3 (2^0 | 2^1)
+            수요일만 가능 -> 16 (2^4)
+          example: 0
+        openAt:
+          type: string
+          description: 창고 여는 시간
+          format: time
+        closeAt:
+          type: string
+          description: '창고 닫는 시간 '
+          format: time
+        availableTimeDetail:
+          type: string
+          description: |
+            창고 운영시간에 대한 추가 정보
+          example: 금요일엔 1시간 일찍 닫음
+        cctvExist:
+          type: boolean
+          description: cctv 존재 여부
+        securityCompanyExist:
+          type: boolean
+          description: 경비업체 존재 여부
+        securityCompanyName:
+          type: string
+          description: '경비업체 이름, 없으면 null'
+        doorlockExist:
+          type: boolean
+          description: 잠금장치 존재 여부
+        airConditioningType:
+          type: string
+          enum:
+            - HEATING
+            - COOLING
+            - NONE
+          description: 냉난방 정보
+        workerExist:
+          type: boolean
+          description: 관리인력 존재 여부
+        insuranceExist:
+          type: boolean
+          description: 보험 가입여부
+        insuranceName:
+          type: string
+          description: '보험사 이름, 없으면 null'
+        canPickup:
+          type: boolean
+          description: |
+            픽업 서비스 여부
+        canPark:
+          type: boolean
+          description: 방문 시 주차 가능 여부
+        attachmentIds:
+          type: array
+          description: 창고 이미지 url 목록
+          items:
+            type: integer
+        location:
+          $ref: '#/components/schemas/LocationInfo'
+        additionalInfo:
+          oneOf:
+            - $ref: '#/components/schemas/AgencyWarehouseDetailInfo'
+            - $ref: '#/components/schemas/GeneralWarehouseDetailInfo'
+          description: '일반 창고와 에이전시 창고에 따라 추가정보 내용이 다름 '
+    WarehouseAttachmentInfo:
+      title: WarehouseAttachmentInfo
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 창고 이미지 id
+        url:
+          type: string
+          format: uri
+          description: 창고 이미지 url
+      required:
+        - id
+        - url
+    NewLocationForm:
+      title: NewLocationForm
+      type: object
+      properties:
+        latitude:
+          type: number
+        longitude:
+          type: number
+      required:
+        - latitude
+        - longitude
+    WarehouseReviewInfo:
+      title: WarehouseReviewInfo
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 리뷰 id
+        rating:
+          type: integer
+          description: 창고 별점
+        content:
+          type: string
+          description: |
+            창고 리뷰 내용
+        writer:
+          $ref: '#/components/schemas/SimplifiedUserInfo'
+      required:
+        - id
+        - rating
+        - content
+        - writer
+    NewWarehouseReviewForm:
+      title: NewWarehouseReviewForm
+      type: object
+      properties:
+        rating:
+          type: integer
+          description: 리뷰 별점
+        content:
+          type: string
+          description: 리뷰내용
+      required:
+        - rating
+        - content
+    SignUpForm:
+      title: NewUserForm
+      type: object
+      description: ''
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+          description: sha256으로 인코딩한 값입니다 (64바이트)
+        type:
+          type: string
+          enum:
+            - SHIPPER
+            - OWNER
+          description: '사용자 종류 (SHIPPER: 화주, OWNER: 창고주)'
+        telephoneNumber:
+          type: string
+        companyName:
+          type: string
+        phoneNumber:
+          type: string
+      required:
+        - name
+        - email
+        - password
+        - type
+        - phoneNumber
+    SignInForm:
+      title: SignInForm
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          description: sha256으로 인코딩한 값 (64바이트)
+      required:
+        - email
+        - password
+    EditUserForm:
+      title: EditUserForm
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+          description: sha256으로 인코딩한 값입니다 (64바이트)
+        type:
+          type: string
+          enum:
+            - SHIPPER
+            - OWNER
+          description: '사용자 종류 (SHIPPER: 화주, OWNER: 창고주)'
+        telephoneNumber:
+          type: string
+        companyName:
+          type: string
+        phoneNumber:
+          type: string
+    DetailedWarehouseInfo:
+      title: DetailedWarehouseInfo
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          description: 창고 이름
+        serviceType:
+          type: string
+          description: |
+            창고 종류
+          enum:
+            - GENERAL
+            - AGENCY
+        owner:
+          $ref: '#/components/schemas/SimplifiedUserInfo'
+        address:
+          type: string
+          description: 창고 주소
+          example: 경기 성남시 야탑동 장미로 55
+        addressDetail:
+          type: string
+          description: 칭고 상세주소
+          example: 108동 101호
+        availableWeekdays:
+          type: integer
+          description: |-
+            사용 가능한 요일에 대한 이진 플래그
+
+            2^0~2^6가 일~토에 매칭됨
+
+            ex.
+            모든 요일 불가능 -> 0
+            일요일만 가능 -> 1 (2^0)
+            월요일만 가능 -> 2 (2^1)
+            일요일, 월요일만 가능 -> 3 (2^0 | 2^1)
+            수요일만 가능 -> 16 (2^4)
+          example: 0
+        openAt:
+          type: string
+          description: 창고 여는 시간
+          format: time
+        closeAt:
+          type: string
+          description: '창고 닫는 시간 '
+          format: time
+        availableTimeDetail:
+          type: string
+          description: |
+            창고 운영시간에 대한 추가 정보
+          example: 금요일엔 1시간 일찍 닫음
+        cctvExist:
+          type: boolean
+          description: cctv 존재 여부
+        securityCompanyExist:
+          type: boolean
+          description: 경비업체 존재 여부
+        securityCompanyName:
+          type: string
+          description: '경비업체 이름, 없으면 null'
+        doorLockExist:
+          type: boolean
+          description: 잠금장치 존재 여부
+        airConditioningType:
+          type: string
+          enum:
+            - HEATING
+            - COOLING
+            - NONE
+          description: 냉난방 정보
+        workerExist:
+          type: boolean
+          description: 관리인력 존재 여부
+        insuranceExist:
+          type: boolean
+          description: 보험 가입여부
+        insuranceName:
+          type: string
+          description: '보험사 이름, 없으면 null'
+        canPickup:
+          type: boolean
+          description: |
+            픽업 서비스 여부
+        canPark:
+          type: boolean
+          description: 방문 시 주차 가능 여부
+        attachments:
+          type: array
+          description: 창고 이미지 url 목록
+          items:
+            $ref: '#/components/schemas/WarehouseAttachmentInfo'
+        location:
+          $ref: '#/components/schemas/LocationInfo'
+        additionalInfo:
+          oneOf:
+            - $ref: '#/components/schemas/AgencyWarehouseDetailInfo'
+            - $ref: '#/components/schemas/GeneralWarehouseDetailInfo'
+          description: '일반 창고와 에이전시 창고에 따라 추가정보 내용이 다름 '
+      required:
+        - id
+        - name
+        - serviceType
+        - owner
+        - address
+        - addressDetail
+        - availableWeekdays
+        - openAt
+        - closeAt
+        - availableTimeDetail
+        - cctvExist
+        - securityCompanyExist
+        - doorLockExist
+        - airConditioningType
+        - workerExist
+        - insuranceExist
+        - canPickup
+        - canPark
+        - attachments
+        - location
+        - additionalInfo
+    AgencyWarehouseDetailInfo:
+      title: AgencyWarehouseDetailInfo
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          enum:
+            - 3PL
+            - FULLFILMENT
+          description: 3PL vs 풀필먼트 업체
+        mainItemType:
+          type: string
+          enum:
+            - CLOTH
+            - FOOD
+            - ACCESSORY
+            - ELECTRONIC
+            - COSMETIC
+            - COMPONENT
+            - RAW_MATERIAL
+          description: 주요 취급 품목
+        storageType:
+          type: string
+          enum:
+            - PALLET
+            - BOX
+            - SPECIAL
+        payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgencyWarehousePaymentInfo'
+      required:
+        - id
+        - type
+        - mainItemType
+        - payments
+        - storageType
+    AgencyWarehousePaymentInfo:
+      title: AgencyWarehousePaymentInfo
+      type: object
+      properties:
+        id:
+          type: integer
+        unit:
+          type: string
+        cost:
+          type: integer
+        description:
+          type: string
+        type:
+          type: string
+          enum:
+            - STORE
+            - WORK
+            - DELIVER
+            - OTHER
+      required:
+        - id
+        - unit
+        - cost
+        - description
+        - type
+    NewAgencyWarehouseDetailForm:
+      title: NewAgencyWarehouseDetail
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - 3PL
+            - FULLFILMENT
+          description: 3PL vs 풀필먼트 업체
+        mainItemType:
+          type: string
+          enum:
+            - CLOTH
+            - FOOD
+            - ACCESSORY
+            - ELECTRONIC
+            - COSMETIC
+            - COMPONENT
+            - RAW_MATERIAL
+          description: 주요 취급 품목
+        storageType:
+          type: string
+          enum:
+            - PALLET
+            - BOX
+            - SPECIAL
+        payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/NewAgencyWarehousePaymentForm'
+    NewAgencyWarehousePaymentForm:
+      title: NewAgencyWarehousePaymentForm
+      type: object
+      properties:
+        unit:
+          type: string
+        cost:
+          type: integer
+        description:
+          type: string
+        type:
+          type: string
+          enum:
+            - STORE
+            - WORK
+            - DELIVER
+            - OTHER
+      required:
+        - id
+        - unit
+        - cost
+        - description
+        - type
+    NewGeneralWarehouseDetailForm:
+      title: NewGeneralWarehouseDetailForm
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - ROOM_TEMPERATURE
+            - LOW_TEMPERATURE
+            - BONDED
+            - SAVAGE
+            - HAZARDOUS
+            - SELF_STORAGE
+            - CONTAINER
+          description: |
+            창고 종류
+        size:
+          type: integer
+          description: '창고 평 수 (단위: 평)'
+          example: 32
+        monthlyFee:
+          type: integer
+          description: '월세 (단위: 만원)'
+          example: 100
+        depositFee:
+          type: integer
+          description: '보증금 (단위: 만원)'
+          example: 5000
+        maintenanceFee:
+          type: integer
+          description: '관리비 (단위: 만원)'
+          example: 50
+        minUseTerm:
+          type: integer
+          description: |-
+            최소 이 기간만큼은 사용해야함
+            단위: 달
+      required:
+        - type
+        - size
+        - monthlyFee
+        - depositFee
+        - maintenanceFee
