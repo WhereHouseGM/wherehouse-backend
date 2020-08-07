@@ -11,4 +11,6 @@ require("./warehouse")(router);
 
 require("./attachment")(router);
 
+require("./warehouse-review")(router);
+
 module.exports = router;
