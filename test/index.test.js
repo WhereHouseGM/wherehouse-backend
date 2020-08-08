@@ -52,6 +52,11 @@ async function getWarehouse (tokenType, accessToken, warehouseId, query) {
 		.set("Authorization", `${tokenType} ${accessToken}`);
 }
 
+async function getWarehouses() {
+	return chai.request(app)
+		.get("/v1/warehouses");
+}
+
 require("./get-user")({
 	describe,
 	before,
@@ -114,6 +119,16 @@ require("./get-warehouse")({
 	db,
 	signUp,
 	getWarehouse,
+	expect
+});
+
+require("./get-warehouses")({
+	describe,
+	before,
+	it,
+	setupDatabase,
+	db,
+	getWarehouses,
 	expect
 });
 
