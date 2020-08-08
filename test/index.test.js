@@ -7,7 +7,6 @@ const { setupDatabase } = require("./setup-database");
 const path = require("path");
 const app = require("../src/app");
 const db = require("../src/models");
-const { signUp } = require("./sign-up.test");
 
 chai.use(chaiHttp);
 chai.use(chaiResponseValidator(path.resolve("spec/wherehouse.v1.yaml")));
@@ -37,6 +36,12 @@ async function signIn(signInRequest) {
 	return chai.request(app)
 		.post("/v1/auth/sign-in")
 		.send(signInRequest);
+}
+
+async function signUp(signUpRequest) {
+	return chai.request(app)
+		.post("/v1/auth/sign-up")
+		.send(signUpRequest);
 }
 
 require("./get-user")({
@@ -80,5 +85,15 @@ require("./sign-in")({
 	db,
 	signUp,
 	signIn,
+	expect
+});
+
+require("./sign-up")({
+	describe,
+	before,
+	it,
+	setupDatabase,
+	db,
+	signUp,
 	expect
 });

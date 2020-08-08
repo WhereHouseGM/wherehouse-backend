@@ -4,7 +4,7 @@ const expect = require("chai").expect;
 const chaiHttp = require("chai-http");
 const db = require("../src/models");
 const app = require("../src/app");
-const { signUp } = require("./sign-up.test");
+const { signUp } = require("./sign-up");
 const { setupDatabase } = require("./setup-database");
 const qs = require("qs");
 

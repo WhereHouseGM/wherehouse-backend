@@ -1,5 +1,5 @@
 const { describe, it, before } = require("mocha");
-const { signUp } = require("./sign-up.test");
+const { signUp } = require("./sign-up");
 const chai = require("chai");
 const db = require("../src/models");
 const expect = require("chai").expect;
