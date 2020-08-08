@@ -28,21 +28,14 @@ module.exports = (dependencies) => {
 			const res = await patchUser(signUpResponse.body.user.id, patchUserRequest, signUpResponse.body.tokenType, signUpResponse.body.accessToken);
 
 			expect(res.status).to.equal(200);
-			expect(res.body).not.to.be.empty;
-			expect(res.body.id).to.be.a("number");
-			expect(res.body.name).to.be.a("string");
-			expect(res.body.name).to.be.equal("patchuser");
-			expect(res.body.email).to.be.a("string");
-			expect(res.body.type).to.be.a("string");
-			expect(res.body.phoneNumber).to.be.a("string");
+			expect(res).to.satisfyApiSpec;
 		});
 
 		it("should fail due to wrong access token", async function() {
 			const res = await patchUser(signUpResponse.body.user.id, patchUserRequest, signUpResponse.body.tokenType, "aaaaa");
 
 			expect(res.status).to.equal(401);
-			expect(res.body).not.to.be.empty;
-			expect(res.body.message).to.be.a("string");
+			expect(res).to.satisfyApiSpec;
 		});
 
 		it("should fail due to another users access token", async function() {
@@ -61,16 +54,14 @@ module.exports = (dependencies) => {
 			const res = await patchUser(signUpResponse.body.user.id, patchUserRequest, anotherSignUpResponse.body.tokenType, anotherSignUpResponse.body.accessToken);
 
 			expect(res.status).to.equal(403);
-			expect(res.body).not.to.be.empty;
-			expect(res.body.message).to.be.a("string");
+			expect(res).to.satisfyApiSpec;
 		});
 
 		it("should fail due to not existing user", async function() {
 			const res = await patchUser(99999, patchUserRequest, signUpResponse.body.tokenType, signUpResponse.body.accessToken);
 
 			expect(res.status).to.equal(404);
-			expect(res.body).not.to.be.empty;
-			expect(res.body.message).to.be.a("string");
+			expect(res).to.satisfyApiSpec;
 		});
 	});
 };

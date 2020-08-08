@@ -26,7 +26,7 @@ module.exports = (dependencies) => {
 			const res = await getWarehouse("Bearer", "", 1);
 
 			expect(res.status).to.equal(401);
-			expect(res.body).not.to.be.empty;
+			expect(res).to.satisfyApiSpec;
 		});
 
 		it("failed since warehouse not exist", async function () {
@@ -35,7 +35,7 @@ module.exports = (dependencies) => {
 			const res = await getWarehouse(tokenType, accessToken, 2);
 
 			expect(res.status).to.equal(404);
-			expect(res.body).not.to.be.empty;
+			expect(res).to.satisfyApiSpec;
 		});
 	});
 };

@@ -21,19 +21,14 @@ module.exports = (dependencies) => {
 			const res = await refreshToken(signUpResponse.body.tokenType, signUpResponse.body.refreshToken);
 
 			expect(res.status).to.equal(200);
-			expect(res.body).not.to.be.empty;
-			expect(res.body.accessToken).to.be.a("string");
-			expect(res.body.refreshToken).to.be.a("string");
-			expect(res.body.tokenType).to.be.a("string");
-			expect(res.body.user).not.to.be.empty;
+			expect(res).to.satisfyApiSpec;
 		});
 
 		it("should fail due to expired refresh token", async function() {
 			const res = await refreshToken("Bearer", "aaaa");
 
 			expect(res.status).to.equal(401);
-			expect(res.body).not.to.be.empty;
-			expect(res.body.message).to.be.a("string");
+			expect(res).to.satisfyApiSpec;
 		});
 	});
 };

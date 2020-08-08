@@ -8,8 +8,8 @@ module.exports = (dependencies) => {
 		it("success", async function() {
 			const res = await getWarehouses();
 
-			expect(res).not.to.be.empty;
-			expect(res.body).not.to.be.empty;
+			expect(res.status).to.equal(200);
+			expect(res).to.satisfyApiSpec;
 		});
 	});
 };

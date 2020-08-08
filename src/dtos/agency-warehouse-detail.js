@@ -5,6 +5,7 @@ module.exports = function (agencyWarehouseDetail) {
 		id: agencyWarehouseDetail.id,
 		type: agencyWarehouseDetail.type,
 		mainItemType: agencyWarehouseDetail.mainItemType,
+		storageType: agencyWarehouseDetail.storageType,
 		payments: agencyWarehouseDetail.payments.map(_ => AgencyWarehousePaymentDto(_))
 	};
 };

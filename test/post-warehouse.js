@@ -116,6 +116,7 @@ module.exports = (dependencies) => {
 			const res = await postWarehouse(tokenType, accessToken, postGeneralWarehouseRequest);
 
 			expect(res.status).to.equal(201);
+			expect(res).to.satisfyApiSpec;
 		});
 
 		it("should success(agency warehouse)", async function () {
@@ -123,18 +124,21 @@ module.exports = (dependencies) => {
 			const res = await postWarehouse(tokenType, accessToken, postAgencyWarehouseRequest);
 
 			expect(res.status).to.equal(201);
+			expect(res).to.satisfyApiSpec;
 		});
 
 		it("should fail due to invalid token", async function () {
 			const res = await postWarehouse("Bearer", "", postAgencyWarehouseRequest);
 
 			expect(res.status).to.equal(401);
+			expect(res).to.satisfyApiSpec;
 		});
 
 		it("should fail due to invalid token", async function () {
 			const res = await postWarehouse("Bearer", "", postAgencyWarehouseRequest);
 
 			expect(res.status).to.equal(401);
+			expect(res).to.satisfyApiSpec;
 		});
 	});
 };

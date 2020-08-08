@@ -36,7 +36,7 @@ module.exports = (router) => {
 			if(error) throw error;
 
 			const user = await patchUser(userIdFromToken, userIdParam, value);
-			res.status(200).json(user);
+			res.status(200).json({ user: SimplifiedUserDto(user) });
 		} catch(err) {
 			next(err);
 		}

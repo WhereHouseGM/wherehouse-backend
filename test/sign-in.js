@@ -27,11 +27,7 @@ module.exports = (dependencies) => {
 			const res = await signIn(signInRequest);
 
 			expect(res.status).to.equal(200);
-			expect(res.body).not.to.be.empty;
-			expect(res.body.accessToken).to.be.a("string");
-			expect(res.body.refreshToken).to.be.a("string");
-			expect(res.body.tokenType).to.be.a("string");
-			expect(res.body.user).not.to.be.empty;
+			expect(res).to.satisfyApiSpec;
 		});
 	});
 };
