@@ -1,99 +1,11 @@
 module.exports = (dependencies) => {
-	const { describe, before, it, setupDatabase, db, signUp, postWarehouse, userFactory, expect } = dependencies;
+	const { describe, before, it, setupDatabase, db, signUp, postWarehouse, userFactory, warehouseFactory, expect } = dependencies;
 
 	describe("post warehouse", function () {
 		const signUpRequest = userFactory.newUser();
-
-		const postGeneralWarehouseRequest = {
-			"name": "string",
-			"serviceType": "AGENCY",
-			"address": "경기 성남시 야탑동 장미로 55",
-			"addressDetail": "108동 101호",
-			"description": "string",
-			"availableWeekdays": 0,
-			"openAt": "08:00:00",
-			"closeAt": "19:00:00",
-			"availableTimeDetail": "금요일엔 1시간 일찍 닫음",
-			"cctvExist": true,
-			"securityCompanyExist": true,
-			"securityCompanyName": "string",
-			"doorLockExist": true,
-			"airConditioningType": "HEATING",
-			"workerExist": true,
-			"insuranceExist": true,
-			"insuranceName": "string",
-			"canPickup": true,
-			"canPark": true,
-			"attachmentIds": [
-				0
-			],
-			"location": {
-				"latitude": 0,
-				"longitude": 0
-			},
-			"additionalInfo": {
-				"type": "3PL",
-				"mainItemType": "CLOTH",
-				"storageType": "BOX",
-				"payments": [
-					{
-						"unit": "string",
-						"cost": 0,
-						"description": "string",
-						"type": "STORE"
-					},
-					{
-						"unit": "다스",
-						"cost": 1000,
-						"description": "연필 보관",
-						"type": "STORE"
-					},
-					{
-						"unit": "KG",
-						"cost": 100,
-						"description": "물건 옮기기",
-						"type": "WORK"
-					}
-				]
-			}
-		};
-
-		const postAgencyWarehouseRequest = {
-			"name": "string",
-			"serviceType": "GENERAL",
-			"address": "경기 성남시 야탑동 장미로 55",
-			"addressDetail": "108동 101호",
-			"description": "string",
-			"availableWeekdays": 0,
-			"openAt": "08:00:00",
-			"closeAt": "19:00:00",
-			"availableTimeDetail": "금요일엔 1시간 일찍 닫음",
-			"cctvExist": true,
-			"securityCompanyExist": true,
-			"securityCompanyName": "string",
-			"doorLockExist": true,
-			"airConditioningType": "HEATING",
-			"workerExist": true,
-			"insuranceExist": true,
-			"insuranceName": "string",
-			"canPickup": true,
-			"canPark": true,
-			"attachmentIds": [
-				0
-			],
-			"location": {
-				"latitude": 0,
-				"longitude": 0
-			},
-			"additionalInfo": {
-				"type": "ROOM_TEMPERATURE",
-				"size": 100,
-				"monthlyFee": 300,
-				"depositFee": 5000,
-				"maintenanceFee": 10,
-				"minUseTerm": 1
-			}
-		};
+		console.log(Object.keys(userFactory))
+		const postGeneralWarehouseRequest = warehouseFactory.newGeneral();
+		const postAgencyWarehouseRequest = warehouseFactory.newAgency();
 
 		let signUpResponse;
 

@@ -5,6 +5,7 @@ const chaiResponseValidator = require("chai-openapi-response-validator");
 const { describe, it, before } = require("mocha");
 const { setupDatabase } = require("./setup-database");
 const userFactory = require("./factory/user");
+const warehouseFactory = require("./factory/warehouse");
 const path = require("path");
 const qs = require("qs");
 const app = require("../src/app");
@@ -97,6 +98,7 @@ require("./post-warehouse")({
 	signUp,
 	postWarehouse,
 	userFactory,
+	warehouseFactory,
 	expect
 });
 
