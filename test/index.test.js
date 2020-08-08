@@ -59,6 +59,13 @@ async function getWarehouse (tokenType, accessToken, warehouseId) {
 		.set("Authorization", `${tokenType} ${accessToken}`);
 }
 
+async function patchWarehouse (tokenType, accessToken, warehouseId, patchWarehouseRequest) {
+	return chai.request(app)
+		.patch(`/v1/warehouses/${warehouseId}`)
+		.set("Authorization", `${tokenType} ${accessToken}`)
+		.send(patchWarehouseRequest);
+}
+
 async function getWarehouses(query) {
 	const queryString = qs.stringify(query);
 	console.log(`/v1/warehouses?${queryString}`);
@@ -148,6 +155,20 @@ require("./get-warehouses")({
 	setupDatabase,
 	db,
 	getWarehouses,
+	postWarehouse,
+	signUp,
+	userFactory,
+	warehouseFactory,
+	expect
+});
+
+require("./patch-warehouse")({
+	describe,
+	before,
+	it,
+	setupDatabase,
+	db,
+	patchWarehouse,
 	postWarehouse,
 	signUp,
 	userFactory,

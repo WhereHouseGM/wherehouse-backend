@@ -8,7 +8,6 @@ module.exports = (dependencies) => {
 			await setupDatabase(db);
 
 			const signUpRequest = userFactory.newUser();
-
 			signUpResponse = await signUp(signUpRequest);
 		});
 

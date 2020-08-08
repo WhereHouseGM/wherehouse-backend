@@ -179,7 +179,7 @@ module.exports = (router) => {
 			if (error) throw error;
 
 			const warehouse = await patchWarehouse(userId, warehouseId, value);
-			res.status(201).json({warehouse: DetailedWarehouseDto(warehouse)});
+			res.status(200).json({warehouse: DetailedWarehouseDto(warehouse)});
 		} catch (err) {
 			next(err);
 		}

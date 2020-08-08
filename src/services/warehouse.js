@@ -142,7 +142,7 @@ exports.postWarehouse = async function (userId, postWarehouseRequest) {
 exports.patchWarehouse = async function (userId, warehouseId, patchWarehouseRequest) {
 	const warehouse = await exports.getWarehouse(warehouseId);
 
-	if(warehouse.owner.id !== userId) throw new HTTPError(403, "Only owner can patch");ㅅ
+	if(warehouse.owner.id !== userId) throw new HTTPError(403, "Only owner can patch");
 
 	const { attachmentIds, additionalInfo, location, ...warehouseFields } = patchWarehouseRequest;
 	let updatedAttachmentIds = attachmentIds || [];
