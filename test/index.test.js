@@ -61,6 +61,8 @@ async function getWarehouse (tokenType, accessToken, warehouseId) {
 
 async function getWarehouses(query) {
 	const queryString = qs.stringify(query);
+	console.log(`/v1/warehouses?${queryString}`);
+
 	return chai.request(app)
 		.get(`/v1/warehouses?${queryString}`);
 }
@@ -146,6 +148,10 @@ require("./get-warehouses")({
 	setupDatabase,
 	db,
 	getWarehouses,
+	postWarehouse,
+	signUp,
+	userFactory,
+	warehouseFactory,
 	expect
 });
 
