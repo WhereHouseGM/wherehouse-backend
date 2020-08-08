@@ -45,6 +45,12 @@ async function signUp(signUpRequest) {
 		.send(signUpRequest);
 }
 
+async function refreshToken(tokenType, refreshToken) {
+	return chai.request(app)
+		.post("/v1/auth/refresh-token")
+		.set("Authorization", `${tokenType} ${refreshToken}`);
+}
+
 async function getWarehouse (tokenType, accessToken, warehouseId, query) {
 	const queryString = qs.stringify(query);
 	return chai.request(app)
@@ -132,4 +138,13 @@ require("./get-warehouses")({
 	expect
 });
 
-
+require("./refresh-token")({
+	describe,
+	before,
+	it,
+	setupDatabase,
+	db,
+	signUp,
+	refreshToken,
+	expect
+});
