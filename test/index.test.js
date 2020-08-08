@@ -5,6 +5,7 @@ const chaiResponseValidator = require("chai-openapi-response-validator");
 const { describe, it, before } = require("mocha");
 const { setupDatabase } = require("./setup-database");
 const path = require("path");
+const qs = require("qs");
 const app = require("../src/app");
 const db = require("../src/models");
 
@@ -42,6 +43,13 @@ async function signUp(signUpRequest) {
 	return chai.request(app)
 		.post("/v1/auth/sign-up")
 		.send(signUpRequest);
+}
+
+async function getWarehouse (tokenType, accessToken, warehouseId, query) {
+	const queryString = qs.stringify(query);
+	return chai.request(app)
+		.get(`/v1/warehouses/${warehouseId}?${queryString}`)
+		.set("Authorization", `${tokenType} ${accessToken}`);
 }
 
 require("./get-user")({
@@ -97,3 +105,16 @@ require("./sign-up")({
 	signUp,
 	expect
 });
+
+require("./get-warehouse")({
+	describe,
+	before,
+	it,
+	setupDatabase,
+	db,
+	signUp,
+	getWarehouse,
+	expect
+});
+
+
