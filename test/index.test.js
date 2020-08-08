@@ -53,17 +53,40 @@ async function refreshToken(tokenType, refreshToken) {
 		.set("Authorization", `${tokenType} ${refreshToken}`);
 }
 
-async function getWarehouse (tokenType, accessToken, warehouseId, query) {
-	const queryString = qs.stringify(query);
+async function getWarehouse (tokenType, accessToken, warehouseId) {
 	return chai.request(app)
-		.get(`/v1/warehouses/${warehouseId}?${queryString}`)
+		.get(`/v1/warehouses/${warehouseId}`)
 		.set("Authorization", `${tokenType} ${accessToken}`);
 }
 
-async function getWarehouses() {
+async function getWarehouses(query) {
+	const queryString = qs.stringify(query);
 	return chai.request(app)
-		.get("/v1/warehouses");
+		.get(`/v1/warehouses?${queryString}`);
 }
+
+require("./sign-in")({
+	describe,
+	before,
+	it,
+	setupDatabase,
+	db,
+	signUp,
+	signIn,
+	userFactory,
+	expect
+});
+
+require("./sign-up")({
+	describe,
+	before,
+	it,
+	setupDatabase,
+	db,
+	signUp,
+	userFactory,
+	expect
+});
 
 require("./get-user")({
 	describe,
@@ -102,29 +125,6 @@ require("./post-warehouse")({
 	expect
 });
 
-require("./sign-in")({
-	describe,
-	before,
-	it,
-	setupDatabase,
-	db,
-	signUp,
-	signIn,
-	userFactory,
-	expect
-});
-
-require("./sign-up")({
-	describe,
-	before,
-	it,
-	setupDatabase,
-	db,
-	signUp,
-	userFactory,
-	expect
-});
-
 require("./get-warehouse")({
 	describe,
 	before,
@@ -133,7 +133,9 @@ require("./get-warehouse")({
 	db,
 	signUp,
 	getWarehouse,
+	postWarehouse,
 	userFactory,
+	warehouseFactory,
 	expect
 });
 

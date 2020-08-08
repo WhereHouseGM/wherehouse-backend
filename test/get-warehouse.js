@@ -1,17 +1,26 @@
 module.exports = (dependencies) => {
-	const { describe, before, it, setupDatabase, db, signUp, getWarehouse, userFactory, expect } = dependencies;
+	const { describe, before, it, setupDatabase, db, signUp, getWarehouse, postWarehouse, userFactory, warehouseFactory, expect } = dependencies;
 	describe("get warehouse", function () {
 		const signUpRequest = userFactory.newUser();
+		const postGenralWarehouseRequest = warehouseFactory.newGeneral();
 		let signUpResponse;
+		let postWarehouseResponse;
 
 		before(async function () {
 			await setupDatabase(db);
 			signUpResponse = await signUp(signUpRequest);
 			signUpResponse = signUpResponse.body;
+			postWarehouseResponse = await postWarehouse(signUpResponse.tokenType, signUpResponse.accessToken, postGenralWarehouseRequest);
+			postWarehouseResponse = postWarehouseResponse.body;
 		});
 
 		it("should success", async function () {
-			// TODO: create warehouse
+			const { tokenType, accessToken } = signUpResponse;
+			const { warehouse } = postWarehouseResponse;
+			const res = await getWarehouse(tokenType, accessToken, warehouse.id);
+
+			expect(res.status).to.equal(200);
+			expect(res).to.satisfyApiSpec;
 		});
 
 		it("failed due to invalid access token", async function () {
@@ -23,7 +32,6 @@ module.exports = (dependencies) => {
 
 		it("failed since warehouse not exist", async function () {
 			const { accessToken, tokenType } = signUpResponse;
-			console.log(accessToken);
 			const res = await getWarehouse(tokenType, accessToken, 2);
 
 			expect(res.status).to.equal(404);
