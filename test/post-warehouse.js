@@ -3,7 +3,6 @@ module.exports = (dependencies) => {
 
 	describe("post warehouse", function () {
 		const signUpRequest = userFactory.newUser();
-		console.log(Object.keys(userFactory))
 		const postGeneralWarehouseRequest = warehouseFactory.newGeneral();
 		const postAgencyWarehouseRequest = warehouseFactory.newAgency();
 

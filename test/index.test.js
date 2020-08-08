@@ -207,3 +207,18 @@ require("./refresh-token")({
 	userFactory,
 	expect
 });
+
+require("./post-warehouse-review")({
+	describe,
+	before,
+	it,
+	setupDatabase,
+	db,
+	postWarehouse,
+	signUp,
+	postWarehouseReview,
+	userFactory,
+	warehouseFactory,
+	warehouseReviewFactory,
+	expect
+});

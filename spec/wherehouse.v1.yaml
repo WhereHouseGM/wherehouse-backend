@@ -535,17 +535,6 @@ paths:
                 properties:
                   message:
                     type: string
-        '403':
-          description: |-
-            Forbidden
-            사용자가 로그인했지만 권한이 없을 때
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
       requestBody:
         content:
           application/json:
