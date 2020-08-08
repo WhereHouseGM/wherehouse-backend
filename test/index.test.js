@@ -89,7 +89,13 @@ async function postWarehouseReview(tokenType, accessToken, warehouseId, postWare
 async function getWarehouseReviews(tokenType, accessToken, warehouseId) {
 	return chai.request(app)
 		.get(`/v1/warehouses/${warehouseId}/reviews`)
-		.set("Authorization", `${tokenType} ${accessToken}`)
+		.set("Authorization", `${tokenType} ${accessToken}`);
+}
+
+async function deleteWarehouseReview(tokenType, accessToken, warehouseId, warehouseReviewId) {
+	return chai.request(app)
+		.delete(`/v1/warehouses/${warehouseId}/reviews/${warehouseReviewId}`)
+		.set("Authorization", `${tokenType} ${accessToken}`);
 }
 
 require("./sign-in")({
@@ -244,6 +250,22 @@ require("./get-warehouse-reviews")({
 	postWarehouse,
 	signUp,
 	getWarehouseReviews,
+	postWarehouseReview,
+	userFactory,
+	warehouseFactory,
+	warehouseReviewFactory,
+	expect
+});
+
+require("./delete-warehouse-review")({
+	describe,
+	before,
+	it,
+	setupDatabase,
+	db,
+	postWarehouse,
+	signUp,
+	deleteWarehouseReview,
 	postWarehouseReview,
 	userFactory,
 	warehouseFactory,
