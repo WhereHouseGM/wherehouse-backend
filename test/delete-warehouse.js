@@ -1,6 +1,6 @@
 module.exports = (dependencies) => {
-	const { describe, before, it, setupDatabase, db, patchWarehouse, postWarehouse, signUp, userFactory, warehouseFactory, expect } = dependencies;
-	describe("patch warehouse", function() {
+	const { describe, before, it, setupDatabase, db, deleteWarehouse, postWarehouse, signUp, userFactory, warehouseFactory, expect } = dependencies;
+	describe("delete warehouse", function() {
 		const signUpRequest = userFactory.newUser();
 		const postWarehouseRequest =  warehouseFactory.newGeneral();
 		let signUpResponse, postWarehouseResponse;
@@ -14,24 +14,16 @@ module.exports = (dependencies) => {
 		it("should success", async function() {
 			const { tokenType, accessToken } = signUpResponse.body;
 			const { warehouse } = postWarehouseResponse.body;
-			const res = await patchWarehouse(tokenType, accessToken, warehouse.id, { name: "patch name" });
+			const res = await deleteWarehouse(tokenType, accessToken, warehouse.id);
 
-			expect(res.status).to.equal(200);
-			expect(res).to.satisfyApiSpec;
-		});
-
-		it("failed due to unknown property", async function() {
-			const { tokenType, accessToken } = signUpResponse.body;
-			const { warehouse } = postWarehouseResponse.body;
-			const res = await patchWarehouse(tokenType, accessToken, warehouse.id, { unknown: "unknown	" });
-
-			expect(res.status).to.equal(400);
+			expect(res.status).to.equal(204);
 			expect(res).to.satisfyApiSpec;
 		});
 
 		it("failed due to invalid access token", async function() {
+			postWarehouseResponse = await postWarehouse(signUpResponse.body.tokenType, signUpResponse.body.accessToken, postWarehouseRequest);
 			const { warehouse } = postWarehouseResponse.body;
-			const res = await patchWarehouse("Bearer", "", warehouse.id, { name: "patch name" });
+			const res = await deleteWarehouse("Bearer", "", warehouse.id);
 
 			expect(res.status).to.equal(401);
 			expect(res).to.satisfyApiSpec;
@@ -41,10 +33,10 @@ module.exports = (dependencies) => {
 			const anotherUserSignUpResponse = await signUp(userFactory.newUser());
 			const { tokenType, accessToken } = anotherUserSignUpResponse.body;
 			const { warehouse } = postWarehouseResponse.body;
-			const res = await patchWarehouse(tokenType, accessToken, warehouse.id, { name: "patch name" });
+			const res = await deleteWarehouse(tokenType, accessToken, warehouse.id);
 
 			expect(res.status).to.equal(403);
 			expect(res).to.satisfyApiSpec;
 		});
 	});
-};
+}

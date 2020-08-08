@@ -66,6 +66,12 @@ async function patchWarehouse (tokenType, accessToken, warehouseId, patchWarehou
 		.send(patchWarehouseRequest);
 }
 
+async function deleteWarehouse (tokenType, accessToken, warehouseId) {
+	return chai.request(app)
+		.delete(`/v1/warehouses/${warehouseId}`)
+		.set("Authorization", `${tokenType} ${accessToken}`)
+}
+
 async function getWarehouses(query) {
 	const queryString = qs.stringify(query);
 	console.log(`/v1/warehouses?${queryString}`);
@@ -169,6 +175,20 @@ require("./patch-warehouse")({
 	setupDatabase,
 	db,
 	patchWarehouse,
+	postWarehouse,
+	signUp,
+	userFactory,
+	warehouseFactory,
+	expect
+});
+
+require("./delete-warehouse")({
+	describe,
+	before,
+	it,
+	setupDatabase,
+	db,
+	deleteWarehouse,
 	postWarehouse,
 	signUp,
 	userFactory,
