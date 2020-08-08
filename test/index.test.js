@@ -33,6 +33,12 @@ async function patchUser(userId, patchUserRequest, tokenType, accessToken) {
 		.send(patchUserRequest);
 }
 
+async function signIn(signInRequest) {
+	return chai.request(app)
+		.post("/v1/auth/sign-in")
+		.send(signInRequest);
+}
+
 require("./get-user")({
 	describe,
 	before,
@@ -63,5 +69,16 @@ require("./post-warehouse")({
 	db,
 	signUp,
 	postWarehouse,
+	expect
+});
+
+require("./sign-in")({
+	describe,
+	before,
+	it,
+	setupDatabase,
+	db,
+	signUp,
+	signIn,
 	expect
 });
