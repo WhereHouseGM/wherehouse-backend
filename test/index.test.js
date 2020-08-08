@@ -19,6 +19,13 @@ async function getUser(userId, tokenType, accessToken) {
 		.set("Authorization", `${tokenType} ${accessToken}`);
 }
 
+async function patchUser(userId, patchUserRequest, tokenType, accessToken) {
+	return chai.request(app)
+		.patch(`/v1/users/${userId}`)
+		.set("Authorization", `${tokenType} ${accessToken}`)
+		.send(patchUserRequest);
+}
+
 require("./get-user")({
 	describe,
 	before,
@@ -27,5 +34,16 @@ require("./get-user")({
 	db,
 	signUp,
 	getUser,
+	expect
+});
+
+require("./patch-user")({
+	describe,
+	before,
+	it,
+	setupDatabase,
+	db,
+	signUp,
+	patchUser,
 	expect
 });
