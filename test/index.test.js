@@ -6,6 +6,7 @@ const { describe, it, before } = require("mocha");
 const { setupDatabase } = require("./setup-database");
 const userFactory = require("./factory/user");
 const warehouseFactory = require("./factory/warehouse");
+const warehouseReviewFactory = require("./factory/warehouse-review");
 const path = require("path");
 const qs = require("qs");
 const app = require("../src/app");
@@ -74,10 +75,15 @@ async function deleteWarehouse (tokenType, accessToken, warehouseId) {
 
 async function getWarehouses(query) {
 	const queryString = qs.stringify(query);
-	console.log(`/v1/warehouses?${queryString}`);
-
 	return chai.request(app)
 		.get(`/v1/warehouses?${queryString}`);
+}
+
+async function postWarehouseReview(tokenType, accessToken, warehouseId, postWarehouseReviewRequest) {
+	return chai.request(app)
+		.post(`/v1/warehouses/${warehouseId}/reviews`)
+		.set("Authorization", `${tokenType} ${accessToken}`)
+		.send(postWarehouseReviewRequest);
 }
 
 require("./sign-in")({

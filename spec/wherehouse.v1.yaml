@@ -433,10 +433,10 @@ paths:
               schema:
                 type: object
                 properties:
-                  warehouse:
+                  reviews:
                     $ref: '#/components/schemas/WarehouseReviewInfo'
                 required:
-                  - warehouse
+                  - reviews
         '400':
           description: |-
             Bad Request
@@ -507,10 +507,10 @@ paths:
               schema:
                 type: object
                 properties:
-                  warehouse:
+                  review:
                     $ref: '#/components/schemas/WarehouseReviewInfo'
                 required:
-                  - warehouse
+                  - review
               examples: {}
           headers: {}
         '400':
@@ -528,6 +528,17 @@ paths:
           description: |-
             Unauthorized
             사용자가 로그인을 안했을떄
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '403':
+          description: |-
+            Forbidden
+            사용자가 로그인했지만 권한이 없을 때
           content:
             application/json:
               schema:
