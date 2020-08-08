@@ -4,6 +4,7 @@ const chaiHttp = require("chai-http");
 const chaiResponseValidator = require("chai-openapi-response-validator");
 const { describe, it, before } = require("mocha");
 const { setupDatabase } = require("./setup-database");
+const userFactory = require("./factory/user");
 const path = require("path");
 const qs = require("qs");
 const app = require("../src/app");
@@ -71,6 +72,7 @@ require("./get-user")({
 	db,
 	signUp,
 	getUser,
+	userFactory,
 	expect
 });
 
@@ -82,6 +84,7 @@ require("./patch-user")({
 	db,
 	signUp,
 	patchUser,
+	userFactory,
 	expect
 });
 
@@ -93,6 +96,7 @@ require("./post-warehouse")({
 	db,
 	signUp,
 	postWarehouse,
+	userFactory,
 	expect
 });
 
@@ -104,6 +108,7 @@ require("./sign-in")({
 	db,
 	signUp,
 	signIn,
+	userFactory,
 	expect
 });
 
@@ -114,6 +119,7 @@ require("./sign-up")({
 	setupDatabase,
 	db,
 	signUp,
+	userFactory,
 	expect
 });
 
@@ -125,6 +131,7 @@ require("./get-warehouse")({
 	db,
 	signUp,
 	getWarehouse,
+	userFactory,
 	expect
 });
 
@@ -146,5 +153,6 @@ require("./refresh-token")({
 	db,
 	signUp,
 	refreshToken,
+	userFactory,
 	expect
 });
