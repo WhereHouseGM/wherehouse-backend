@@ -19,6 +19,13 @@ async function getUser(userId, tokenType, accessToken) {
 		.set("Authorization", `${tokenType} ${accessToken}`);
 }
 
+async function postWarehouse(tokenType, accessToken, postWarehouseRequest) {
+	return chai.request(app)
+		.post("/v1/warehouses")
+		.set("Authorization", `${tokenType} ${accessToken}`)
+		.send(postWarehouseRequest);
+}
+
 async function patchUser(userId, patchUserRequest, tokenType, accessToken) {
 	return chai.request(app)
 		.patch(`/v1/users/${userId}`)
@@ -45,5 +52,16 @@ require("./patch-user")({
 	db,
 	signUp,
 	patchUser,
+	expect
+});
+
+require("./post-warehouse")({
+	describe,
+	before,
+	it,
+	setupDatabase,
+	db,
+	signUp,
+	postWarehouse,
 	expect
 });
