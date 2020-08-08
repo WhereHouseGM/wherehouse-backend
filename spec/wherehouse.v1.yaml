@@ -434,7 +434,9 @@ paths:
                 type: object
                 properties:
                   reviews:
-                    $ref: '#/components/schemas/WarehouseReviewInfo'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/WarehouseReviewInfo'
                 required:
                   - reviews
         '400':
