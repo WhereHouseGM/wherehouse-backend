@@ -9,29 +9,17 @@ const qs = require("qs");
 const app = require("../src/app");
 const db = require("../src/models");
 const factories = require("./factory");
+const apis = require("./api");
 
 chai.use(chaiHttp);
 chai.use(chaiResponseValidator(path.resolve("spec/wherehouse.v1.yaml")));
 chai.should();
-
-async function getUser(userId, tokenType, accessToken) {
-	return chai.request(app)
-		.get(`/v1/users/${userId}`)
-		.set("Authorization", `${tokenType} ${accessToken}`);
-}
 
 async function postWarehouse(tokenType, accessToken, postWarehouseRequest) {
 	return chai.request(app)
 		.post("/v1/warehouses")
 		.set("Authorization", `${tokenType} ${accessToken}`)
 		.send(postWarehouseRequest);
-}
-
-async function patchUser(userId, patchUserRequest, tokenType, accessToken) {
-	return chai.request(app)
-		.patch(`/v1/users/${userId}`)
-		.set("Authorization", `${tokenType} ${accessToken}`)
-		.send(patchUserRequest);
 }
 
 async function signIn(signInRequest) {
@@ -68,7 +56,7 @@ async function patchWarehouse (tokenType, accessToken, warehouseId, patchWarehou
 async function deleteWarehouse (tokenType, accessToken, warehouseId) {
 	return chai.request(app)
 		.delete(`/v1/warehouses/${warehouseId}`)
-		.set("Authorization", `${tokenType} ${accessToken}`)
+		.set("Authorization", `${tokenType} ${accessToken}`);
 }
 
 async function getWarehouses(query) {
@@ -126,7 +114,7 @@ require("./get-user")({
 	setupDatabase,
 	db,
 	signUp,
-	getUser,
+	apis,
 	factories,
 	expect
 });
@@ -138,7 +126,7 @@ require("./patch-user")({
 	setupDatabase,
 	db,
 	signUp,
-	patchUser,
+	apis,
 	factories,
 	expect
 });

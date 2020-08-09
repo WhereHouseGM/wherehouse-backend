@@ -1,5 +1,5 @@
 module.exports = (dependencies) => {
-	const { describe, before, it, setupDatabase, db, signUp, getUser, factories, expect } = dependencies;
+	const { describe, before, it, setupDatabase, db, signUp, apis, factories, expect } = dependencies;
 
 	describe("get user", function() {
 		let signUpResponse;
@@ -12,14 +12,14 @@ module.exports = (dependencies) => {
 		});
 
 		it("should success", async function() {
-			const res = await getUser(signUpResponse.body.user.id, signUpResponse.body.tokenType, signUpResponse.body.accessToken);
+			const res = await apis.users.getUser(signUpResponse, signUpResponse.body.user.id);
 
 			expect(res.status).to.equal(200);
 			expect(res).to.satisfyApiSpec;
 		});
 
 		it("should fail due to wrong access token", async function() {
-			const res = await getUser(signUpResponse.body.user.id, signUpResponse.body.tokenType, "aaaaa");
+			const res = await apis.users.getUser({ body: { tokenType: "Bearer", accessToken: "aaaa" } }, signUpResponse.body.user.id);
 
 			expect(res.status).to.equal(401);
 			expect(res).to.satisfyApiSpec;
@@ -30,14 +30,14 @@ module.exports = (dependencies) => {
 
 			const anotherSignUpResponse = await signUp(signUpRequest);
 
-			const res = await getUser(signUpResponse.body.user.id, anotherSignUpResponse.body.tokenType, anotherSignUpResponse.body.accessToken);
+			const res = await apis.users.getUser(anotherSignUpResponse, signUpResponse.body.user.id);
 
 			expect(res.status).to.equal(403);
 			expect(res).to.satisfyApiSpec;
 		});
 
 		it("should fail due to not existing user", async function() {
-			const res = await getUser(99999, signUpResponse.body.tokenType, signUpResponse.body.accessToken);
+			const res = await apis.users.getUser(signUpResponse, 99999);
 
 			expect(res.status).to.equal(404);
 			expect(res).to.satisfyApiSpec;

@@ -1,5 +1,5 @@
 module.exports = (dependencies) => {
-	const { describe, before, it, setupDatabase, db, signUp, patchUser, factories, expect } = dependencies;
+	const { describe, before, it, setupDatabase, db, signUp, apis, factories, expect } = dependencies;
 	describe("patch user", function() {
 		let signUpResponse;
 		let patchUserRequest = {};
@@ -16,14 +16,14 @@ module.exports = (dependencies) => {
 				name: "patchuser"
 			};
 
-			const res = await patchUser(signUpResponse.body.user.id, patchUserRequest, signUpResponse.body.tokenType, signUpResponse.body.accessToken);
+			const res = await apis.users.patchUser(signUpResponse, signUpResponse.body.user.id, patchUserRequest);
 
 			expect(res.status).to.equal(200);
 			expect(res).to.satisfyApiSpec;
 		});
 
 		it("should fail due to wrong access token", async function() {
-			const res = await patchUser(signUpResponse.body.user.id, patchUserRequest, signUpResponse.body.tokenType, "aaaaa");
+			const res = await apis.users.patchUser({ body: { tokenType: "Bearer", accessToken: "aaaaa" } }, signUpResponse.body.user.id, patchUserRequest);
 
 			expect(res.status).to.equal(401);
 			expect(res).to.satisfyApiSpec;
@@ -42,14 +42,14 @@ module.exports = (dependencies) => {
 
 			const anotherSignUpResponse = await signUp(signUpRequest);
 
-			const res = await patchUser(signUpResponse.body.user.id, patchUserRequest, anotherSignUpResponse.body.tokenType, anotherSignUpResponse.body.accessToken);
+			const res = await apis.users.patchUser(anotherSignUpResponse, signUpResponse.body.user.id, patchUserRequest);
 
 			expect(res.status).to.equal(403);
 			expect(res).to.satisfyApiSpec;
 		});
 
 		it("should fail due to not existing user", async function() {
-			const res = await patchUser(99999, patchUserRequest, signUpResponse.body.tokenType, signUpResponse.body.accessToken);
+			const res = await apis.users.patchUser(signUpResponse, 99999, patchUserRequest);
 
 			expect(res.status).to.equal(404);
 			expect(res).to.satisfyApiSpec;
