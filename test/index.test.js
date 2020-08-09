@@ -5,8 +5,6 @@ const chaiResponseValidator = require("chai-openapi-response-validator");
 const { describe, it, before } = require("mocha");
 const { setupDatabase } = require("./setup-database");
 const path = require("path");
-const qs = require("qs");
-const app = require("../src/app");
 const db = require("../src/models");
 const factories = require("./factory");
 const apis = require("./api");
@@ -15,83 +13,13 @@ chai.use(chaiHttp);
 chai.use(chaiResponseValidator(path.resolve("spec/wherehouse.v1.yaml")));
 chai.should();
 
-async function postWarehouse(tokenType, accessToken, postWarehouseRequest) {
-	return chai.request(app)
-		.post("/v1/warehouses")
-		.set("Authorization", `${tokenType} ${accessToken}`)
-		.send(postWarehouseRequest);
-}
-
-async function signIn(signInRequest) {
-	return chai.request(app)
-		.post("/v1/auth/sign-in")
-		.send(signInRequest);
-}
-
-async function signUp(signUpRequest) {
-	return chai.request(app)
-		.post("/v1/auth/sign-up")
-		.send(signUpRequest);
-}
-
-async function refreshToken(tokenType, refreshToken) {
-	return chai.request(app)
-		.post("/v1/auth/refresh-token")
-		.set("Authorization", `${tokenType} ${refreshToken}`);
-}
-
-async function getWarehouse (tokenType, accessToken, warehouseId) {
-	return chai.request(app)
-		.get(`/v1/warehouses/${warehouseId}`)
-		.set("Authorization", `${tokenType} ${accessToken}`);
-}
-
-async function patchWarehouse (tokenType, accessToken, warehouseId, patchWarehouseRequest) {
-	return chai.request(app)
-		.patch(`/v1/warehouses/${warehouseId}`)
-		.set("Authorization", `${tokenType} ${accessToken}`)
-		.send(patchWarehouseRequest);
-}
-
-async function deleteWarehouse (tokenType, accessToken, warehouseId) {
-	return chai.request(app)
-		.delete(`/v1/warehouses/${warehouseId}`)
-		.set("Authorization", `${tokenType} ${accessToken}`);
-}
-
-async function getWarehouses(query) {
-	const queryString = qs.stringify(query);
-	return chai.request(app)
-		.get(`/v1/warehouses?${queryString}`);
-}
-
-async function postWarehouseReview(tokenType, accessToken, warehouseId, postWarehouseReviewRequest) {
-	return chai.request(app)
-		.post(`/v1/warehouses/${warehouseId}/reviews`)
-		.set("Authorization", `${tokenType} ${accessToken}`)
-		.send(postWarehouseReviewRequest);
-}
-
-async function getWarehouseReviews(tokenType, accessToken, warehouseId) {
-	return chai.request(app)
-		.get(`/v1/warehouses/${warehouseId}/reviews`)
-		.set("Authorization", `${tokenType} ${accessToken}`);
-}
-
-async function deleteWarehouseReview(tokenType, accessToken, warehouseId, warehouseReviewId) {
-	return chai.request(app)
-		.delete(`/v1/warehouses/${warehouseId}/reviews/${warehouseReviewId}`)
-		.set("Authorization", `${tokenType} ${accessToken}`);
-}
-
 require("./sign-in")({
 	describe,
 	before,
 	it,
 	setupDatabase,
 	db,
-	signUp,
-	signIn,
+	apis,
 	factories,
 	expect
 });
@@ -102,7 +30,7 @@ require("./sign-up")({
 	it,
 	setupDatabase,
 	db,
-	signUp,
+	apis,
 	factories,
 	expect
 });
@@ -113,7 +41,6 @@ require("./get-user")({
 	it,
 	setupDatabase,
 	db,
-	signUp,
 	apis,
 	factories,
 	expect
@@ -125,7 +52,6 @@ require("./patch-user")({
 	it,
 	setupDatabase,
 	db,
-	signUp,
 	apis,
 	factories,
 	expect
@@ -137,8 +63,7 @@ require("./post-warehouse")({
 	it,
 	setupDatabase,
 	db,
-	signUp,
-	postWarehouse,
+	apis,
 	factories,
 	expect
 });
@@ -149,9 +74,7 @@ require("./get-warehouse")({
 	it,
 	setupDatabase,
 	db,
-	signUp,
-	getWarehouse,
-	postWarehouse,
+	apis,
 	factories,
 	expect
 });
@@ -162,9 +85,7 @@ require("./get-warehouses")({
 	it,
 	setupDatabase,
 	db,
-	getWarehouses,
-	postWarehouse,
-	signUp,
+	apis,
 	factories,
 	expect
 });
@@ -175,9 +96,7 @@ require("./patch-warehouse")({
 	it,
 	setupDatabase,
 	db,
-	patchWarehouse,
-	postWarehouse,
-	signUp,
+	apis,
 	factories,
 	expect
 });
@@ -188,9 +107,7 @@ require("./delete-warehouse")({
 	it,
 	setupDatabase,
 	db,
-	deleteWarehouse,
-	postWarehouse,
-	signUp,
+	apis,
 	factories,
 	expect
 });
@@ -201,8 +118,7 @@ require("./refresh-token")({
 	it,
 	setupDatabase,
 	db,
-	signUp,
-	refreshToken,
+	apis,
 	factories,
 	expect
 });
@@ -213,9 +129,7 @@ require("./post-warehouse-review")({
 	it,
 	setupDatabase,
 	db,
-	postWarehouse,
-	signUp,
-	postWarehouseReview,
+	apis,
 	factories,
 	expect
 });
@@ -226,10 +140,7 @@ require("./get-warehouse-reviews")({
 	it,
 	setupDatabase,
 	db,
-	postWarehouse,
-	signUp,
-	getWarehouseReviews,
-	postWarehouseReview,
+	apis,
 	factories,
 	expect
 });
@@ -240,10 +151,7 @@ require("./delete-warehouse-review")({
 	it,
 	setupDatabase,
 	db,
-	postWarehouse,
-	signUp,
-	deleteWarehouseReview,
-	postWarehouseReview,
+	apis,
 	factories,
 	expect
 });

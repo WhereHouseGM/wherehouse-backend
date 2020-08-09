@@ -1,5 +1,5 @@
 module.exports = (dependencies) => {
-	const { describe, before, it, setupDatabase, db, signUp, apis, factories, expect } = dependencies;
+	const { describe, before, it, setupDatabase, db, apis, factories, expect } = dependencies;
 	describe("patch user", function() {
 		let signUpResponse;
 		let patchUserRequest = {};
@@ -8,7 +8,7 @@ module.exports = (dependencies) => {
 			await setupDatabase(db);
 
 			const signUpRequest = factories.users.newUser();
-			signUpResponse = await signUp(signUpRequest);
+			signUpResponse = await apis.auths.signUp(signUpRequest);
 		});
 
 		it("should success", async function() {
@@ -40,7 +40,7 @@ module.exports = (dependencies) => {
 				phoneNumber: "string"
 			};
 
-			const anotherSignUpResponse = await signUp(signUpRequest);
+			const anotherSignUpResponse = await apis.auths.signUp(signUpRequest);
 
 			const res = await apis.users.patchUser(anotherSignUpResponse, signUpResponse.body.user.id, patchUserRequest);
 

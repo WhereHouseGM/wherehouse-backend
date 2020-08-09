@@ -1,5 +1,5 @@
 module.exports = (dependencies) => {
-	const { describe, before, it, setupDatabase, db, signUp, postWarehouse, factories, expect } = dependencies;
+	const { describe, before, it, setupDatabase, db, apis, factories, expect } = dependencies;
 
 	describe("post warehouse", function () {
 		const signUpRequest = factories.users.newUser();
@@ -10,35 +10,30 @@ module.exports = (dependencies) => {
 
 		before(async function () {
 			await setupDatabase(db);
-			signUpResponse = await signUp(signUpRequest);
-			signUpResponse = signUpResponse.body;
+			signUpResponse = await apis.auths.signUp(signUpRequest);
 		});
 
 		it("should success(general warehouse)", async function () {
-			const { tokenType, accessToken } = signUpResponse;
-			const res = await postWarehouse(tokenType, accessToken, postGeneralWarehouseRequest);
+			const res = await apis.warehouses.postWarehouse(signUpResponse, postGeneralWarehouseRequest);
 
 			expect(res.status).to.equal(201);
 			expect(res).to.satisfyApiSpec;
 		});
 
 		it("should success(agency warehouse)", async function () {
-			const { tokenType, accessToken } = signUpResponse;
-			const res = await postWarehouse(tokenType, accessToken, postAgencyWarehouseRequest);
+			const res = await apis.warehouses.postWarehouse(signUpResponse, postAgencyWarehouseRequest);
 
 			expect(res.status).to.equal(201);
 			expect(res).to.satisfyApiSpec;
 		});
 
 		it("should fail due to invalid token", async function () {
-			const res = await postWarehouse("Bearer", "", postAgencyWarehouseRequest);
-
-			expect(res.status).to.equal(401);
-			expect(res).to.satisfyApiSpec;
-		});
-
-		it("should fail due to invalid token", async function () {
-			const res = await postWarehouse("Bearer", "", postAgencyWarehouseRequest);
+			const res = await apis.warehouses.postWarehouse({
+				body: {
+					tokenType: "Bearer",
+					accessToken: ""
+				}
+			}, postAgencyWarehouseRequest);
 
 			expect(res.status).to.equal(401);
 			expect(res).to.satisfyApiSpec;
