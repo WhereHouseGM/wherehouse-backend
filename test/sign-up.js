@@ -1,5 +1,7 @@
 module.exports = (dependencies) => {
-	const { describe, before, it, setupDatabase, db,apis, factories, expect } = dependencies;
+	const { mocha, chai, setupDatabase, db, apis, factories } = dependencies;
+	const { describe, before, it } = mocha;
+	const { expect } = chai;
 	describe("sign up", function() {
 		const signUpRequest = factories.users.newUser();
 

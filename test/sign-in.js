@@ -1,13 +1,13 @@
 module.exports = (dependencies) => {
-	const { describe, before, it, setupDatabase, db, apis, factories, expect } = dependencies;
-
+	const { mocha, chai, setupDatabase, db, apis, factories } = dependencies;
+	const { describe, before, it } = mocha;
+	const { expect } = chai;
 	describe("sign in", function() {
 		before(async function() {
 			await setupDatabase(db);
 		});
 
 		it("should success", async function() {
-			// TODO: create user factory
 			const signUpRequest = factories.users.newUser();
 			await apis.auths.signUp(signUpRequest);
 

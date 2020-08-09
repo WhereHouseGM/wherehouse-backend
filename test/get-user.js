@@ -1,6 +1,7 @@
 module.exports = (dependencies) => {
-	const { describe, before, it, setupDatabase, db, apis, factories, expect } = dependencies;
-
+	const { mocha, chai, setupDatabase, db, apis, factories } = dependencies;
+	const { describe, before, it } = mocha;
+	const { expect } = chai;
 	describe("get user", function() {
 		let signUpResponse;
 		before(async function() {
