@@ -1,8 +1,8 @@
 module.exports = (dependencies) => {
-	const { describe, before, it, setupDatabase, db, patchWarehouse, postWarehouse, signUp, userFactory, warehouseFactory, expect } = dependencies;
+	const { describe, before, it, setupDatabase, db, patchWarehouse, postWarehouse, signUp, factories, expect } = dependencies;
 	describe("patch warehouse", function() {
-		const signUpRequest = userFactory.newUser();
-		const postWarehouseRequest =  warehouseFactory.newGeneral();
+		const signUpRequest = factories.users.newUser();
+		const postWarehouseRequest =  factories.warehouses.newGeneral();
 		let signUpResponse, postWarehouseResponse;
 
 		before(async function() {
@@ -38,7 +38,7 @@ module.exports = (dependencies) => {
 		});
 
 		it("failed due to another users access token", async function() {
-			const anotherUserSignUpResponse = await signUp(userFactory.newUser());
+			const anotherUserSignUpResponse = await signUp(factories.users.newUser());
 			const { tokenType, accessToken } = anotherUserSignUpResponse.body;
 			const { warehouse } = postWarehouseResponse.body;
 			const res = await patchWarehouse(tokenType, accessToken, warehouse.id, { name: "patch name" });

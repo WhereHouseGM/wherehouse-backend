@@ -1,9 +1,9 @@
 module.exports = (dependencies) => {
-	const { describe, before, it, setupDatabase, db, postWarehouse, signUp, deleteWarehouseReview, postWarehouseReview, userFactory, warehouseFactory, warehouseReviewFactory, expect } = dependencies;
+	const { describe, before, it, setupDatabase, db, postWarehouse, signUp, deleteWarehouseReview, postWarehouseReview, factories, expect } = dependencies;
 	describe("delete waerhouse review", function() {
-		const signUpRequest = userFactory.newUser();
-		const postWarehouseRequest =  warehouseFactory.newGeneral();
-		const postWarehouseReviewRequest = warehouseReviewFactory.newReview();
+		const signUpRequest = factories.users.newUser();
+		const postWarehouseRequest =  factories.warehouses.newGeneral();
+		const postWarehouseReviewRequest = factories.warehouseReviews.newReview();
 		let signUpResponse, postWarehouseResponse, postWarehouseReviewResponse;
 
 		before(async function() {
@@ -35,7 +35,7 @@ module.exports = (dependencies) => {
 
 		it("failed due to another user access token", async function() {
 			postWarehouseReviewResponse = await postWarehouseReview(signUpResponse.body.tokenType, signUpResponse.body.accessToken, postWarehouseResponse.body.warehouse.id, postWarehouseReviewRequest);
-			const anotherSignUpResponse = await signUp(userFactory.newUser());
+			const anotherSignUpResponse = await signUp(factories.users.newUser());
 			const { tokenType, accessToken } = anotherSignUpResponse.body;
 			const { warehouse } = postWarehouseResponse.body;
 			const { review } = postWarehouseReviewResponse.body;

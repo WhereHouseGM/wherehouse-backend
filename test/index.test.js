@@ -4,13 +4,11 @@ const chaiHttp = require("chai-http");
 const chaiResponseValidator = require("chai-openapi-response-validator");
 const { describe, it, before } = require("mocha");
 const { setupDatabase } = require("./setup-database");
-const userFactory = require("./factory/user");
-const warehouseFactory = require("./factory/warehouse");
-const warehouseReviewFactory = require("./factory/warehouse-review");
 const path = require("path");
 const qs = require("qs");
 const app = require("../src/app");
 const db = require("../src/models");
+const factories = require("./factory");
 
 chai.use(chaiHttp);
 chai.use(chaiResponseValidator(path.resolve("spec/wherehouse.v1.yaml")));
@@ -106,7 +104,7 @@ require("./sign-in")({
 	db,
 	signUp,
 	signIn,
-	userFactory,
+	factories,
 	expect
 });
 
@@ -117,7 +115,7 @@ require("./sign-up")({
 	setupDatabase,
 	db,
 	signUp,
-	userFactory,
+	factories,
 	expect
 });
 
@@ -129,7 +127,7 @@ require("./get-user")({
 	db,
 	signUp,
 	getUser,
-	userFactory,
+	factories,
 	expect
 });
 
@@ -141,7 +139,7 @@ require("./patch-user")({
 	db,
 	signUp,
 	patchUser,
-	userFactory,
+	factories,
 	expect
 });
 
@@ -153,8 +151,7 @@ require("./post-warehouse")({
 	db,
 	signUp,
 	postWarehouse,
-	userFactory,
-	warehouseFactory,
+	factories,
 	expect
 });
 
@@ -167,8 +164,7 @@ require("./get-warehouse")({
 	signUp,
 	getWarehouse,
 	postWarehouse,
-	userFactory,
-	warehouseFactory,
+	factories,
 	expect
 });
 
@@ -181,8 +177,7 @@ require("./get-warehouses")({
 	getWarehouses,
 	postWarehouse,
 	signUp,
-	userFactory,
-	warehouseFactory,
+	factories,
 	expect
 });
 
@@ -195,8 +190,7 @@ require("./patch-warehouse")({
 	patchWarehouse,
 	postWarehouse,
 	signUp,
-	userFactory,
-	warehouseFactory,
+	factories,
 	expect
 });
 
@@ -209,8 +203,7 @@ require("./delete-warehouse")({
 	deleteWarehouse,
 	postWarehouse,
 	signUp,
-	userFactory,
-	warehouseFactory,
+	factories,
 	expect
 });
 
@@ -222,7 +215,7 @@ require("./refresh-token")({
 	db,
 	signUp,
 	refreshToken,
-	userFactory,
+	factories,
 	expect
 });
 
@@ -235,9 +228,7 @@ require("./post-warehouse-review")({
 	postWarehouse,
 	signUp,
 	postWarehouseReview,
-	userFactory,
-	warehouseFactory,
-	warehouseReviewFactory,
+	factories,
 	expect
 });
 
@@ -251,9 +242,7 @@ require("./get-warehouse-reviews")({
 	signUp,
 	getWarehouseReviews,
 	postWarehouseReview,
-	userFactory,
-	warehouseFactory,
-	warehouseReviewFactory,
+	factories,
 	expect
 });
 
@@ -267,8 +256,6 @@ require("./delete-warehouse-review")({
 	signUp,
 	deleteWarehouseReview,
 	postWarehouseReview,
-	userFactory,
-	warehouseFactory,
-	warehouseReviewFactory,
+	factories,
 	expect
 });

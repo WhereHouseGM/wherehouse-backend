@@ -1,5 +1,5 @@
 module.exports = (dependencies) => {
-	const { describe, before, it, setupDatabase, db, signUp, signIn, userFactory, expect } = dependencies;
+	const { describe, before, it, setupDatabase, db, signUp, signIn, factories, expect } = dependencies;
 
 	describe("sign in", function() {
 		before(async function() {
@@ -8,7 +8,7 @@ module.exports = (dependencies) => {
 
 		it("should success", async function() {
 			// TODO: create user factory
-			const signUpRequest = userFactory.newUser();
+			const signUpRequest = factories.users.newUser();
 			await signUp(signUpRequest);
 
 			const signInRequest = {

@@ -1,6 +1,7 @@
 let userId = 0;
 
 module.exports = {
+	name: "users",
 	newUser() {
 		userId++;
 		return {

@@ -2,6 +2,7 @@ let agencyId = 0;
 let generalId = 0;
 
 module.exports = {
+	name: "warehouses",
 	newAgency() {
 		agencyId++;
 		return {

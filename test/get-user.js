@@ -1,12 +1,12 @@
 module.exports = (dependencies) => {
-	const { describe, before, it, setupDatabase, db, signUp, getUser, userFactory, expect } = dependencies;
+	const { describe, before, it, setupDatabase, db, signUp, getUser, factories, expect } = dependencies;
 
 	describe("get user", function() {
 		let signUpResponse;
 		before(async function() {
 			await setupDatabase(db);
 
-			const signUpRequest = userFactory.newUser();
+			const signUpRequest = factories.users.newUser();
 
 			signUpResponse = await signUp(signUpRequest);
 		});
@@ -26,7 +26,7 @@ module.exports = (dependencies) => {
 		});
 
 		it("should fail due to another users access token", async function() {
-			const signUpRequest = userFactory.newUser();
+			const signUpRequest = factories.users.newUser();
 
 			const anotherSignUpResponse = await signUp(signUpRequest);
 

@@ -1,8 +1,8 @@
 module.exports = (dependencies) => {
-	const { describe, before, it, setupDatabase, db, signUp, getWarehouse, postWarehouse, userFactory, warehouseFactory, expect } = dependencies;
+	const { describe, before, it, setupDatabase, db, signUp, getWarehouse, postWarehouse, factories, expect } = dependencies;
 	describe("get warehouse", function () {
-		const signUpRequest = userFactory.newUser();
-		const postGenralWarehouseRequest = warehouseFactory.newGeneral();
+		const signUpRequest = factories.users.newUser();
+		const postGenralWarehouseRequest = factories.warehouses.newGeneral();
 		let signUpResponse;
 		let postWarehouseResponse;
 
