@@ -4,6 +4,7 @@ const HTTPError = require("node-http-error");
 
 exports.getWarehouses = async function (query) {
 	let addressQuery, sizeQuery;
+	let queryOption;
 
 	addressQuery = sizeQuery = undefined;
 
@@ -19,15 +20,20 @@ exports.getWarehouses = async function (query) {
 		sizeQuery.size[Op.lte] = query.maxSize;
 	}
 
-	const warehouses = await db.warehouses.findAll({
+	queryOption = {
 		include: [
-			{ model: db.users, required: true, as: "owner" },
-			{ model: db.warehouseLocations, required: true, as: "location" },
-			{ model: db.warehouseAttachments, as: "attachments" },
-			{ model: db.generalWarehouseDetails, where: sizeQuery, as: "generalDetail" },
+			{model: db.users, required: true, as: "owner"},
+			{model: db.warehouseLocations, required: true, as: "location"},
+			{model: db.warehouseAttachments, as: "attachments"},
+			{model: db.generalWarehouseDetails, where: sizeQuery, as: "generalDetail"},
 		],
 		where: addressQuery
-	});
+	};
+
+	if(query.offset !== undefined) queryOption.offset = query.offset;
+	if(query.limit !== undefined) queryOption.limit = query.limit;
+
+	const warehouses = await db.warehouses.findAll(queryOption);
 
 	return warehouses;
 };
@@ -136,7 +142,7 @@ exports.postWarehouse = async function (userId, postWarehouseRequest) {
 exports.patchWarehouse = async function (userId, warehouseId, patchWarehouseRequest) {
 	const warehouse = await exports.getWarehouse(warehouseId);
 
-	if(warehouse.owner.id !== userId) throw new HTTPError(403, "Only owner can patch");ㅅ
+	if(warehouse.owner.id !== userId) throw new HTTPError(403, "Only owner can patch");
 
 	const { attachmentIds, additionalInfo, location, ...warehouseFields } = patchWarehouseRequest;
 	let updatedAttachmentIds = attachmentIds || [];
@@ -174,7 +180,6 @@ exports.patchWarehouse = async function (userId, warehouseId, patchWarehouseRequ
 exports.deleteWarehouse = async function (userId, warehouseId) {
 	const warehouse = await exports.getWarehouse(warehouseId);
 
-	if(warehouse === null) throw new HTTPError(404, "warehouse does not exist");
 	if(warehouse.owner.id !== userId) throw new HTTPError(403, "Only owner can patch");
 
 	await warehouse.destroy();

@@ -7,7 +7,9 @@ const DetailedWarehouseDto = require("../../dtos/detailed-warehouse");
 const getWarehousesQueryValidator = Joi.object({
 	address: Joi.string(),
 	minSize: Joi.number().integer(),
-	maxSize: Joi.number().integer()
+	maxSize: Joi.number().integer(),
+	offset: Joi.number().integer(),
+	limit: Joi.number().integer()
 });
 
 const postWarehouseLocationRequestValidator = Joi.object({
@@ -120,9 +122,10 @@ module.exports = (router) => {
 	router.get("/warehouses", async function (req, res, next) {
 		try {
 			const query = req.query;
-			getWarehousesQueryValidator.validate(query);
+			const { value, error } = getWarehousesQueryValidator.validate(query);
+			if(error) throw error;
 
-			const warehouses = await getWarehouses(query);
+			const warehouses = await getWarehouses(value);
 
 			res.status(200).json({ warehouses: warehouses.map(warehouse => SimplifiedWarehouseDto(warehouse)) });
 		} catch(err) {
@@ -176,7 +179,7 @@ module.exports = (router) => {
 			if (error) throw error;
 
 			const warehouse = await patchWarehouse(userId, warehouseId, value);
-			res.status(201).json({warehouse: DetailedWarehouseDto(warehouse)});
+			res.status(200).json({warehouse: DetailedWarehouseDto(warehouse)});
 		} catch (err) {
 			next(err);
 		}

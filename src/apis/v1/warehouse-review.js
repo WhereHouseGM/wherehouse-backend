@@ -40,7 +40,7 @@ module.exports = (router) => {
 
 			const review = await postWarehouseReview(userId, warehouseId, value);
 
-			res.status(201).send(WarehouseReviewDto(review));
+			res.status(201).send({ review: WarehouseReviewDto(review) });
 		} catch (err) {
 			next(err);
 		}
