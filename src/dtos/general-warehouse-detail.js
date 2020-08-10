@@ -1,7 +1,7 @@
 module.exports = function (generalWarehouseDetail) {
 	return {
 		id: generalWarehouseDetail.id,
-		type: generalWarehouseDetail.type,
+		types: generalWarehouseDetail.types.map(type => type.name),
 		landArea: generalWarehouseDetail.landArea,
 		totalArea: generalWarehouseDetail.totalArea,
 		monthlyFee: generalWarehouseDetail.monthlyFee,

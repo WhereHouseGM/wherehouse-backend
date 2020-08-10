@@ -1022,12 +1022,18 @@ components:
           description: '창고 임대 가능 여부 '
         location:
           $ref: '#/components/schemas/LocationInfo'
+        types:
+          type: array
+          description: 창고 종류
+          items:
+            type: string
       required:
         - id
         - name
         - thumbnailUrl
         - canUse
         - location
+        - types
     LocationInfo:
       title: Location
       type: object
@@ -1050,18 +1056,20 @@ components:
       properties:
         id:
           type: integer
-        type:
-          type: string
-          enum:
-            - ROOM_TEMPERATURE
-            - LOW_TEMPERATURE
-            - BONDED
-            - SAVAGE
-            - HAZARDOUS
-            - SELF_STORAGE
-            - CONTAINER
+        types:
           description: |
             창고 종류
+          type: array
+          items:
+            type: string
+            enum:
+              - ROOM_TEMPERATURE
+              - LOW_TEMPERATURE
+              - BONDED
+              - SAVAGE
+              - HAZARDOUS
+              - SELF_STORAGE
+              - CONTAINER
         landArea:
           type: integer
           description: '창고 평 수 (단위: 평)'
@@ -1087,8 +1095,9 @@ components:
           description: 최소 이 기간만큼은 사용해야함
       required:
         - id
-        - type
+        - types
         - landArea
+        - totalArea
         - monthlyFee
         - depositFee
         - maintenanceFee
@@ -1717,8 +1726,9 @@ components:
     NewGeneralWarehouseDetailForm:
       title: NewGeneralWarehouseDetailForm
       type: object
+      description: ''
       properties:
-        type:
+        types:
           type: string
           enum:
             - ROOM_TEMPERATURE
@@ -1730,10 +1740,12 @@ components:
             - CONTAINER
           description: |
             창고 종류
-        size:
+        landArea:
           type: integer
           description: '창고 평 수 (단위: 평)'
           example: 32
+        totalArea:
+          type: integer
         monthlyFee:
           type: integer
           description: '월세 (단위: 만원)'
@@ -1752,8 +1764,9 @@ components:
             최소 이 기간만큼은 사용해야함
             단위: 달
       required:
-        - type
-        - size
+        - types
+        - landArea
+        - totalArea
         - monthlyFee
         - depositFee
         - maintenanceFee
