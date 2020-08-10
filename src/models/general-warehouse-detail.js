@@ -4,7 +4,6 @@ module.exports = (sequelize, DataTypes) => {
 
 	const GeneralWarehouseDetail = sequelize.define(modelName, {
 		id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-		type: { type: DataTypes.ENUM("ROOM_TEMPERATURE", "LOW_TEMPERATURE", "BONDED", "SAVAGE", "HAZARDOUS", "SELF_STORAGE", "CONTAINER"), allowNull: false },
 		landArea: { type: DataTypes.INTEGER, allowNull: false },
 		totalArea: { type: DataTypes.INTEGER, allowNull: false },
 		monthlyFee: { type: DataTypes.INTEGER, allowNull: false },
@@ -12,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
 		maintenanceFee: { type: DataTypes.INTEGER, allowNull: false },
 		minUseTerm: { type: DataTypes.INTEGER }
 	}, { tableName: tableName, timestamps: false });
+
+	GeneralWarehouseDetail.associate = function(db) {
+		db.generalWarehouseDetails.hasMany(db.generalWarehouseTypes, { as: "types", onUpdate: "cascade", onDelete: "cascade"});
+	};
 
 	return GeneralWarehouseDetail;
 };

@@ -6,6 +6,7 @@ module.exports = function (warehouse) {
 	return {
 		id: warehouse.id,
 		name: warehouse.name,
+		types: warehouse.generalDetail.types.map(type => type.name),
 		thumbnailUrl: warehouse.attachments[0] || null,
 		size: size,
 		canUse: warehouse.canUse,

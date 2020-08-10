@@ -89,7 +89,7 @@ module.exports = {
 				"longitude": `${generalId}`
 			},
 			"additionalInfo": {
-				"type": "ROOM_TEMPERATURE",
+				"types": ["ROOM_TEMPERATURE"],
 				"landArea": 100,
 				"totalArea": 200,
 				"monthlyFee": 300,

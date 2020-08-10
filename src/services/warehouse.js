@@ -25,7 +25,12 @@ exports.getWarehouses = async function (query) {
 			{model: db.users, required: true, as: "owner"},
 			{model: db.warehouseLocations, required: true, as: "location"},
 			{model: db.warehouseAttachments, as: "attachments"},
-			{model: db.generalWarehouseDetails, where: sizeQuery, as: "generalDetail"},
+			{
+				model: db.generalWarehouseDetails,
+				where: sizeQuery,
+				as: "generalDetail",
+				include: [ { model: db.generalWarehouseTypes, as: "types" }]
+			},
 		],
 		where: addressQuery
 	};
@@ -44,7 +49,11 @@ exports.getWarehouse = async function (warehouseId) {
 			{ model: db.users, required: true, as: "owner" },
 			{ model: db.warehouseLocations, required: true, as: "location" },
 			{ model: db.warehouseAttachments, as: "attachments" },
-			{ model: db.generalWarehouseDetails, as: "generalDetail" },
+			{
+				model: db.generalWarehouseDetails,
+				include: [ { model: db.generalWarehouseTypes, as: "types" } ],
+				as: "generalDetail"
+			},
 			{
 				model: db.agencyWarehouseDetails,
 				include: [ { model: db.agencyWarehousePayments, as: "payments" } ],
@@ -77,15 +86,16 @@ exports.postWarehouse = async function (userId, postWarehouseRequest) {
 		const serviceType = postWarehouseRequest.serviceType;
 
 		if (serviceType === "GENERAL") {
+			additionalInfo.types = additionalInfo.types.map(type => { return { name: type }; });
 			await db.generalWarehouseDetails.create({
 				...additionalInfo,
 				warehouseId: _warehouse.id
-			}, { transaction: t });
+			}, { transaction: t, include: [ { model: db.generalWarehouseTypes, as: "types" }] });
 		} else {
 			await db.agencyWarehouseDetails.create({
 				...additionalInfo,
 				warehouseId: _warehouse.id
-			}, { transaction: t });
+			}, { transaction: t, include: [ { model: db.agencyWarehousePayments, as: "payments" }] });
 		}
 
 		// update attachments
