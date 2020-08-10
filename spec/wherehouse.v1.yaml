@@ -362,8 +362,7 @@ paths:
             창고 삭제 성공했을때
           content:
             application/json:
-              schema:
-                type: object
+              schema: {}
         '400':
           description: |-
             Bad Request
@@ -591,8 +590,7 @@ paths:
             리뷰 삭제 성공했을때
           content:
             application/json:
-              schema:
-                type: object
+              schema: {}
         '400':
           description: |-
             Bad Request
