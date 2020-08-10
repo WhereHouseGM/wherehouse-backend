@@ -1,0 +1,14 @@
+version: '3'
+services:
+        wherehouse-api:
+                build: 
+                        context: ..
+                        dockerfile: ops/wherehouse-api/Dockerfile
+                ports:
+                        - "3000:3000"
+                depends_on:
+                        - mysql
+        mysql:
+                build: mysql
+                ports:
+                        - "3306:3306"
