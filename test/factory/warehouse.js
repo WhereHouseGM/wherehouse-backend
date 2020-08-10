@@ -90,7 +90,8 @@ module.exports = {
 			},
 			"additionalInfo": {
 				"type": "ROOM_TEMPERATURE",
-				"size": 100,
+				"landArea": 100,
+				"totalArea": 200,
 				"monthlyFee": 300,
 				"depositFee": 5000,
 				"maintenanceFee": 10,

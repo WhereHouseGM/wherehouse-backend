@@ -1009,6 +1009,7 @@ components:
           description: '창고명 '
         thumbnailUrl:
           type: string
+          nullable: true
           description: '창고 섬네일 이미지 링크 '
         landArea:
           type: integer
@@ -1061,7 +1062,11 @@ components:
             - CONTAINER
           description: |
             창고 종류
-        size:
+        landArea:
+          type: integer
+          description: '창고 평 수 (단위: 평)'
+          example: 32
+        totalArea:
           type: integer
           description: '창고 평 수 (단위: 평)'
           example: 32
@@ -1083,7 +1088,7 @@ components:
       required:
         - id
         - type
-        - size
+        - landArea
         - monthlyFee
         - depositFee
         - maintenanceFee
