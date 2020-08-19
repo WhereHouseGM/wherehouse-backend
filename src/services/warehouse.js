@@ -78,7 +78,7 @@ exports.postWarehouse = async function (userId, postWarehouseRequest) {
 		// create warehouse
 		const _warehouse = await db.warehouses.create({
 			ownerId: userId,
-			...postWarehouseRequest
+			...warehouseFields
 		}, { transaction: t });
 
 		//create location

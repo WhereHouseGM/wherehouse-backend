@@ -61,6 +61,7 @@ const postWarehouseRequestValidator = Joi.object({
 	insuranceName: Joi.string().max(100),
 	canPickup: Joi.boolean().required(),
 	canPark: Joi.boolean().required(),
+	parkingScale: Joi.number().integer(),
 	attachmentIds: Joi.array().items(Joi.number().integer()).required(),
 	location: postWarehouseLocationRequestValidator.required(),
 	additionalInfo: Joi.any().when("serviceType", { is: "GENERAL", then: postGeneralWarehouseDetailValidator, otherwise: postAgencyWarehouseDetailValidator})

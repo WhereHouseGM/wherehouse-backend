@@ -13,17 +13,18 @@ module.exports = (sequelize, DataTypes) => {
 		availableWeekdays: { type: DataTypes.INTEGER, allowNull: false },
 		openAt: { type: DataTypes.TIME, allowNull: false },
 		closeAt: { type: DataTypes.TIME, allowNull: false },
-		availableTimeDetail: { type: DataTypes.STRING(100) },
+		availableTimeDetail: { type: DataTypes.STRING(100), allowNull: true, defaultValue: null },
 		cctvExist: { type: DataTypes.BOOLEAN, defaultValue: false, allowNull: false },
 		securityCompanyExist: { type: DataTypes.BOOLEAN, defaultValue: false, allowNull: false },
-		securityCompanyName: { type: DataTypes.STRING(100) },
+		securityCompanyName: { type: DataTypes.STRING(100), allowNull: true, defaultValue: null },
 		doorLockExist: { type: DataTypes.BOOLEAN, defaultValue: true, allowNull: false },
 		airConditioningType: { type: DataTypes.ENUM("HEATING", "COOLING", "NONE"), defaultValue: "NONE" },
 		workerExist: { type: DataTypes.BOOLEAN, defaultValue: false, allowNull: false },
 		insuranceExist: { type: DataTypes.BOOLEAN, defaultValue: false, allowNull: false },
-		insuranceName: { type: DataTypes.STRING(100) },
+		insuranceName: { type: DataTypes.STRING(100), allowNull: true, defaultValue: null },
 		canPickup: { type: DataTypes.BOOLEAN, defaultValue: false, allowNull: false },
-		canPark: { type: DataTypes.BOOLEAN, defaultValue: false, allowNull: false }
+		canPark: { type: DataTypes.BOOLEAN, defaultValue: false, allowNull: false },
+		parkingScale: { type: DataTypes.INTEGER, allowNull: true, defaultValue: null}
 	}, { tableName: tableName, timestamps: false });
 
 	Warehouse.associate = function (db) {

@@ -32,6 +32,7 @@ module.exports = function(warehouse) {
 		insuranceExist: warehouse.insuranceExist,
 		insuranceName: warehouse.insuranceName,
 		canPickup: warehouse.canPickup,
+		parkingScale: warehouse.parkingScale,
 		canPark: warehouse.canPark,
 		attachments: warehouse.attachments.map(_ => AttachmentDto(_)),
 		location: LocationDto(warehouse.location),
