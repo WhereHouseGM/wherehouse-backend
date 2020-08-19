@@ -31,6 +31,11 @@ exports.getWarehouses = async function (query) {
 				as: "generalDetail",
 				include: [ { model: db.generalWarehouseTypes, as: "types" }]
 			},
+			{
+				model: db.agencyWarehouseDetails,
+				include: [ { model: db.agencyWarehousePayments, as: "payments" } ],
+				as: "agencyDetail"
+			}
 		],
 		where: addressQuery
 	};
