@@ -2,7 +2,7 @@ const LocationDto = require("./location");
 
 module.exports = function (warehouse) {
 	const size = warehouse.generalDetail === null ? null : warehouse.generalDetail.size;
-	const types = warehouse.generalDetail === nul ? [warehouse.agencyDetail.type] : warehouse.generalDetail.types;
+	const types = warehouse.generalDetail === null ? [warehouse.agencyDetail.type] : warehouse.generalDetail.types;
 
 	return {
 		id: warehouse.id,
