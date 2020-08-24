@@ -14,6 +14,7 @@ chai.use(chaiHttp);
 chai.use(chaiResponseValidator(path.resolve("spec/wherehouse.v1.yaml")));
 chai.should();
 
+console.log(Object.keys(mocha));
 fs
 	.readdirSync(__dirname)
 	.filter(file => {

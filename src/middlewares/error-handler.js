@@ -5,8 +5,8 @@ const HTTPError = require("node-http-error");
 
 module.exports = function(err, req, res, next) {
 	if(err instanceof SequelizeValidationError) {
-		console.log(err);
-		if(err.parent.code === "ER_DUP_ENTRY") res.status(409).json({ message: "Conflict Error" });
+		if(err.parent && err.parent.code === "ER_DUP_ENTRY") res.status(409).json({ message: "Conflict Error" });
+		else res.status(400).json({ message: err.message });
 	}
 	else if(err instanceof JoiValidationError) {
 		res.status(400).json({ message: err.message });

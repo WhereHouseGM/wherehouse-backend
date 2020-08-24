@@ -11,9 +11,12 @@
     "js-sha256": "^0.9.0",
     "jsonwebtoken": "^8.5.1",
     "multer": "^1.4.2",
+    "multer-sftp": "^1.1.0",
     "mysql2": "^2.1.0",
     "node-http-error": "^2.0.0",
-    "sequelize": "^6.3.3"
+    "queue": "^6.0.1",
+    "sequelize": "^6.3.3",
+    "ssh2-sftp-client": "^5.2.2"
   },
   "devDependencies": {
     "chai": "^4.2.0",
@@ -25,7 +28,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "mocha": "^8.0.1",
+    "mocha": "^8.1.1",
     "sequelize-cli": "^6.2.0"
   },
   "scripts": {
