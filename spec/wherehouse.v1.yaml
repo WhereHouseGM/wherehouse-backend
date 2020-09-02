@@ -1056,28 +1056,6 @@ components:
       properties:
         id:
           type: integer
-        types:
-          description: |
-            창고 종류
-          type: array
-          items:
-            type: string
-            enum:
-              - ROOM_TEMPERATURE
-              - LOW_TEMPERATURE
-              - BONDED
-              - SAVAGE
-              - HAZARDOUS
-              - SELF_STORAGE
-              - CONTAINER
-        landArea:
-          type: integer
-          description: '창고 평 수 (단위: 평)'
-          example: 32
-        totalArea:
-          type: integer
-          description: '창고 평 수 (단위: 평)'
-          example: 32
         monthlyFee:
           type: integer
           description: '월세 (단위: 만원)'
@@ -1095,9 +1073,6 @@ components:
           description: 최소 이 기간만큼은 사용해야함
       required:
         - id
-        - types
-        - landArea
-        - totalArea
         - monthlyFee
         - depositFee
         - maintenanceFee
@@ -1499,6 +1474,17 @@ components:
           enum:
             - GENERAL
             - AGENCY
+        landArea:
+          type: integer
+          description: 창고 대지면적
+        totalArea:
+          type: integer
+          description: 창고 연면적
+        types:
+          type: array
+          description: 창고 종류
+          items:
+            type: string
         owner:
           $ref: '#/components/schemas/SimplifiedUserInfo'
         address:
@@ -1587,6 +1573,9 @@ components:
         - id
         - name
         - serviceType
+        - landArea
+        - totalArea
+        - types
         - owner
         - address
         - addressDetail

@@ -8,6 +8,9 @@ module.exports = {
 		return {
 			"name": `name${agencyId}`,
 			"serviceType": "AGENCY",
+			"types": ["ROOM_TEMPERATURE"],
+			"landArea": 100,
+			"totalArea": 200,
 			"address": "ㅇㅇ도 ㅇㅇ시 ㅇㅇ구 ㅇㅇ동",
 			"addressDetail": "ㅇㅇㅇ동 ㅇㅇㅇ호",
 			"description": "이건 에이전시 창고입니다",
@@ -64,6 +67,9 @@ module.exports = {
 		return {
 			"name": `name${generalId}`,
 			"serviceType": "GENERAL",
+			"types": ["ROOM_TEMPERATURE"],
+			"landArea": 100,
+			"totalArea": 200,
 			"address": "ㅇㅇ도 ㅇㅇ시 ㅇㅇ구 ㅇㅇ동",
 			"addressDetail": "ㅇㅇㅇ동 ㅇㅇㅇ호",
 			"description": "이건 일반 창고입니다",
@@ -89,9 +95,6 @@ module.exports = {
 				"longitude": `${generalId}`
 			},
 			"additionalInfo": {
-				"types": ["ROOM_TEMPERATURE"],
-				"landArea": 100,
-				"totalArea": 200,
 				"monthlyFee": 300,
 				"depositFee": 5000,
 				"maintenanceFee": 10,

@@ -7,6 +7,8 @@ module.exports = (sequelize, DataTypes) => {
 		canUse: { type: DataTypes.BOOLEAN, defaultValue: true, allowNull: false },
 		name: { type: DataTypes.STRING(20), allowNull: false },
 		serviceType: { type: DataTypes.ENUM("GENERAL", "AGENCY"), allowNull: false },
+		landArea: { type: DataTypes.INTEGER, allowNull: false },
+		totalArea: { type: DataTypes.INTEGER, allowNull: false },
 		address: { type: DataTypes.STRING(100), allowNull: false },
 		addressDetail: { type: DataTypes.STRING(100), allowNull: false },
 		description: { type: DataTypes.STRING(400), allowNull: false },
@@ -33,6 +35,7 @@ module.exports = (sequelize, DataTypes) => {
 		db.warehouses.hasOne(db.warehouseLocations, { as: "location", foreignKey: "warehouseId", onUpdate: "cascade", onDelete: "cascade"});
 		db.warehouses.hasMany(db.warehouseAttachments, { as: "attachments", onUpdate: "cascade", onDelete: "cascade"});
 		db.warehouses.belongsTo(db.users, { as: "owner" });
+		db.warehouses.hasMany(db.warehouseTypes, { as: "types", onUpdate: "cascade", onDelete: "cascade"});
 	};
 
 	return Warehouse;
