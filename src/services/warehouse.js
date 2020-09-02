@@ -25,11 +25,11 @@ exports.getWarehouses = async function (query) {
 			{model: db.users, required: true, as: "owner"},
 			{model: db.warehouseLocations, required: true, as: "location"},
 			{model: db.warehouseAttachments, as: "attachments"},
+			{model: db.warehouseTypes, as: "types"},
 			{
 				model: db.generalWarehouseDetails,
 				where: sizeQuery,
 				as: "generalDetail",
-				include: [ { model: db.generalWarehouseTypes, as: "types" }]
 			},
 			{
 				model: db.agencyWarehouseDetails,
@@ -54,11 +54,8 @@ exports.getWarehouse = async function (warehouseId) {
 			{ model: db.users, required: true, as: "owner" },
 			{ model: db.warehouseLocations, required: true, as: "location" },
 			{ model: db.warehouseAttachments, as: "attachments" },
-			{
-				model: db.generalWarehouseDetails,
-				include: [ { model: db.generalWarehouseTypes, as: "types" } ],
-				as: "generalDetail"
-			},
+			{ model: db.warehouseTypes, as: "types" },
+			{ model: db.generalWarehouseDetails, as: "generalDetail" },
 			{
 				model: db.agencyWarehouseDetails,
 				include: [ { model: db.agencyWarehousePayments, as: "payments" } ],
@@ -74,12 +71,13 @@ exports.getWarehouse = async function (warehouseId) {
 
 exports.postWarehouse = async function (userId, postWarehouseRequest) {
 	const warehouseId = await db.sequelize.transaction(async function(t) {
+		postWarehouseRequest.types = postWarehouseRequest.types.map(type => { return { name: type }; });
 		const { attachmentIds, location, additionalInfo, ...warehouseFields } = postWarehouseRequest;
 		// create warehouse
 		const _warehouse = await db.warehouses.create({
 			ownerId: userId,
 			...warehouseFields
-		}, { transaction: t });
+		}, { transaction: t, include: [ { model: db.warehouseTypes, as: "types" }] });
 
 		//create location
 		await db.warehouseLocations.create({
@@ -91,11 +89,10 @@ exports.postWarehouse = async function (userId, postWarehouseRequest) {
 		const serviceType = postWarehouseRequest.serviceType;
 
 		if (serviceType === "GENERAL") {
-			additionalInfo.types = additionalInfo.types.map(type => { return { name: type }; });
 			await db.generalWarehouseDetails.create({
 				...additionalInfo,
 				warehouseId: _warehouse.id
-			}, { transaction: t, include: [ { model: db.generalWarehouseTypes, as: "types" }] });
+			}, { transaction: t });
 		} else {
 			await db.agencyWarehouseDetails.create({
 				...additionalInfo,
@@ -129,8 +126,6 @@ exports.patchWarehouse = async function (userId, warehouseId, patchWarehouseRequ
 		await warehouse.update(warehouseFields, { transaction: t });
 		await warehouse.location.update(location, { transaction: t });
 
-		console.log(warehouse.agencyDetail);
-		console.log(warehouse.generalDetail);
 		if(warehouse.serviceType === "GENERAL") await warehouse.generalDetail.update(additionalInfo, { transaction: t });
 		else if(warehouse.serviceType === "AGENCY") await warehouse.agencyDetail.update(additionalInfo, { transaction: t });
 

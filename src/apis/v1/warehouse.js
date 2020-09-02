@@ -18,9 +18,6 @@ const postWarehouseLocationRequestValidator = Joi.object({
 });
 
 const postGeneralWarehouseDetailValidator = Joi.object({
-	types: Joi.array().items(Joi.string().valid("ROOM_TEMPERATURE", "LOW_TEMPERATURE", "BONDED", "SAVAGE", "HAZARDOUS", "SELF_STORAGE", "CONTAINER"))	.required(),
-	landArea: Joi.number().integer().required(),
-	totalArea: Joi.number().integer().required(),
 	monthlyFee: Joi.number().integer().required(),
 	depositFee: Joi.number().integer().required(),
 	maintenanceFee: Joi.number().integer().required(),
@@ -44,6 +41,9 @@ const postAgencyWarehouseDetailValidator = Joi.object({
 const postWarehouseRequestValidator = Joi.object({
 	name: Joi.string().max(20).required(),
 	serviceType: Joi.string().valid("GENERAL", "AGENCY").required(),
+	types: Joi.array().items(Joi.string().valid("ROOM_TEMPERATURE", "LOW_TEMPERATURE", "BONDED", "SAVAGE", "HAZARDOUS", "SELF_STORAGE", "CONTAINER"))	.required(),
+	landArea: Joi.number().integer().required(),
+	totalArea: Joi.number().integer().required(),
 	address: Joi.string().max(100).required(),
 	addressDetail: Joi.string().max(100).required(),
 	description: Joi.string().max(400).required(),

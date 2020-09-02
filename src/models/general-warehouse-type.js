@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-	const modelName = "generalWarehouseTypes";
-	const tableName = "general_warehouse_types";
+	const modelName = "warehouseTypes";
+	const tableName = "warehouse_types";
 
 	const GeneralWarehouseType = sequelize.define(modelName, {
 		id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
