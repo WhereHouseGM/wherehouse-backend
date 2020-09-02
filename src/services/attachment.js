@@ -10,7 +10,5 @@ exports.postAttachments = async function (files) {
 			return newAttachment;
 		}));
 
-	return {
-		attachments: attachments
-	};
+	return attachments;
 };

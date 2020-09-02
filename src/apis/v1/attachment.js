@@ -13,13 +13,13 @@ const storage = sftpStorage({
 		password: "karkar55@"
 	},
 	destination: function (req, file, cb) {
-		cb(null, "/");
+		cb(null, "/sftpuser");
 	},
 	filename: function (req, file, cb) {
 		cb(null, file.fieldname + "-" + Date.now());
 	}
 });
-const upload = multer({ storage });
+const upload = multer({ storage, limits: { fileSize: 1024*1024*5 } });
 
 module.exports = (router) => {
 	router.post("/attachments", authorize(), upload.array("attachments", 10), async function (req, res, next) {
