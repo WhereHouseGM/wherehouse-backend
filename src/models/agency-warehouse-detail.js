@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
 
 	AgencyWarehouseDetail.associate = function (db) {
 		db.agencyWarehouseDetails.hasMany(db.agencyWarehousePayments, { as: "payments", onUpdate: "cascade", onDelete: "cascade" });
+		db.agencyWarehouseDetails.hasMany(db.deliveryTypes, { as: "deliveryTypes" });
 	};
 
 	return AgencyWarehouseDetail;
