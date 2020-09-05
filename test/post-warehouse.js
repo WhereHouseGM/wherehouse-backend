@@ -17,8 +17,6 @@ module.exports = (dependencies) => {
 		it("should success(general warehouse)", async function () {
 			const res = await apis.warehouses.postWarehouse(signUpResponse, postGeneralWarehouseRequest);
 
-			console.log("success general warehouse");
-			console.log(res.body);
 			expect(res.status).to.equal(201);
 			expect(res).to.satisfyApiSpec;
 		});
@@ -26,8 +24,6 @@ module.exports = (dependencies) => {
 		it("should success(agency warehouse)", async function () {
 			const res = await apis.warehouses.postWarehouse(signUpResponse, postAgencyWarehouseRequest);
 
-			console.log("success agency warehouse");
-			console.log(res.body);
 			expect(res.status).to.equal(201);
 			expect(res).to.satisfyApiSpec;
 		});

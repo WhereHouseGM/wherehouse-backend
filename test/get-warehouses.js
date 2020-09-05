@@ -37,7 +37,6 @@ module.exports = (dependencies) => {
 		it("failed due to invalid offset and limit values", async function() {
 			const res = await apis.warehouses.getWarehouses({ offset: "null", limit: "null" });
 
-			console.log(res.body);
 			expect(res.status).to.equal(400);
 			expect(res).to.satisfyApiSpec;
 		});
