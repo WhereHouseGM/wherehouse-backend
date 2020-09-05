@@ -20,9 +20,9 @@ info:
     name: wherehousegm
     email: wherehousegm@gmail.com
 servers:
-  - url: 'https://wherehouse-backend.herokuapp.com/v1'
+  - url: 'https://api.banchango.shop'
 paths:
-  /warehouses:
+  /v1/warehouses:
     get:
       summary: 창고 정보 목록 조회
       tags:
@@ -208,7 +208,7 @@ paths:
       tags:
         - warehouses
     parameters: []
-  '/warehouses/{warehouseId}':
+  '/v1/warehouses/{warehouseId}':
     get:
       summary: 창고 정보 조회
       tags:
@@ -410,7 +410,7 @@ paths:
             jwt 토큰을 사용합니다.
       tags:
         - warehouses
-  '/warehouses/{warehouseId}/reviews':
+  '/v1/warehouses/{warehouseId}/reviews':
     parameters:
       - schema:
           type: integer
@@ -566,7 +566,7 @@ paths:
         창고 리뷰를 작성할 때 사용함
       tags:
         - warehouse-reviews
-  '/warehouses/{warehouseId}/reviews/{reviewId}':
+  '/v1/warehouses/{warehouseId}/reviews/{reviewId}':
     parameters:
       - schema:
           type: integer
@@ -638,7 +638,7 @@ paths:
             jwt 토큰을 사용합니다.
       tags:
         - warehouse-reviews
-  /auth/sign-up:
+  /v1/auth/sign-up:
     post:
       summary: 회원가입
       tags:
@@ -684,7 +684,7 @@ paths:
               $ref: '#/components/schemas/SignUpForm'
       description: 회원가입할 때 사용함
     parameters: []
-  /auth/sign-in:
+  /v1/auth/sign-in:
     post:
       summary: 로그인
       operationId: post-v1-auth-sign-in
@@ -739,7 +739,7 @@ paths:
       tags:
         - auth
     parameters: []
-  '/users/{userId}':
+  '/v1/users/{userId}':
     parameters:
       - schema:
           type: integer
@@ -906,7 +906,7 @@ paths:
               $ref: '#/components/schemas/EditUserForm'
       tags:
         - users
-  /auth/refresh-token:
+  /v1/auth/refresh-token:
     post:
       summary: 액세스 토큰 재발급
       operationId: post-v1-auth-refresh-token
@@ -954,7 +954,7 @@ paths:
       tags:
         - auth
     parameters: []
-  /attachments:
+  /v1/attachments:
     post:
       summary: 첨부파일 업로드
       operationId: post-attachments
@@ -994,6 +994,48 @@ paths:
         description: ''
       tags:
         - attachments
+    parameters: []
+  /v1/delivery-types:
+    get:
+      summary: 배송 업체 목록 조회
+      tags:
+        - delivery-type
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  types:
+                    type: array
+                    description: 배송업체 목록
+                    items:
+                      $ref: '#/components/schemas/DeliveryTypeInfo'
+                required:
+                  - types
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  '':
+                    type: string
+      operationId: get-v1-delivery-types
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          description: |-
+            Bearer 토큰 값입니다.
+            jwt 토큰을 사용합니다.
+          required: true
+      description: ''
+    parameters: []
 components:
   schemas:
     SimplifiedWarehouseInfo:
@@ -1759,3 +1801,16 @@ components:
         - monthlyFee
         - depositFee
         - maintenanceFee
+    DeliveryTypeInfo:
+      title: DeliveryTypeInfo
+      type: object
+      properties:
+        id:
+          type: integer
+          description: PK
+        name:
+          type: string
+          description: 배송 업체 이름
+      required:
+        - id
+        - name

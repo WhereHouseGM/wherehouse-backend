@@ -26,7 +26,6 @@ exports.getWarehouseReviews = async function (userId, warehouseId, getWarehouseR
 	if(getWarehouseReviewQuery.limit !== undefined) queryOption.limit = getWarehouseReviewQuery.limit;
 	if(getWarehouseReviewQuery.offset !== undefined) queryOption.offset = getWarehouseReviewQuery.offset;
 
-	console.log(queryOption);
 	const reviews = await db.warehouseReviews.findAll(queryOption);
 
 	return reviews;

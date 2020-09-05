@@ -13,4 +13,6 @@ require("./attachment")(router);
 
 require("./warehouse-review")(router);
 
+require("./delivery-type")(router);
+
 module.exports = router;

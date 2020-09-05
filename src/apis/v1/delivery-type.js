@@ -3,7 +3,7 @@ const { authorize } = require("../../middlewares/auth");
 const DeliveryTypeDto = require("../../dtos/delivery-type");
 
 module.exports = (router) => {
-	router.get("/delivery-types", authorize, async function (req, res, next) {
+	router.get("/delivery-types", authorize(), async function (req, res, next) {
 		try {
 			const deliveryTypes = await getDeliveryTypes();
 
