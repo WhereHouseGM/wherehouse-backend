@@ -33,7 +33,10 @@ exports.getWarehouses = async function (query) {
 			},
 			{
 				model: db.agencyWarehouseDetails,
-				include: [ { model: db.agencyWarehousePayments, as: "payments" } ],
+				include: [
+					{ model: db.agencyWarehousePayments, as: "payments" },
+					{ model: db.agencyMainItemTypes, as: "mainItemTypes" }
+				],
 				as: "agencyDetail"
 			}
 		],
@@ -58,7 +61,10 @@ exports.getWarehouse = async function (warehouseId) {
 			{ model: db.generalWarehouseDetails, as: "generalDetail" },
 			{
 				model: db.agencyWarehouseDetails,
-				include: [ { model: db.agencyWarehousePayments, as: "payments" } ],
+				include: [
+					{ model: db.agencyWarehousePayments, as: "payments" },
+					{ model: db.agencyMainItemTypes, as: "mainItemTypes" }
+				],
 				as: "agencyDetail"
 			}
 		]
@@ -94,10 +100,15 @@ exports.postWarehouse = async function (userId, postWarehouseRequest) {
 				warehouseId: _warehouse.id
 			}, { transaction: t });
 		} else {
+			additionalInfo.mainItemTypes = additionalInfo.mainItemTypes.map(type => { return { name: type }; });
+
 			await db.agencyWarehouseDetails.create({
 				...additionalInfo,
 				warehouseId: _warehouse.id
-			}, { transaction: t, include: [ { model: db.agencyWarehousePayments, as: "payments" }] });
+			}, { transaction: t, include: [
+				{ model: db.agencyWarehousePayments, as: "payments" },
+				{ model: db.agencyMainItemTypes, as: "mainItemTypes" }
+			] });
 		}
 
 		// update attachments

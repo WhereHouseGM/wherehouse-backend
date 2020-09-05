@@ -37,7 +37,7 @@ module.exports = {
 			},
 			"additionalInfo": {
 				"type": "3PL",
-				"mainItemType": "CLOTH",
+				"mainItemTypes": ["CLOTH"],
 				"storageType": "BOX",
 				"payments": [
 					{
