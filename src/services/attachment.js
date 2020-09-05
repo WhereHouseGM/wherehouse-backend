@@ -5,7 +5,7 @@ exports.postAttachments = async function (files) {
 	const attachments = await Promise.all(
 		files.map(async _ => {
 			const newAttachment = await db.warehouseAttachments.create({
-				url: `${appConfig.app.url}/${_.path}`
+				url: `${appConfig.app.imageUrl}/${_.path}`
 			});
 			return newAttachment;
 		}));
