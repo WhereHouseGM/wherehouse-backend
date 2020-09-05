@@ -4,19 +4,21 @@ const { postAttachments } = require("../../services/attachment");
 const HTTPError = require("node-http-error");
 const AttachmentDto = require("../../dtos/attachment");
 const sftpStorage = require("multer-sftp");
+const appConfig = require("../../config/app");
+const md5 = require("md5");
 
 const storage = sftpStorage({
 	sftp: {
-		host: "127.0.0.1",
+		host: appConfig.app.imageUrl,
 		port: 22,
-		username: "sftpuser",
+		username: "wherehouse",
 		password: "karkar55@"
 	},
 	destination: function (req, file, cb) {
-		cb(null, "/sftpuser");
+		cb(null, "uploads");
 	},
 	filename: function (req, file, cb) {
-		cb(null, file.fieldname + "-" + Date.now());
+		cb(null, md5(file.fieldname + "-" + Date.now()));
 	}
 });
 const upload = multer({ storage, limits: { fileSize: 1024*1024*5 } });
