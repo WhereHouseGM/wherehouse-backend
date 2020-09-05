@@ -1,5 +1,5 @@
 module.exports = {
 	app: {
-		url: process.env.APP_URL
+		imageUrl: process.env.IMAGE_URL
 	}
 };
