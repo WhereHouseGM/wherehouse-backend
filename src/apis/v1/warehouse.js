@@ -33,7 +33,7 @@ const postAgencyWarehousePaymentValidator = Joi.object({
 
 const postAgencyWarehouseDetailValidator = Joi.object({
 	type: Joi.string().valid("3PL", "FULLFILMENT").required(),
-	mainItemType: Joi.string().valid("CLOTH", "FOOD", "ACCESSORY", "ELECTRONIC", "COSMETIC", "COMPONENT", "RAW_MATERIAL").required(),
+	mainItemTypes: Joi.array().items(Joi.string().valid("CLOTH", "FOOD", "ACCESSORY", "ELECTRONIC", "COSMETIC", "COMPONENT", "RAW_MATERIAL")).required(),
 	storageType: Joi.string().valid("PALLET", "BOX", "SPECIAL").required(),
 	payments: Joi.array().items(postAgencyWarehousePaymentValidator)
 });
