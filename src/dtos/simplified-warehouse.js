@@ -11,6 +11,8 @@ module.exports = function (warehouse) {
 		landArea: warehouse.landArea,
 		totalArea: warehouse.totalArea,
 		canUse: warehouse.canUse,
+		address: warehouse.address,
+		addressDetail: warehouse.addressDetail,
 		location: LocationDto(warehouse.location)
 	};
 };
