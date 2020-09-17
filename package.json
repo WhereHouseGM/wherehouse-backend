@@ -35,8 +35,7 @@
   },
   "scripts": {
     "test": "mocha test --timeout 90000",
-    "start": "webpack --config webpack.config.js && node build/server.js",
-    "build": "webpack --config webpack.config.js"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
