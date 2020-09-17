@@ -8,10 +8,4 @@ COPY . .
 
 EXPOSE 3000
 
-ENV DATABASE_URL=mysql
-ENV DATABASE_USERNAME=wherehouse
-ENV DATABASE_PASSWORD=group
-ENV DATABASE_NAME=wherehouse
-ENV JWT_SECRET=jwtsecretyayyay
-
 CMD ["node", "server.js"]
