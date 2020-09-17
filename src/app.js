@@ -2,11 +2,14 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
+const morgan = require('morgan');
 
 const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
+
+app.use(morgan("[:date[clf]] :method :url :status :res[content-length] - :response-time ms"));
 
 // import models
 const db = require("./models");
