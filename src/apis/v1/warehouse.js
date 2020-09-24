@@ -93,7 +93,8 @@ const patchAgencyWarehouseDetailValidator = Joi.object({
 	type: Joi.string().valid("3PL", "FULLFILMENT"),
 	mainItemType: Joi.string().valid("CLOTH", "FOOD", "ACCESSORY", "ELECTRONIC", "COSMETIC", "COMPONENT", "RAW_MATERIAL"),
 	storageType: Joi.string().valid("PALLET", "BOX", "SPECIAL"),
-	payments: Joi.array().items(patchAgencyWarehousePaymentValidator)
+	payments: Joi.array().items(patchAgencyWarehousePaymentValidator),
+	deliveryCompanies: Joi.array().items(Joi.string())
 });
 
 const patchWarehouseRequestValidator = Joi.object({

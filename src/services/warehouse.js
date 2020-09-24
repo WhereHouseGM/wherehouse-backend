@@ -63,7 +63,8 @@ exports.getWarehouse = async function (warehouseId) {
 				model: db.agencyWarehouseDetails,
 				include: [
 					{ model: db.agencyWarehousePayments, as: "payments" },
-					{ model: db.agencyMainItemTypes, as: "mainItemTypes" }
+					{ model: db.agencyMainItemTypes, as: "mainItemTypes" },
+					{ model: db.deliveryTypes, as: "deliveryTypes" }
 				],
 				as: "agencyDetail"
 			}
@@ -107,7 +108,8 @@ exports.postWarehouse = async function (userId, postWarehouseRequest) {
 				warehouseId: _warehouse.id
 			}, { transaction: t, include: [
 				{ model: db.agencyWarehousePayments, as: "payments" },
-				{ model: db.agencyMainItemTypes, as: "mainItemTypes" }
+				{ model: db.agencyMainItemTypes, as: "mainItemTypes" },
+				{ model: db.deliveryTypes, as: "deliveryTypes" }
 			] });
 		}
 
