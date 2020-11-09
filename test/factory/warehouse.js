@@ -58,7 +58,8 @@ module.exports = {
 						"description": "물건 옮기기",
 						"type": "WORK"
 					}
-				]
+				],
+				"deliveryCompanies": ["한진택배"]
 			}
 		};
 	},
