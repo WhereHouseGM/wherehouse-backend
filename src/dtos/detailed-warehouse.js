@@ -15,6 +15,7 @@ module.exports = function(warehouse) {
 	return {
 		id: warehouse.id,
 		name: warehouse.name,
+		description: warehouse.description,
 		serviceType: warehouse.serviceType,
 		types: warehouse.types.map(type => type.name),
 		landArea: warehouse.landArea,
