@@ -12,5 +12,5 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: test
-        run: source ops/.test_env && cd ops && docker-compose down -v && cd .. && ./test_start.sh && sleep 20 && docker exec ops_wherehouse-api_1 npm run test
+        run: source ops/.test_env && cd ops && docker-compose down -v && cd .. && ./test_start.sh && sleep 60 && docker exec ops_wherehouse-api_1 npm run test
 
