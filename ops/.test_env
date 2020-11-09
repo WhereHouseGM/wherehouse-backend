@@ -1,0 +1,5 @@
+export WH_MYSQL_USER=testuser
+export WH_MYSQL_PASSWORD=testpassword
+export WH_MYSQL_DATABASE=testdatabase
+export WH_JWT_SECRET=thisistestjwtsecretforme
+export WH_MYSQL_ROOT_PASSWORD=thisistestrootpassword

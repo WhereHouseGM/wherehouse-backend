@@ -12,4 +12,4 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: test
-        run: docker-compose -f ops/docker-compose.yaml -p tests run -p 3000 --rm wherehouse-api npm run test
+        run: source ops/.test_env && docker-compose -f ops/docker-compose.yaml -p tests run -p 3000 --rm wherehouse-api npm run test
