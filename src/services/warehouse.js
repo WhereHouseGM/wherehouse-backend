@@ -79,7 +79,6 @@ exports.getWarehouse = async function (warehouseId) {
 exports.postWarehouse = async function (userId, postWarehouseRequest) {
 	const warehouseId = await db.sequelize.transaction(async function(t) {
 		postWarehouseRequest.types = postWarehouseRequest.types.map(type => { return { name: type }; });
-		postWarehouseRequest.deliveryCompanies.map(deliveryType => { return { name: deliveryType }; });
 		
 		const { attachmentIds, location, additionalInfo, ...warehouseFields } = postWarehouseRequest;
 		// create warehouse
@@ -103,6 +102,7 @@ exports.postWarehouse = async function (userId, postWarehouseRequest) {
 				warehouseId: _warehouse.id
 			}, { transaction: t });
 		} else {
+			additionalInfo.deliveryCompanies = additionalInfo.deliveryCompanies.map(deliveryType => { return { name: deliveryType }; });
 			additionalInfo.mainItemTypes = additionalInfo.mainItemTypes.map(type => { return { name: type }; });
 
 			await db.agencyWarehouseDetails.create({
