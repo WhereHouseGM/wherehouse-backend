@@ -11,7 +11,7 @@ services:
                         - DATABASE_NAME=${WH_MYSQL_DATABASE}
                         - JWT_SECRET=${WH_JWT_SECRET}
                 ports:
-                        - "127.0.0.1:3000:3000"
+                        - "3000:3000"
                 depends_on:
                         - mysql
         mysql:
@@ -22,4 +22,4 @@ services:
                         - MYSQL_PASSWORD=${WH_MYSQL_PASSWORD}
                         - MYSQL_DATABASE=${WH_MYSQL_DATABASE}
                 ports:
-                        - "127.0.0.1:3306:3306"
+                        - "3306:3306"

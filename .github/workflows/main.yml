@@ -12,4 +12,5 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: test
-        run: source ops/.test_env && ./test_start.sh && docker exec ops_wherehouse-api_1 npm run test && docker container logs ops_mysql_1 && docker ps && docker container ls -a
+        run: source ops/.test_env && cd ops && docker-compose down -v && cd .. && ./test_start.sh && sleep 20 && docker exec ops_wherehouse-api_1 npm run test
+
