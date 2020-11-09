@@ -12,4 +12,4 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: test
-        run: source ops/.test_env && ./start.sh && docker exec ops_wherehouse-api_1 ls && docker ps && docker container ls -a
+        run: source ops/.test_env && ./start.sh && docker exec ops_wherehouse-api_1 npm run test && docker ps && docker container ls -a
