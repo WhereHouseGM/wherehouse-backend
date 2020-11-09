@@ -1,0 +1,25 @@
+version: '3'
+services:
+        wherehouse-api:
+                build: 
+                        context: ..
+                        dockerfile: ops/wherehouse-api/Dockerfile
+                environment:
+                        - DATABASE_URL=mysql
+                        - DATABASE_USERNAME=${WH_MYSQL_USER}
+                        - DATABASE_PASSWORD=${WH_MYSQL_PASSWORD}
+                        - DATABASE_NAME=${WH_MYSQL_DATABASE}
+                        - JWT_SECRET=${WH_JWT_SECRET}
+                ports:
+                        - "127.0.0.1:3000:3000"
+                depends_on:
+                        - mysql
+        mysql:
+                build: mysql
+                environment:
+                        - MYSQL_ROOT_PASSWORD=${WH_MYSQL_ROOT_PASSWORD}
+                        - MYSQL_USER=${WH_MYSQL_USER}
+                        - MYSQL_PASSWORD=${WH_MYSQL_PASSWORD}
+                        - MYSQL_DATABASE=${WH_MYSQL_DATABASE}
+                ports:
+                        - "127.0.0.1:3306:3306"
