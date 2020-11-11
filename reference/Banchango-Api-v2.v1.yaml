@@ -14,7 +14,7 @@ paths:
         required: true
         description: 사용자 id값
     get:
-      summary: Your GET endpoint
+      summary: 사용자 정보 조회 및 수정
       tags: []
       responses:
         '200':
@@ -131,6 +131,466 @@ paths:
           description: Bearer Token 값. JWT Token 사용
           required: true
       description: 사용자 정보를 가져옵니다.
+    patch:
+      summary: ''
+      operationId: patch-v2-users-userId
+      responses:
+        '200':
+          description: 'OK : 정보 수정 완료'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  User:
+                    type: object
+                    properties:
+                      telephoneNumber:
+                        type: string
+                        minLength: 1
+                      phoneNumber:
+                        type: string
+                        minLength: 1
+                      companyName:
+                        type: string
+                        minLength: 1
+                      name:
+                        type: string
+                        minLength: 1
+                      id:
+                        type: number
+                      type:
+                        type: string
+                        minLength: 1
+                      email:
+                        type: string
+                        minLength: 1
+                    required:
+                      - telephoneNumber
+                      - phoneNumber
+                      - companyName
+                      - name
+                      - id
+                      - type
+                      - email
+                required:
+                  - User
+              examples:
+                200_example:
+                  value:
+                    User:
+                      telephoneNumber: '0212342222'
+                      phoneNumber: '0101234'
+                      companyName: testCompanyName
+                      name: testName
+                      id: 6
+                      type: SHIPPER
+                      email: testEmail@naver.com
+        '400':
+          description: 'Bad Request : 요청 형식이 잘못되었을 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                400_Example:
+                  value:
+                    message: 요청 형식이 잘못되었습니다.
+        '401':
+          description: 'Unauthorized : Access Token값에 문제가 있어 인증에 실패한 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                401_example:
+                  value:
+                    message: 인증에 실패했습니다.
+        '403':
+          description: 'Forbidden : Path에 있는 userId와 Access Token이 가지는 userId 값이 달라 정보 수정이 불가한 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                403_Example:
+                  value:
+                    message: 해당 회원 정보를 수정하기 위한 권한이 없습니다.
+        '404':
+          description: |-
+            Not Found : Path의 userId가 존재하지 않는 경우
+            * 이 상태는 뜨지 않습니다. 수정 권한을 먼저 확인하기 때문에 403이 옵니다. 
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                404_example:
+                  value:
+                    message: 해당 id로 조회된 결과가 없습니다.
+        '409':
+          description: 'Conflict : 수정된 이메일이 이미 사용중인 경우'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                409_example:
+                  value:
+                    message: 해당 이메일은 이미 사용 중 입니다.
+      description: 사용자 정보 수정
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: ''
+              type: object
+              properties:
+                email:
+                  type: string
+                  minLength: 1
+                name:
+                  type: string
+                  minLength: 1
+                password:
+                  type: string
+                  minLength: 1
+                type:
+                  type: string
+                  minLength: 1
+                telephoneNumber:
+                  type: string
+                  minLength: 1
+                companyName:
+                  type: string
+                  minLength: 1
+                phoneNumber:
+                  type: string
+                  minLength: 1
+              required:
+                - email
+                - name
+                - password
+                - type
+                - telephoneNumber
+                - companyName
+                - phoneNumber
+            examples:
+              Request Example:
+                value:
+                  email: testEmail@naver.com
+                  name: testName
+                  password: '1234'
+                  type: SHIPPER
+                  telephoneNumber: '0212342222'
+                  companyName: testCompanyName
+                  phoneNumber: '0101234'
+        description: |-
+          사용자 정보 변경 시 필요한 정보(사용자 등록과 동일)
+          * 변경하지 않는 부분도 모두 입력해야 합니다.
+  /v2/users/sign-in:
+    post:
+      summary: 사용자 로그인
+      operationId: post-v2-users-sign-in
+      responses:
+        '200':
+          description: 'OK : 로그인 성공'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  User:
+                    type: object
+                    properties:
+                      telephoneNumber:
+                        type: string
+                        minLength: 1
+                      phoneNumber:
+                        type: string
+                        minLength: 1
+                      companyName:
+                        type: string
+                        minLength: 1
+                      name:
+                        type: string
+                        minLength: 1
+                      id:
+                        type: number
+                      type:
+                        type: string
+                        minLength: 1
+                      email:
+                        type: string
+                        minLength: 1
+                    required:
+                      - telephoneNumber
+                      - phoneNumber
+                      - companyName
+                      - name
+                      - id
+                      - type
+                      - email
+                  accessToken:
+                    type: string
+                    minLength: 1
+                  tokenType:
+                    type: string
+                    minLength: 1
+                  refreshToken:
+                    type: string
+                    minLength: 1
+                required:
+                  - User
+                  - accessToken
+                  - tokenType
+                  - refreshToken
+              examples:
+                200_example:
+                  value:
+                    User:
+                      telephoneNumber: '0211112222'
+                      phoneNumber: '01011112222'
+                      companyName: testCompany
+                      name: Test
+                      id: 1
+                      type: SHIPPER
+                      email: test@naver.com
+                    accessToken: Access Token 값
+                    tokenType: Bearer
+                    refreshToken: Refresh Token 값
+        '400':
+          description: 'Bad Request : 요청 형식이 잘못된 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                400_example:
+                  value:
+                    message: 요청 형식이 잘못되었습니다.
+        '404':
+          description: 'Not Found : 로그인 실패 시'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                404_example:
+                  value:
+                    message: 이메일 또는 비밀번호가 잘못되었습니다.
+      description: 사용자 로그인
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: ''
+              type: object
+              properties:
+                email:
+                  type: string
+                  minLength: 1
+                  description: 사용자 email 주소
+                password:
+                  type: string
+                  minLength: 1
+                  description: sha256으로 인코딩된 비밀번호 값(64바이트)
+              required:
+                - email
+                - password
+            examples:
+              로그인 요청 예시:
+                value:
+                  email: test@naver.com
+                  password: '1234'
+        description: 사용자 로그인에 필요한 값
+  /v2/users/sign-up:
+    post:
+      summary: 사용자 회원 가입
+      operationId: post-v2-users-sign-up
+      responses:
+        '201':
+          description: 'Created : 가입 성공'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  User:
+                    type: object
+                    properties:
+                      telephoneNumber:
+                        type: string
+                        minLength: 1
+                      phoneNumber:
+                        type: string
+                        minLength: 1
+                      companyName:
+                        type: string
+                        minLength: 1
+                      name:
+                        type: string
+                        minLength: 1
+                      id:
+                        type: number
+                      type:
+                        type: string
+                        minLength: 1
+                      email:
+                        type: string
+                        minLength: 1
+                    required:
+                      - telephoneNumber
+                      - phoneNumber
+                      - companyName
+                      - name
+                      - id
+                      - type
+                      - email
+                required:
+                  - User
+              examples:
+                201_example:
+                  value:
+                    User:
+                      telephoneNumber: '0212341234'
+                      phoneNumber: '01012341234'
+                      companyName: testCompanyName
+                      name: testName
+                      id: 6
+                      type: SHIPPER
+                      email: testEmail@naver.com
+        '400':
+          description: 'Bad Request : 요청 형식이 잘못 되었을 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                400_example:
+                  value:
+                    message: 요청 형식이 잘못되었습니다.
+        '409':
+          description: 'Conflict : 해당 이메일로 이미 가입이 되어있는 회원이 존재하는 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                409_example:
+                  value:
+                    message: 해당 이메일은 이미 사용 중 입니다.
+      description: 사용자 회원 가입
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: ''
+              type: object
+              properties:
+                email:
+                  type: string
+                  minLength: 1
+                name:
+                  type: string
+                  minLength: 1
+                password:
+                  type: string
+                  minLength: 1
+                  description: sha256으로 인코딩된 비밀번호 값(64바이트)
+                type:
+                  type: string
+                  minLength: 1
+                  description: 회원 종류(SHIPPER 또는 OWNER 둘 중 하나)
+                telephoneNumber:
+                  type: string
+                  minLength: 1
+                companyName:
+                  type: string
+                  minLength: 1
+                phoneNumber:
+                  type: string
+                  minLength: 1
+              required:
+                - email
+                - name
+                - password
+                - type
+                - telephoneNumber
+                - companyName
+                - phoneNumber
+            examples:
+              request_example:
+                value:
+                  email: testEmail@naver.com
+                  name: testName
+                  password: '1234'
+                  type: SHIPPER
+                  telephoneNumber: '0212341234'
+                  companyName: testCompanyName
+                  phoneNumber: '01012341234'
+        description: 사용자 회원가입을 위한 정보
 components:
   schemas: {}
   securitySchemes:
