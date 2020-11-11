@@ -132,7 +132,7 @@ paths:
           required: true
       description: 사용자 정보를 가져옵니다.
     patch:
-      summary: ''
+      summary: 사용자 정보 수정
       operationId: patch-v2-users-userId
       responses:
         '200':
