@@ -1,0 +1,140 @@
+openapi: 3.0.0
+info:
+  title: Banchango Api v2
+  version: '1.0'
+servers:
+  - url: 'http://localhost:8080'
+paths:
+  '/v2/users/{userId}':
+    parameters:
+      - schema:
+          type: integer
+        name: userId
+        in: path
+        required: true
+        description: 사용자 id값
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  User:
+                    type: object
+                    properties:
+                      telephoneNumber:
+                        type: string
+                        minLength: 1
+                      phoneNumber:
+                        type: string
+                        minLength: 1
+                      companyName:
+                        type: string
+                        minLength: 1
+                      name:
+                        type: string
+                        minLength: 1
+                      id:
+                        type: number
+                      type:
+                        type: string
+                        minLength: 1
+                      email:
+                        type: string
+                        minLength: 1
+                    required:
+                      - telephoneNumber
+                      - phoneNumber
+                      - companyName
+                      - name
+                      - id
+                      - type
+                      - email
+                required:
+                  - User
+              examples:
+                200_example:
+                  value:
+                    User:
+                      telephoneNumber: '0211112222'
+                      phoneNumber: '01011112222'
+                      companyName: testCompany
+                      name: Test
+                      id: 1
+                      type: SHIPPER
+                      email: test@naver.com
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  timestamp:
+                    type: string
+                    minLength: 1
+                  status:
+                    type: number
+                  error:
+                    type: string
+                    minLength: 1
+                  message:
+                    type: string
+                    minLength: 1
+                  path:
+                    type: string
+                    minLength: 1
+                required:
+                  - timestamp
+                  - status
+                  - error
+                  - message
+                  - path
+              examples:
+                400_example:
+                  value:
+                    timestamp: '2020-11-11T01:52:48.667+0000'
+                    status: 400
+                    error: Bad Request
+                    message: Missing request header 'Authorization' for method parameter of type String
+                    path: /v2/users/1
+        '401':
+          description: 'Unauthorized : Token값에 문제가 있을 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                401_example:
+                  value:
+                    message: 인증에 실패했습니다.
+      operationId: get-v2-users-userId
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          description: Bearer Token 값. JWT Token 사용
+          required: true
+      description: 사용자 정보를 가져옵니다.
+components:
+  schemas: {}
+  securitySchemes:
+    API Key - 1:
+      name: API Key
+      type: apiKey
+      in: query
