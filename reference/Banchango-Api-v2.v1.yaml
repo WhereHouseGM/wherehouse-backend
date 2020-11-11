@@ -318,6 +318,13 @@ paths:
         description: |-
           사용자 정보 변경 시 필요한 정보(사용자 등록과 동일)
           * 변경하지 않는 부분도 모두 입력해야 합니다.
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          description: Bearer Token값. JWT Token 사용
+          required: true
   /v2/users/sign-in:
     post:
       summary: 사용자 로그인
@@ -591,6 +598,58 @@ paths:
                   companyName: testCompanyName
                   phoneNumber: '01012341234'
         description: 사용자 회원가입을 위한 정보
+  /v2/auth/refresh-token:
+    post:
+      summary: 액세스 토큰을 재발급 받습니다.
+      operationId: post-v2-auth-refresh-token
+      responses:
+        '200':
+          description: 'OK : 재발급 성공'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    minLength: 1
+                  tokenType:
+                    type: string
+                    minLength: 1
+                required:
+                  - accessToken
+                  - tokenType
+              examples:
+                200_Example:
+                  value:
+                    accessToken: 새로 발급된 Access Token 값
+                    tokenType: Bearer
+        '401':
+          description: 'Unauthorized : Bearer 토큰값에 문제가 있는 경우(토큰값 오류 또는 유효기간 만료)'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                401_Example:
+                  value:
+                    message: 인증에 실패했습니다.
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          description: Bearer Token값. JWT Token 사용
+          required: true
+      description: 유효기간이 지난 액세스 토큰을 재발급 받습니다.
 components:
   schemas: {}
   securitySchemes:
