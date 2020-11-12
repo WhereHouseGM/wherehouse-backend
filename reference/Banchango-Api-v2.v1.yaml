@@ -650,6 +650,112 @@ paths:
           description: Bearer Token값. JWT Token 사용
           required: true
       description: 유효기간이 지난 액세스 토큰을 재발급 받습니다.
+  /v2/warehouses:
+    get:
+      summary: 창고 검색 결과 조회
+      tags: []
+      responses:
+        '200':
+          description: 'OK : 검색 결과가 존재할 때'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  warehouses:
+                    type: array
+                    uniqueItems: true
+                    minItems: 1
+                    items:
+                      required:
+                        - name
+                        - landArea
+                        - id
+                        - type
+                        - canUse
+                        - totalArea
+                        - thumbnailUrl
+                      properties:
+                        name:
+                          type: string
+                          minLength: 1
+                        landArea:
+                          type: number
+                        location:
+                          type: object
+                          properties:
+                            latitude:
+                              type: number
+                            longitude:
+                              type: number
+                          required:
+                            - latitude
+                            - longitude
+                        id:
+                          type: number
+                        type:
+                          type: string
+                          minLength: 1
+                        canUse:
+                          type: boolean
+                        totalArea:
+                          type: number
+                        thumbnailUrl:
+                          type: string
+                          minLength: 1
+                required:
+                  - warehouses
+              examples:
+                200_example:
+                  value:
+                    warehouses:
+                      - name: N09
+                        location:
+                          latitude: 1.1
+                          longitude: 2.2
+                        id: 1
+                        type: ROOM_TEMPERATURE
+                        canUse: true
+                        totalArea: 1000
+                        thumbnailUrl: image_url.com
+                      - name: 나우 패킹
+                        landArea: 30
+                        location:
+                          latitude: 3.3
+                          longitude: 4.4
+                        id: 2
+                        type: ROOM_TEMPERATURE
+                        canUse: true
+                        totalArea: 30
+                        thumbnailUrl: image_url2.com
+        '204':
+          description: 'No Content : 검색 결과가 없을 때'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+      operationId: get-v2-warehouses
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          description: 사용자가 검색한 주소 값
+          required: true
+        - schema:
+            type: integer
+          in: query
+          name: limit
+          description: 불러올 결과 목록의 개수
+          required: true
+        - schema:
+            type: integer
+          in: query
+          name: offset
+          description: 창고들의 offset값
+          required: true
 components:
   schemas: {}
   securitySchemes:
