@@ -756,6 +756,102 @@ paths:
           name: offset
           description: 창고들의 offset값
           required: true
+  '/v2/warehouses/{warehouseId}':
+    parameters:
+      - schema:
+          type: string
+        name: warehouseId
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: get-v2-warehouses-warehouseId
+    delete:
+      summary: 창고를 삭제합니다.
+      operationId: delete-v2-warehouses-warehouseId
+      responses:
+        '200':
+          description: OK
+        '204':
+          description: 'No Content : 해당 warehouseId로 저장된 창고가 존재하지 않을 경우'
+        '400':
+          description: 'Bad Request : 요청 형식이 잘못된 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                400_Example:
+                  value:
+                    message: string
+        '401':
+          description: 'Unauthorized : JWT Token값이 잘못 되거나 유효 기간이 지난 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                401_example:
+                  value:
+                    message: string
+        '403':
+          description: 'Forbidden : JWT Token값의 userId와 warehouseId로 조회된 창고를 등록한 userId가 다른 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                403_example:
+                  value:
+                    message: string
+        '':
+          description: 'OK : 삭제가 완료되었을 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                200_example:
+                  value:
+                    message: 창고가 정상적으로 삭제되었습니다.
+      description: 창고를 삭제합니다.
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          description: Bearer Token 값입니다. JWT Token을 사용합니다.
+          required: true
 components:
   schemas: {}
   securitySchemes:
