@@ -27,6 +27,14 @@ paths:
                 properties:
                   User:
                     type: object
+                    required:
+                      - telephoneNumber
+                      - phoneNumber
+                      - companyName
+                      - name
+                      - userId
+                      - type
+                      - email
                     properties:
                       telephoneNumber:
                         type: string
@@ -40,7 +48,7 @@ paths:
                       name:
                         type: string
                         minLength: 1
-                      id:
+                      userId:
                         type: number
                       type:
                         type: string
@@ -48,14 +56,6 @@ paths:
                       email:
                         type: string
                         minLength: 1
-                    required:
-                      - telephoneNumber
-                      - phoneNumber
-                      - companyName
-                      - name
-                      - id
-                      - type
-                      - email
                 required:
                   - User
               examples:
@@ -66,7 +66,7 @@ paths:
                       phoneNumber: '01011112222'
                       companyName: testCompany
                       name: Test
-                      id: 1
+                      userId: 1
                       type: SHIPPER
                       email: test@naver.com
         '400':
@@ -145,6 +145,14 @@ paths:
                 properties:
                   User:
                     type: object
+                    required:
+                      - telephoneNumber
+                      - phoneNumber
+                      - companyName
+                      - name
+                      - userId
+                      - type
+                      - email
                     properties:
                       telephoneNumber:
                         type: string
@@ -158,7 +166,7 @@ paths:
                       name:
                         type: string
                         minLength: 1
-                      id:
+                      userId:
                         type: number
                       type:
                         type: string
@@ -166,14 +174,6 @@ paths:
                       email:
                         type: string
                         minLength: 1
-                    required:
-                      - telephoneNumber
-                      - phoneNumber
-                      - companyName
-                      - name
-                      - id
-                      - type
-                      - email
                 required:
                   - User
               examples:
@@ -184,7 +184,7 @@ paths:
                       phoneNumber: '0101234'
                       companyName: testCompanyName
                       name: testName
-                      id: 6
+                      userId: 6
                       type: SHIPPER
                       email: testEmail@naver.com
         '400':
@@ -340,6 +340,14 @@ paths:
                 properties:
                   User:
                     type: object
+                    required:
+                      - telephoneNumber
+                      - phoneNumber
+                      - companyName
+                      - name
+                      - userId
+                      - type
+                      - email
                     properties:
                       telephoneNumber:
                         type: string
@@ -353,7 +361,7 @@ paths:
                       name:
                         type: string
                         minLength: 1
-                      id:
+                      userId:
                         type: number
                       type:
                         type: string
@@ -361,14 +369,6 @@ paths:
                       email:
                         type: string
                         minLength: 1
-                    required:
-                      - telephoneNumber
-                      - phoneNumber
-                      - companyName
-                      - name
-                      - id
-                      - type
-                      - email
                   accessToken:
                     type: string
                     minLength: 1
@@ -391,7 +391,7 @@ paths:
                       phoneNumber: '01011112222'
                       companyName: testCompany
                       name: Test
-                      id: 1
+                      userId: 1
                       type: SHIPPER
                       email: test@naver.com
                     accessToken: Access Token 값
@@ -472,6 +472,14 @@ paths:
                 properties:
                   User:
                     type: object
+                    required:
+                      - telephoneNumber
+                      - phoneNumber
+                      - companyName
+                      - name
+                      - userId
+                      - type
+                      - email
                     properties:
                       telephoneNumber:
                         type: string
@@ -485,7 +493,7 @@ paths:
                       name:
                         type: string
                         minLength: 1
-                      id:
+                      userId:
                         type: number
                       type:
                         type: string
@@ -493,14 +501,6 @@ paths:
                       email:
                         type: string
                         minLength: 1
-                    required:
-                      - telephoneNumber
-                      - phoneNumber
-                      - companyName
-                      - name
-                      - id
-                      - type
-                      - email
                 required:
                   - User
               examples:
@@ -511,7 +511,7 @@ paths:
                       phoneNumber: '01012341234'
                       companyName: testCompanyName
                       name: testName
-                      id: 6
+                      userId: 6
                       type: SHIPPER
                       email: testEmail@naver.com
         '400':
@@ -668,14 +668,7 @@ paths:
                     uniqueItems: true
                     minItems: 1
                     items:
-                      required:
-                        - name
-                        - landArea
-                        - id
-                        - type
-                        - canUse
-                        - totalArea
-                        - thumbnailUrl
+                      type: object
                       properties:
                         name:
                           type: string
@@ -692,7 +685,7 @@ paths:
                           required:
                             - latitude
                             - longitude
-                        id:
+                        warehouseId:
                           type: number
                         type:
                           type: string
@@ -704,6 +697,14 @@ paths:
                         thumbnailUrl:
                           type: string
                           minLength: 1
+                      required:
+                        - name
+                        - landArea
+                        - warehouseId
+                        - type
+                        - canUse
+                        - totalArea
+                        - thumbnailUrl
                 required:
                   - warehouses
               examples:
@@ -714,7 +715,7 @@ paths:
                         location:
                           latitude: 1.1
                           longitude: 2.2
-                        id: 1
+                        warehouseId: 1
                         type: ROOM_TEMPERATURE
                         canUse: true
                         totalArea: 1000
@@ -724,7 +725,7 @@ paths:
                         location:
                           latitude: 3.3
                           longitude: 4.4
-                        id: 2
+                        warehouseId: 2
                         type: ROOM_TEMPERATURE
                         canUse: true
                         totalArea: 30
@@ -773,7 +774,21 @@ paths:
       operationId: delete-v2-warehouses-warehouseId
       responses:
         '200':
-          description: OK
+          description: 'OK : 삭제가 완료된 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+              examples:
+                200_Example:
+                  value:
+                    message: 창고가 정상적으로 삭제되었습니다.
         '204':
           description: 'No Content : 해당 warehouseId로 저장된 창고가 존재하지 않을 경우'
         '400':
@@ -852,6 +867,168 @@ paths:
           name: Authorization
           description: Bearer Token 값입니다. JWT Token을 사용합니다.
           required: true
+  '/v2/warehouses/{warehouseId}/reviews':
+    parameters:
+      - schema:
+          type: integer
+        name: warehouseId
+        in: path
+        required: true
+        description: 창고 id값
+    get:
+      summary: 창고 리뷰 목록을 조회합니다.
+      tags: []
+      responses:
+        '200':
+          description: 'OK : 리뷰 목록 가져오기 성공'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  reviews:
+                    type: array
+                    uniqueItems: true
+                    minItems: 1
+                    items:
+                      required:
+                        - warehouseId
+                        - rating
+                        - content
+                      properties:
+                        warehouseId:
+                          type: number
+                        rating:
+                          type: number
+                        content:
+                          type: string
+                          minLength: 1
+                        writer:
+                          type: object
+                          properties:
+                            userId:
+                              type: number
+                            name:
+                              type: string
+                              minLength: 1
+                            email:
+                              type: string
+                              minLength: 1
+                            type:
+                              type: string
+                              minLength: 1
+                            telephoneNumber:
+                              type: string
+                              minLength: 1
+                            phoneNumber:
+                              type: string
+                              minLength: 1
+                            companyName:
+                              type: string
+                              minLength: 1
+                          required:
+                            - userId
+                            - name
+                            - email
+                            - type
+                            - telephoneNumber
+                            - phoneNumber
+                            - companyName
+                required:
+                  - reviews
+              examples:
+                200_example:
+                  value:
+                    reviews:
+                      - warehouseId: 1
+                        rating: 5
+                        content: 리뷰 제목1
+                        writer:
+                          userId: 1
+                          name: userName
+                          email: email@email.com
+                          type: SHIPPER
+                          telephoneNumber: '02123123'
+                          phoneNumber: '0102123123'
+                          companyName: company_name
+                      - warehouseId: 1
+                        rating: 4
+                        content: 리뷰 제목2
+                        writer:
+                          userId: 2
+                          name: userName2
+                          email: email2@email2.com
+                          type: SHIPPER
+                          telephoneNumber: '022342342'
+                          phoneNumber: '01022223333'
+                          companyName: company_name2
+        '204':
+          description: 'No Content : 해당 warehouseId를 id로 가진 창고가 존재하지 않는 경우'
+        '400':
+          description: 'Bad Request : 요청 형식이 잘못된 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+              examples:
+                400_Example:
+                  value:
+                    message: 요청 형식이 잘못되었습니다.
+        '401':
+          description: 'Unauthorized : JWT Token값이 올바르지 않거나 유효기간이 지났을 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                401_Example:
+                  value:
+                    message: 인증에 실패했습니다.
+        '404':
+          description: 'Not Found : 해당 warehouseId를 가진 창고는 존재하나, 리뷰가 존재하지 않는 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+              examples:
+                404_Example:
+                  value:
+                    message: 해당 창고에 등록된 리뷰가 없습니다.
+      operationId: get-v2-warehouses-warehouseId-reviews
+      description: 창고 리뷰 목록을 조회합니다.
+      parameters:
+        - schema:
+            type: integer
+          in: query
+          name: limit
+          description: 불러올 리뷰 목록 개수입니다.
+          required: true
+        - schema:
+            type: integer
+          in: query
+          name: offset
+          required: true
+          description: offset 값입니다.
 components:
   schemas: {}
   securitySchemes:
