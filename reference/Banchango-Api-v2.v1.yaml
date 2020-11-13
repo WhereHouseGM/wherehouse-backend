@@ -1192,6 +1192,101 @@ paths:
                 value:
                   rating: 4
                   content: 리뷰 내용!
+  '/v2/warehouses/{warehouseId}/reviews/{reviewId}':
+    parameters:
+      - schema:
+          type: integer
+        name: warehouseId
+        in: path
+        required: true
+        description: 창고 id값
+      - schema:
+          type: integer
+        name: reviewId
+        in: path
+        required: true
+        description: 리뷰 id값
+    delete:
+      summary: 창고에 대한 리뷰를 삭제합니다.
+      operationId: delete-v2-warehouses-warehouseId-reviews-reviewId
+      responses:
+        '200':
+          description: 'OK : 리뷰가 정상적으로 삭제된 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                200_Example:
+                  value:
+                    message: 리뷰가 성공적으로 삭제되었습니다.
+        '204':
+          description: 'Not Found : warehouseId로 검색된 창고가 없거나 reviewId에 해당하는 리뷰가 존재하지 않는 경우'
+        '400':
+          description: 'Bad Request : 요청 형식이 잘못된 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                400_Example:
+                  value:
+                    message: 요청 형식이 잘못되었습니다.
+        '401':
+          description: 'Unauthorized : Token값에 문제가 있을 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                401_Example:
+                  value:
+                    message: 인증에 실패했습니다.
+        '403':
+          description: 'Forbidden : 해당 리뷰를 삭제할 권한이 없을 경우(리뷰 작성자와 Token에 포함된 사용자의 id가 다른 경우)'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                403_Example:
+                  value:
+                    message: 해당 리뷰를 삭제하기 위한 권한이 없습니다.
+      description: 창고에 대한 리뷰를 삭제합니다.
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          description: Bearer Token 값입니다. JWT Token을 사용합니다.
 components:
   schemas: {}
   securitySchemes:
