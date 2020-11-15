@@ -1618,6 +1618,105 @@ paths:
                       - 한진 택배
                       - 테스트 택배
         description: 새로운 Agency 창고 등록을 위한 모든 정보를 기입합니다.
+    get:
+      summary: 창고 목록 조회
+      operationId: get-v2-warehouses-agency
+      responses:
+        '200':
+          description: 'OK : 창고 목록 가져오기 성공'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  warehouses:
+                    type: array
+                    uniqueItems: true
+                    minItems: 1
+                    items:
+                      type: object
+                      properties:
+                        address:
+                          type: string
+                          minLength: 1
+                          description: 창고 주소
+                        warehouseId:
+                          type: number
+                          description: 창고 id값
+                        warehouseCondition:
+                          type: string
+                          minLength: 1
+                          description: '(''ROOM_TEMPERATURE'',''LOW_TEMPERATURE'',''BONDED'',''SAVAGE'',''HAZARDOUS'',''SELF_STORAGE'',''CONTAINER'') 중 하나의 값이 옵니다. 창고의 상태를 의미합니다.'
+                        name:
+                          type: string
+                          minLength: 1
+                          description: 창고 이름
+                        warehouseType:
+                          type: string
+                          minLength: 1
+                          description: THREEPL 또는 FULFILLMENT이 옵니다.
+                        closeAt:
+                          type: string
+                          minLength: 1
+                          description: 창고 마감 시간
+                        openAt:
+                          type: string
+                          minLength: 1
+                          description: 창고 오픈 시간
+                      required:
+                        - address
+                        - warehouseId
+                        - warehouseCondition
+                        - name
+                        - warehouseType
+                        - closeAt
+                        - openAt
+                required:
+                  - warehouses
+              examples:
+                200_Example:
+                  value:
+                    warehouses:
+                      - address: 서울특별시 강북구 월계로 75
+                        warehouseId: 2
+                        warehouseCondition: ROOM_TEMPERATURE
+                        name: 나우 패킹
+                        warehouseType: THREEPL
+                        closeAt: '18:30:00'
+                        openAt: '09:00:00'
+                      - address: TEST ADDR
+                        warehouseId: 5
+                        warehouseCondition: ROOM_TEMPERATURE
+                        name: TEST NAME
+                        warehouseType: THREEPL
+                        closeAt: '23:30:00'
+                        openAt: '01:00:00'
+        '401':
+          description: 'Unauthorized : Token값에 문제가 있는 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                401_Example:
+                  value:
+                    message: 인증에 실패했습니다.
+      description: 창고 목록을 조회합니다. 간단하게 창고 목록을 출력하는 페이지에서 사용합니다.
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          required: true
+          description: Bearer Token 값. JWT Token을 사용합니다.
   /v2/warehouses/general:
     post:
       summary: 새로운 General 창고 등록
@@ -1860,147 +1959,93 @@ paths:
               properties:
                 canUse:
                   type: number
-                  description: |-
-                    사용 가능한 창고인지의 유무
-                    (1 : 가능, 0 : 불가)
                 name:
                   type: string
                   minLength: 1
-                  description: 창고 이름
                 serviceType:
                   type: string
                   minLength: 1
-                  description: 무조건 GENERAL 이어야 한다.
                 landArea:
                   type: number
-                  description: 대지 면젹
                 totalArea:
                   type: number
-                  description: 연 면적
                 address:
                   type: string
                   minLength: 1
-                  description: 창고 주소
                 addressDetail:
                   type: string
                   minLength: 1
-                  description: 상세 주소
                 description:
                   type: string
                   minLength: 1
-                  description: 창고 설명
                 availableWeekdays:
                   type: number
-                  description: |-
-                    일주일 단위 사용 가능한 창고 일자
-                    (ex. 일요일만 가능 --> 100000,
-                      월화수목금 가능 --> 0111110)
                 openAt:
                   type: string
                   minLength: 1
-                  description: |-
-                    창고 사용 가능 시작 시간
-                    ("HH:mm" 규격으로 작성해주세요.)
                 closeAt:
                   type: string
                   minLength: 1
-                  description: |-
-                    창고 마감 시간
-                    ("HH:mm" 규격으로 작성해주세요.)
                 availableTimeDetail:
                   type: string
                   minLength: 1
-                  description: 창고 사용 가능 상세 시간
                 cctvExist:
                   type: number
-                  description: |-
-                    CCTV 존재 유무
-                    (존재 : 1, 없음: 0)
                 securityCompanyExist:
                   type: number
-                  description: |-
-                    보안업체 존재 유무
-                    (존재 : 1, 없음 : 0)
                 securityCompanyName:
                   type: string
                   minLength: 1
-                  description: 보안 업체명
                 doorLockExist:
                   type: number
-                  description: |-
-                    도어락 존재 유무
-                    (존재 : 1, 없음 : 0)
                 airConditioningType:
                   type: string
                   minLength: 1
-                  description: |-
-                    냉난방 방식
-                    ("HEATING", "COOLING", "NONE", "BOTH") 중 택일
                 workerExist:
                   type: number
-                  description: |-
-                    현장 인력 존재 유무
-                    (존재 : 1, 없음 : 0)
                 canPickup:
                   type: number
-                  description: |-
-                    픽업 가능 유무
-                    (가능 : 1, 불가 : 0)
                 canPark:
                   type: number
-                  description: |-
-                    주차 가능 유무
-                    (가능 : 1, 불가 : 0)
                 parkingScale:
                   type: number
-                  description: 주차장 면적
                 warehouseType:
                   type: string
                   minLength: 1
-                  description: |-
-                    창고 조건
-                    ("ROOM_TEMPERATURE","LOW_TEMPERATURE","BONDED","SAVAGE","HAZARDOUS","SELF_STORAGE","CONTAINER") 중 택일
                 location:
                   type: object
-                  required:
-                    - latitude
-                    - longitude
                   properties:
                     latitude:
                       type: number
                     longitude:
                       type: number
+                  required:
+                    - latitude
+                    - longitude
                 insurance:
                   type: object
-                  required:
-                    - name
                   properties:
                     name:
                       type: string
                       minLength: 1
-                      description: |-
-                        창고의 보험사명 기입
-                        (필수 항목 아님, 있을 시에만 기입)
+                  required:
+                    - name
                 generalDetail:
                   type: object
+                  properties:
+                    monthlyFee:
+                      type: number
+                    depositFee:
+                      type: number
+                    maintenanceFee:
+                      type: number
+                    minimumTerm:
+                      type: number
                   required:
                     - monthlyFee
                     - depositFee
                     - maintenanceFee
                     - minimumTerm
-                  properties:
-                    monthlyFee:
-                      type: number
-                      description: 매달 사용 비용
-                    depositFee:
-                      type: number
-                      description: 출고 비용
-                    maintenanceFee:
-                      type: number
-                      description: 유지 비용
-                    minimumTerm:
-                      type: number
-                      description: 최소 사용 기간(월 단위)
               required:
                 - canUse
                 - name
@@ -2025,6 +2070,7 @@ paths:
                 - parkingScale
                 - warehouseType
                 - location
+                - insurance
                 - generalDetail
             examples:
               Request Body example:
