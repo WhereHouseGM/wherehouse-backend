@@ -1945,7 +1945,13 @@ paths:
                         warehouseCondition:
                           type: string
                           minLength: 1
-                          description: '(''ROOM_TEMPERATURE'',''LOW_TEMPERATURE'',''BONDED'',''SAVAGE'',''HAZARDOUS'',''SELF_STORAGE'',''CONTAINER'') 중 하나의 값이 옵니다. 창고의 상태를 의미합니다.'
+                          description: |-
+                            창고 상태
+                            ('ROOM_TEMPERATURE','LOW_TEMPERATURE','BONDED','SAVAGE','HAZARDOUS','SELF_STORAGE','CONTAINER') 중 하나의 값이 옵니다.
+                        imageUrl:
+                          type: string
+                          minLength: 1
+                          description: 창고 이미지 url
                         name:
                           type: string
                           minLength: 1
@@ -1953,19 +1959,24 @@ paths:
                         warehouseType:
                           type: string
                           minLength: 1
-                          description: THREEPL 또는 FULFILLMENT이 옵니다.
+                          description: '창고 타입 ("THREEPL", "FULFILLMENT") 중 하나의 값이 옵니다.'
                         closeAt:
                           type: string
                           minLength: 1
-                          description: 창고 마감 시간
+                          description: |-
+                            창고 오픈 시간
+                            ("HH:mm:ss")
                         openAt:
                           type: string
                           minLength: 1
-                          description: 창고 오픈 시간
+                          description: |-
+                            창고 마감 시간
+                            ("HH:mm:ss")
                       required:
                         - address
                         - warehouseId
                         - warehouseCondition
+                        - imageUrl
                         - name
                         - warehouseType
                         - closeAt
@@ -1979,6 +1990,7 @@ paths:
                       - address: 서울특별시 강북구 월계로 75
                         warehouseId: 2
                         warehouseCondition: ROOM_TEMPERATURE
+                        imageUrl: 'https://warehouse-image-bucket.s3.ap-northeast-2.amazonaws.com/warehouse_noimage.png'
                         name: 나우 패킹
                         warehouseType: THREEPL
                         closeAt: '18:30:00'
@@ -1986,6 +1998,7 @@ paths:
                       - address: TEST ADDR
                         warehouseId: 5
                         warehouseCondition: ROOM_TEMPERATURE
+                        imageUrl: 'https://warehouse-image-bucket.s3.ap-northeast-2.amazonaws.com/warehouse_noimage.png'
                         name: TEST NAME
                         warehouseType: THREEPL
                         closeAt: '23:30:00'
