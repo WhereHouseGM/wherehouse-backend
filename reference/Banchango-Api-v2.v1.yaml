@@ -1762,9 +1762,6 @@ paths:
                 warehouseType:
                   type: string
                   minLength: 1
-                  description: |-
-                    창고 조건
-                    ("ROOM_TEMPERATURE","LOW_TEMPERATURE","BONDED","SAVAGE","HAZARDOUS","SELF_STORAGE","CONTAINER") 중 택일
                 insurance:
                   type: object
                   required:
@@ -1781,7 +1778,6 @@ paths:
                   required:
                     - latitude
                     - longitude
-                  description: 창고 위치 정보
                   properties:
                     latitude:
                       type: number
@@ -1793,16 +1789,19 @@ paths:
                   type: object
                   required:
                     - warehouseType
-                    - typeName
+                    - minReleasePerMonth
+                    - mainItemType
                     - payments
                     - deliveryTypes
-                  description: Agency 창고만을 위한 추가 정보
                   properties:
                     warehouseType:
                       type: string
                       minLength: 1
                       description: '창고 종류 ("THREEPL", "FULFILLMENT") 중 택일'
-                    typeName:
+                    minReleasePerMonth:
+                      type: number
+                      description: 창고주가 원하는 원별 최소 출고량
+                    mainItemType:
                       type: string
                       minLength: 1
                       description: |-
@@ -1812,7 +1811,6 @@ paths:
                       type: array
                       uniqueItems: true
                       minItems: 1
-                      description: 창고 보관 비용에 대한 정보
                       items:
                         type: object
                         properties:
@@ -1843,8 +1841,7 @@ paths:
                     deliveryTypes:
                       type: array
                       description: '택배사 (ex. "한진 택배", "경동 택배")'
-                      items:
-                        type: string
+                      items: {}
               required:
                 - canUse
                 - name
@@ -1902,7 +1899,8 @@ paths:
                     longitude: 88.888
                   agencyDetail:
                     warehouseType: THREEPL
-                    typeName: CLOTH
+                    minReleasePerMonth: 1000
+                    mainItemType: CLOTH
                     payments:
                       - unit: TEST UNIT 1
                         cost: 999
@@ -1916,118 +1914,7 @@ paths:
                       - 한진 택배
                       - 테스트 택배
         description: 새로운 Agency 창고 등록을 위한 모든 정보를 기입합니다.
-    get:
-      summary: 창고 목록 조회
-      operationId: get-v2-warehouses-agency
-      responses:
-        '200':
-          description: 'OK : 창고 목록 가져오기 성공'
-          content:
-            application/json:
-              schema:
-                description: ''
-                type: object
-                properties:
-                  warehouses:
-                    type: array
-                    uniqueItems: true
-                    minItems: 1
-                    items:
-                      type: object
-                      properties:
-                        address:
-                          type: string
-                          minLength: 1
-                          description: 창고 주소
-                        warehouseId:
-                          type: number
-                          description: 창고 id값
-                        warehouseCondition:
-                          type: string
-                          minLength: 1
-                          description: |-
-                            창고 상태
-                            ('ROOM_TEMPERATURE','LOW_TEMPERATURE','BONDED','SAVAGE','HAZARDOUS','SELF_STORAGE','CONTAINER') 중 하나의 값이 옵니다.
-                        imageUrl:
-                          type: string
-                          minLength: 1
-                          description: 창고 이미지 url
-                        name:
-                          type: string
-                          minLength: 1
-                          description: 창고 이름
-                        warehouseType:
-                          type: string
-                          minLength: 1
-                          description: '창고 타입 ("THREEPL", "FULFILLMENT") 중 하나의 값이 옵니다.'
-                        closeAt:
-                          type: string
-                          minLength: 1
-                          description: |-
-                            창고 오픈 시간
-                            ("HH:mm:ss")
-                        openAt:
-                          type: string
-                          minLength: 1
-                          description: |-
-                            창고 마감 시간
-                            ("HH:mm:ss")
-                      required:
-                        - address
-                        - warehouseId
-                        - warehouseCondition
-                        - imageUrl
-                        - name
-                        - warehouseType
-                        - closeAt
-                        - openAt
-                required:
-                  - warehouses
-              examples:
-                200_Example:
-                  value:
-                    warehouses:
-                      - address: 서울특별시 강북구 월계로 75
-                        warehouseId: 2
-                        warehouseCondition: ROOM_TEMPERATURE
-                        imageUrl: 'https://warehouse-image-bucket.s3.ap-northeast-2.amazonaws.com/warehouse_noimage.png'
-                        name: 나우 패킹
-                        warehouseType: THREEPL
-                        closeAt: '18:30:00'
-                        openAt: '09:00:00'
-                      - address: TEST ADDR
-                        warehouseId: 5
-                        warehouseCondition: ROOM_TEMPERATURE
-                        imageUrl: 'https://warehouse-image-bucket.s3.ap-northeast-2.amazonaws.com/warehouse_noimage.png'
-                        name: TEST NAME
-                        warehouseType: THREEPL
-                        closeAt: '23:30:00'
-                        openAt: '01:00:00'
-        '401':
-          description: 'Unauthorized : Token값에 문제가 있는 경우'
-          content:
-            application/json:
-              schema:
-                description: ''
-                type: object
-                properties:
-                  message:
-                    type: string
-                    minLength: 1
-                required:
-                  - message
-              examples:
-                401_Example:
-                  value:
-                    message: 인증에 실패했습니다.
-      description: 창고 목록을 조회합니다. 간단하게 창고 목록을 출력하는 페이지에서 사용합니다.
-      parameters:
-        - schema:
-            type: string
-          in: header
-          name: Authorization
-          required: true
-          description: Bearer Token 값. JWT Token을 사용합니다.
+    parameters: []
   /v2/warehouses/general:
     post:
       summary: 새로운 General 창고 등록
@@ -2419,6 +2306,113 @@ paths:
                     maintenanceFee: 10000
                     minimumTerm: 3
         description: 새로운 General 창고 등록을 위한 정보를 기입합니다.
+  '/v2/warehouses/agency/{mainItemType}':
+    parameters:
+      - schema:
+          type: string
+        name: mainItemType
+        in: path
+        required: true
+        description: |-
+          창고의 메인 아이템 타입을 지정해줍니다.
+          ('CLOTH','TEMPERATURE_SENSITIVE','GENERAL_MERCHANDISE','ELECTRONIC','FURNITURE','BOOK','ACCESSORY','COSMETIC','ETC') 중 하나의 값. (반드시 대문자!)
+    get:
+      summary: 창고 타입에 알맞은 창고의 목록을 조회합니다.
+      tags: []
+      responses:
+        '200':
+          description: 'OK : 목록 조회 성공'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  warehouses:
+                    type: array
+                    uniqueItems: true
+                    minItems: 1
+                    items:
+                      type: object
+                      properties:
+                        address:
+                          type: string
+                          minLength: 1
+                          description: 창고 주소
+                        warehouseId:
+                          type: number
+                          description: 창고 id값
+                        warehouseCondition:
+                          type: string
+                          minLength: 1
+                          description: |-
+                            창고 상태
+                            ('ROOM_TEMPERATURE','LOW_TEMPERATURE','BONDED','SAVAGE','HAZARDOUS','SELF_STORAGE','CONTAINER') 중 하나의 값이 옵니다.
+                        minReleasePerMonth:
+                          type: number
+                          description: 창고가 원하는 월 단위 최소 출고량
+                        name:
+                          type: string
+                          minLength: 1
+                          description: 창고 이름
+                        warehouseType:
+                          type: string
+                          minLength: 1
+                          description: '창고 타입 ("THREEPL", "FULFILLMENT") 중 하나의 값이 옵니다.'
+                        closeAt:
+                          type: string
+                          minLength: 1
+                          description: |-
+                            창고 마감 시간
+                            ("HH:mm:ss")
+                        mainImageUrl:
+                          type: string
+                          minLength: 1
+                          description: 창고의 메인 사진 url 입니다.
+                        openAt:
+                          type: string
+                          minLength: 1
+                          description: |-
+                            창고 오픈 시간
+                            ("HH:mm:ss")
+                      required:
+                        - address
+                        - warehouseId
+                        - warehouseCondition
+                        - minReleasePerMonth
+                        - name
+                        - warehouseType
+                        - closeAt
+                        - mainImageUrl
+                        - openAt
+                required:
+                  - warehouses
+              examples:
+                200_Example:
+                  value:
+                    warehouses:
+                      - address: 서울특별시 강북구 월계로 75
+                        warehouseId: 2
+                        warehouseCondition: ROOM_TEMPERATURE
+                        minReleasePerMonth: 222
+                        name: 나우 패킹
+                        warehouseType: THREEPL
+                        closeAt: '18:30:00'
+                        mainImageUrl: 'https://warehouse-image-bucket.s3.ap-northeast-2.amazonaws.com/warehouse_noimage.png'
+                        openAt: '09:00:00'
+                      - address: TEST ADDR
+                        warehouseId: 5
+                        warehouseCondition: ROOM_TEMPERATURE
+                        minReleasePerMonth: 555
+                        name: TEST NAME
+                        warehouseType: THREEPL
+                        closeAt: '23:30:00'
+                        mainImageUrl: 'https://warehouse-image-bucket.s3.ap-northeast-2.amazonaws.com/warehouse_noimage.png'
+                        openAt: '01:00:00'
+        '204':
+          description: 'No Content : 해당 mainItemType으로 조회된 창고가 없는 경우'
+      operationId: get-v2-warehouses-agency-mainItemType
+      description: 창고 타입에 알맞은 창고의 목록을 조회합니다.
 components:
   schemas: {}
   securitySchemes:
