@@ -1774,13 +1774,13 @@ paths:
                 parkingScale:
                   type: number
                   description: 주차 면적
-                warehouseType:
-                  type: string
-                  minLength: 1
+                warehouseCondition:
+                  type: array
+                  description: '(''ROOM_TEMPERATURE'',''LOW_TEMPERATURE'',''BONDED'',''SAVAGE'',''HAZARDOUS'',''SELF_STORAGE'',''CONTAINER'') 중 여러 개의 값을 배열로 전달합니다.'
+                  items:
+                    type: string
                 insurance:
                   type: object
-                  required:
-                    - name
                   properties:
                     name:
                       type: string
@@ -1788,6 +1788,8 @@ paths:
                       description: |-
                         창고의 보험사명 기입
                         (필수 항목 아님, 있을 시에만 기입)
+                  required:
+                    - name
                 location:
                   type: object
                   required:
@@ -1879,7 +1881,7 @@ paths:
                 - canPickup
                 - canPark
                 - parkingScale
-                - warehouseType
+                - warehouseCondition
                 - location
                 - agencyDetail
             examples:
