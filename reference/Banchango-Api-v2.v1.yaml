@@ -669,10 +669,12 @@ paths:
                     minItems: 1
                     items:
                       type: object
+                      description: 창고 이름
                       properties:
                         name:
                           type: string
                           minLength: 1
+                          description: 대지 면적
                         landArea:
                           type: number
                         location:
@@ -680,31 +682,43 @@ paths:
                           properties:
                             latitude:
                               type: number
+                              description: 위도
                             longitude:
                               type: number
+                              description: 경도
                           required:
                             - latitude
                             - longitude
                         warehouseId:
                           type: number
-                        type:
-                          type: string
-                          minLength: 1
+                          description: 해당 창고의 id 값입니다.
+                        warehouseCondition:
+                          type: array
+                          description: |-
+                            창고의 상태입니다.
+                            ('ROOM_TEMPERATURE','LOW_TEMPERATURE','BONDED','SAVAGE','HAZARDOUS','SELF_STORAGE','CONTAINER') 중 0개 이상의 값이 배열에 옵니다. (없을 시 빈 배열)
+                          items:
+                            type: string
                         canUse:
                           type: boolean
+                          description: |-
+                            해당 창고의 사용 가능 여부
+                            (가능 : 1, 불가 : 0)
                         totalArea:
                           type: number
-                        thumbnailUrl:
+                          description: 연 면적
+                        mainImageUrl:
                           type: string
                           minLength: 1
+                          description: 창고의 메인 이미지 url 입니다.
                       required:
                         - name
                         - landArea
                         - warehouseId
-                        - type
+                        - warehouseCondition
                         - canUse
                         - totalArea
-                        - thumbnailUrl
+                        - mainImageUrl
                 required:
                   - warehouses
               examples:
@@ -777,11 +791,12 @@ paths:
                 type: object
                 properties:
                   warehouseCondition:
-                    type: string
-                    minLength: 1
+                    type: array
                     description: |-
                       창고의 상태
                       ('ROOM_TEMPERATURE','LOW_TEMPERATURE','BONDED','SAVAGE','HAZARDOUS','SELF_STORAGE','CONTAINER') 중 하나의 값이 옵니다.
+                    items:
+                      type: string
                   securityCompanyName:
                     type: string
                     minLength: 1
@@ -835,13 +850,13 @@ paths:
                     description: 창고 주소
                   agencyDetails:
                     type: object
+                    description: Agency만의 정보를 담은 객체
                     required:
                       - agencyWarehouseDetailId
                       - payments
                       - mainItemType
                       - warehouseType
                       - deliveryTypes
-                    description: Agency만의 정보를 담은 객체
                     properties:
                       agencyWarehouseDetailId:
                         type: number
@@ -938,10 +953,10 @@ paths:
                       (없으면 이 값은 오지 않습니다.)
                   location:
                     type: object
+                    description: 창고 위치 정보 객체
                     required:
                       - latitude
                       - longitude
-                    description: 창고 위치 정보 객체
                     properties:
                       latitude:
                         type: number
@@ -2343,11 +2358,12 @@ paths:
                           type: number
                           description: 창고 id값
                         warehouseCondition:
-                          type: string
-                          minLength: 1
+                          type: array
                           description: |-
                             창고 상태
-                            ('ROOM_TEMPERATURE','LOW_TEMPERATURE','BONDED','SAVAGE','HAZARDOUS','SELF_STORAGE','CONTAINER') 중 하나의 값이 옵니다.
+                            ('ROOM_TEMPERATURE','LOW_TEMPERATURE','BONDED','SAVAGE','HAZARDOUS','SELF_STORAGE','CONTAINER') 중 여러 개의 값이 옵니다. 값이 없을 경우에는 빈 배열이 옵니다.
+                          items:
+                            type: string
                         minReleasePerMonth:
                           type: number
                           description: 창고가 원하는 월 단위 최소 출고량
