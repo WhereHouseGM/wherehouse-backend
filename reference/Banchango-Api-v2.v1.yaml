@@ -2323,6 +2323,7 @@ paths:
                     maintenanceFee: 10000
                     minimumTerm: 3
         description: 새로운 General 창고 등록을 위한 정보를 기입합니다.
+      deprecated: true
   '/v2/warehouses/agency/{mainItemType}':
     parameters:
       - schema:
