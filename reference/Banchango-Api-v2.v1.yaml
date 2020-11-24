@@ -977,6 +977,20 @@ paths:
                   totalArea:
                     type: number
                     description: 총 면적
+                  warehouseUsageConditions:
+                    type: array
+                    description: |-
+                      창고 이용 시 주의 사항
+                      (String 배열)
+                    items:
+                      type: string
+                  warehouseFacilityUsages:
+                    type: array
+                    description: |-
+                      창고 시설 이용 유의사항
+                      (String 배열)
+                    items:
+                      type: string
                 required:
                   - warehouseCondition
                   - securityCompanyName
@@ -1003,6 +1017,8 @@ paths:
                   - availableTimeDetail
                   - airConditioningType
                   - totalArea
+                  - warehouseUsageConditions
+                  - warehouseFacilityUsages
               examples:
                 200_Example:
                   value:
