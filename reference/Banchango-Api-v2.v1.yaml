@@ -2438,6 +2438,16 @@ paths:
                           description: |-
                             창고 오픈 시간
                             ("HH:mm:ss")
+                        totalArea:
+                          type: integer
+                          description: 창고 총 면적
+                        deliveryTypes:
+                          type: array
+                          description: |-
+                            창고 택배 제휴사
+                            (String 배열)
+                          items:
+                            type: string
                       required:
                         - address
                         - warehouseId
