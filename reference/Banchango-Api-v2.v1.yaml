@@ -2486,6 +2486,424 @@ paths:
           description: 'No Content : 해당 mainItemType으로 조회된 창고가 없는 경우'
       operationId: get-v2-warehouses-agency-mainItemType
       description: 창고 타입에 알맞은 창고의 목록을 조회합니다.
+  '/v2/upload/{warehouseId}':
+    parameters:
+      - schema:
+          type: integer
+        name: warehouseId
+        in: path
+        required: true
+        description: 창고의 id 값입니다.
+    post:
+      summary: 창고에 추가 사진을 등록합니다.
+      operationId: post-v2-upload-warehouseId
+      responses:
+        '200':
+          description: 'OK : 사진 저장 성공'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                200_Example:
+                  value:
+                    message: 파일 업로드에 성공했습니다.
+        '400':
+          description: 'Bad Request : 요청이 잘못된 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                400_Example:
+                  value:
+                    message: 요청 형식이 잘못되었습니다.
+        '401':
+          description: 'Unauthorized : 인증 토근 값에 문제가 있는 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                401_Example:
+                  value:
+                    message: 인증에 실패했습니다.
+        '403':
+          description: |-
+            Forbidden : 수정하는 회원이 해당 창고의 정보를 수정할 수 있는 권한이 없는 경우
+                        즉, 창고주가 아닌 다른 회원이 창고 정보를 변경하려는 경우
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                403_Example:
+                  value:
+                    message: 해당 창고에 대한 정보를 수정 또는 삭제할 수 있는 권한이 없습니다.
+        '406':
+          description: 'Not Acceptable : 창고 당 등록할 수 있는 추가 사진의 최대 개수(5개)를 초과하는 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                406_Example:
+                  value:
+                    message: 등록할 수 있는 사진의 최대 개수(5개)를 초과했습니다.
+        '':
+          description: ''
+      description: 창고의 메인 사진이 아닌 추가 사진을 등록합니다.
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          description: Bearer Token 값입니다.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties: {}
+        description: '사진 파일을 Body로 보냅니다. Key는 무조건 file, Value는 파일 자체를 보내면 됩니다.'
+  '/v2/images/upload/main/{warehouseId}':
+    parameters:
+      - schema:
+          type: integer
+        name: warehouseId
+        in: path
+        required: true
+        description: 창고의 id 값입니다.
+    post:
+      summary: ''
+      operationId: post-v2-images-upload-main-warehouseId
+      responses:
+        '200':
+          description: 'OK : 창고 메인 이미지 저장 성공 시'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                200_Example:
+                  value:
+                    message: 메인 이미지 업로드에 성공했습니다.
+        '400':
+          description: 'Bad Request : 요청 형식이 잘못된 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                400_Example:
+                  value:
+                    message: 요청 형식이 잘못되었습니다.
+        '401':
+          description: 'Unauthorized : 인증 토큰 값이 잘못된 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                401_Example:
+                  value:
+                    message: 인증에 실패했습니다.
+        '403':
+          description: 'Forbidden : 해당 창고 정보를 수정할 수 있는 권한이 없는 경우(해당 창고의 창고주가 아닌 경우)'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                403_Example:
+                  value:
+                    message: 해당 창고에 대한 정보를 수정 또는 삭제할 수 있는 권한이 없습니다.
+        '406':
+          description: 'Not Acceptable : 이미 메인 이미지가 등록되어 있는 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                406_Example:
+                  value:
+                    message: 해당 창고는 이미 메인 사진이 있습니다. 기존 사진을 삭제 후 다시 등록해주세요.
+      description: 창고의 메인 이미지를 저장합니다.
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          description: Bearer Token 값입니다.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties: {}
+        description: |-
+          창고의 메인 이미지 파일을 보냅니다.
+          Key는 무조건 file, Value는 파일을 전송하면 됩니다.
+  /v2/images/delete:
+    delete:
+      summary: ''
+      operationId: delete-v2-images-delete
+      responses:
+        '200':
+          description: 'OK : 이미지가 정상적으로 삭제된 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                200_Example:
+                  value:
+                    message: 삭제에 성공했습니다.
+        '400':
+          description: 'Bad Request : 요청 형식이 잘못된 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                400_Example:
+                  value:
+                    message: 요청 형식이 잘못되었습니다.
+        '401':
+          description: 'Unauthorized : 인증 토큰에 문제가 있는 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                401_Example:
+                  value:
+                    message: 인증에 실패했습니다.
+        '403':
+          description: 'Forbidden : 해당 창고의 사진을 삭제할 권한이 없는 경우(창고주가 아닌 경우)'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                401_Example:
+                  value:
+                    message: 해당 창고에 대한 정보를 수정 또는 삭제할 수 있는 권한이 없습니다.
+        '404':
+          description: 'Not Found : 해당 id를 가진 창고가 없거나, 해당 추가 이미지가 없는 경우'
+      description: |-
+        창고의 추가 이미지 중 하나를 삭제합니다.
+        예시) /v2/images/delete?warehouseId=1&file=test.jpg
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          description: Bearer Token 값입니다.
+          required: true
+        - schema:
+            type: integer
+          in: query
+          name: warehouseId
+          description: 창고 id 값입니다.
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: file
+          description: 삭제할 이미지명 입니다.(확장자 포함)
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+  '/v2/images/delete/main/{warehouseId}':
+    parameters:
+      - schema:
+          type: integer
+        name: warehouseId
+        in: path
+        required: true
+    delete:
+      summary: ''
+      operationId: delete-v2-images-delete-main-warehouseId
+      responses:
+        '200':
+          description: 'OK : 삭제 처리에 성공한 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                200_Example:
+                  value:
+                    message: 창고의 메인 이미지가 정상적으로 삭제되었습니다.
+        '400':
+          description: 'Bad Request : 요청 형식이 잘못된 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                400_Example:
+                  value:
+                    message: 요청 형식이 잘못되었습니다.
+        '401':
+          description: 'Unauthorized : 인증 토큰에 문제가 있는 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                401_Example:
+                  value:
+                    message: 인증에 실패했습니다.
+        '403':
+          description: 'Forbidden : 해당 창고의 메인 이미지를 수정 또는 삭제할 수 있는 권한이 없을 경우(창고주가 아닌 경우)'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                403_Example:
+                  value:
+                    message: 해당 창고에 대한 정보를 수정 또는 삭제할 수 있는 권한이 없습니다.
+        '404':
+          description: 'Not Found : 해당 id를 가진 창고가 존재하지 않거나, 메인 이미지가 애초에 존재하지 않는 경우'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+      description: 창고의 메인 이미지를 삭제합니다.
 components:
   schemas: {}
   securitySchemes:
