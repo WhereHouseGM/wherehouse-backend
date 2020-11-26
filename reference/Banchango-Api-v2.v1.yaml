@@ -2495,7 +2495,7 @@ paths:
         required: true
         description: 창고의 id 값입니다.
     post:
-      summary: 창고에 추가 사진을 등록합니다.
+      summary: 창고 추가 사진 등록
       operationId: post-v2-upload-warehouseId
       responses:
         '200':
@@ -2610,7 +2610,7 @@ paths:
         required: true
         description: 창고의 id 값입니다.
     post:
-      summary: ''
+      summary: 창고 메인 이미지 등록
       operationId: post-v2-images-upload-main-warehouseId
       responses:
         '200':
@@ -2716,7 +2716,7 @@ paths:
           Key는 무조건 file, Value는 파일을 전송하면 됩니다.
   /v2/images/delete:
     delete:
-      summary: ''
+      summary: 창고 추가 이미지 삭제
       operationId: delete-v2-images-delete
       responses:
         '200':
@@ -2825,7 +2825,7 @@ paths:
         in: path
         required: true
     delete:
-      summary: ''
+      summary: 창고 메인 이미지 삭제
       operationId: delete-v2-images-delete-main-warehouseId
       responses:
         '200':
