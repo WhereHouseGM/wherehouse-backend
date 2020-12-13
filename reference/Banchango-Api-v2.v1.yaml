@@ -2453,7 +2453,7 @@ paths:
           description: 'No Content : 해당 mainItemType으로 조회된 창고가 없는 경우'
       operationId: get-v2-warehouses-agency-mainItemType
       description: 창고 타입에 알맞은 창고의 목록을 조회합니다.
-  '/v2/upload/{warehouseId}':
+  '/v2/images/upload/{warehouseId}':
     parameters:
       - schema:
           type: integer
@@ -2678,6 +2678,9 @@ paths:
             schema:
               type: object
               properties: {}
+            examples:
+              example-1:
+                value: {}
         description: |-
           창고의 메인 이미지 파일을 보냅니다.
           Key는 무조건 file, Value는 파일을 전송하면 됩니다.
