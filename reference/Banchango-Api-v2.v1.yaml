@@ -1905,6 +1905,132 @@ paths:
                       - 테스트 택배
         description: 새로운 Agency 창고 등록을 위한 모든 정보를 기입합니다.
     parameters: []
+    get:
+      summary: 메인 화면을 위한 창고 리스트 정보
+      operationId: get-v2-warehouses-agency
+      responses:
+        '200':
+          description: 'OK : 가져오는 데에 성공했을 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  warehouses:
+                    type: array
+                    uniqueItems: true
+                    minItems: 1
+                    items:
+                      type: object
+                      properties:
+                        address:
+                          type: string
+                          minLength: 1
+                          description: 창고 주소(대략적인 주소)
+                        warehouseId:
+                          type: number
+                          description: 창고의 고유 id값
+                        warehouseCondition:
+                          type: array
+                          description: '''ROOM_TEMPERATURE'',''LOW_TEMPERATURE'',''BONDED'',''SAVAGE'',''HAZARDOUS'',''SELF_STORAGE'',''CONTAINER'' 중 여러 개의 값이 String배열로 옵니다.'
+                          items:
+                            type: string
+                        minReleasePerMonth:
+                          type: number
+                          description: 창고주가 원하는 월 최소 출고량
+                        name:
+                          type: string
+                          minLength: 1
+                          description: 창고명
+                        mainItemType:
+                          type: string
+                          minLength: 1
+                          description: '창고가 다루는 주요 품목 (''CLOTH'',''TEMPERATURE_SENSITIVE'',''GENERAL_MERCHANDISE'',''FURNITURE'', ''ACCESSORY'',''COSMETIC'') 중 하나의 값이 옵니다.'
+                        warehouseType:
+                          type: string
+                          minLength: 1
+                          description: '''THREEPL'', ''FULFILLMENT'' 중 하나의 값이 옵니다.'
+                        closeAt:
+                          type: string
+                          minLength: 1
+                          description: '창고가 닫는 시간(HH:mm:ss)'
+                        mainImageUrl:
+                          type: string
+                          minLength: 1
+                          description: 창고 메인 이미지 url
+                        openAt:
+                          type: string
+                          minLength: 1
+                          description: '창고 오픈 시간(HH:mm:ss)'
+                        deliveryTypes:
+                          type: array
+                          description: 택배사 목록(String 배열)
+                          items:
+                            type: string
+                        totalArea:
+                          type: number
+                          description: 총 면적
+                      required:
+                        - address
+                        - warehouseId
+                        - minReleasePerMonth
+                        - name
+                        - mainItemType
+                        - warehouseType
+                        - closeAt
+                        - mainImageUrl
+                        - openAt
+                        - totalArea
+                required:
+                  - warehouses
+              examples:
+                200_Example:
+                  value:
+                    warehouses:
+                      - address: 경기도 용인시 처인구
+                        warehouseId: 26
+                        warehouseCondition:
+                          - ROOM_TEMPERATURE
+                        minReleasePerMonth: 1
+                        name: 에스에스팩
+                        mainItemType: GENERAL_MERCHANDISE
+                        warehouseType: THREEPL
+                        closeAt: '18:00:00'
+                        mainImageUrl: 'https://warehouse-image-bucket.s3.ap-northeast-2.amazonaws.com/warehouse_noimage.jpg'
+                        openAt: '09:00:00'
+                        deliveryTypes:
+                          - CJ 대한통운
+                          - 롯데 택배
+                        totalArea: 200
+                      - address: 서울특별시 강서구 가양동
+                        warehouseId: 31
+                        warehouseCondition:
+                          - ROOM_TEMPERATURE
+                        minReleasePerMonth: 5000
+                        name: 가야물류
+                        mainItemType: COSMETIC
+                        warehouseType: THREEPL
+                        closeAt: '18:00:00'
+                        mainImageUrl: 'https://warehouse-image-bucket.s3.ap-northeast-2.amazonaws.com/warehouse_noimage.jpg'
+                        openAt: '10:00:00'
+                        deliveryTypes:
+                          - CJ 대한통운
+                        totalArea: 180
+      description: 메인 화면 하단에 출력될 리스트를 위한 API 입니다.
+      parameters:
+        - schema:
+            type: integer
+          in: query
+          name: page
+          description: page 번호(0-index)
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: size
+          description: 한 page 당 가져올 항목의 개수
+          required: true
   /v2/warehouses/general:
     post:
       summary: 새로운 General 창고 등록
@@ -2377,6 +2503,9 @@ paths:
                             (String 배열)
                           items:
                             type: string
+                        mainItemType:
+                          type: string
+                          description: '''CLOTH'',''TEMPERATURE_SENSITIVE'',''GENERAL_MERCHANDISE'',''FURNITURE'',''ACCESSORY'',''COSMETIC'', 중 하나의 값이 옵니다.'
                       required:
                         - address
                         - warehouseId
