@@ -2966,13 +2966,8 @@ paths:
                 properties: {}
       description: 창고의 메인 이미지를 삭제합니다.
   /v2/users/password-lost:
-    get:
-      summary: 임시 비밀번호 이메일 발급
-      tags: []
-      responses: {}
-      operationId: get-v2-users-password-lost
     post:
-      summary: ''
+      summary: 임시 비밀번호 이메일 발송
       operationId: post-v2-users-password-lost
       responses:
         '200':
