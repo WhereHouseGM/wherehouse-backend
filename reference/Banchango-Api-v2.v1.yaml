@@ -2965,6 +2965,75 @@ paths:
                 type: object
                 properties: {}
       description: 창고의 메인 이미지를 삭제합니다.
+  /v2/users/password-lost:
+    get:
+      summary: 임시 비밀번호 이메일 발급
+      tags: []
+      responses: {}
+      operationId: get-v2-users-password-lost
+    post:
+      summary: ''
+      operationId: post-v2-users-password-lost
+      responses:
+        '200':
+          description: 'OK : 이메일 전송 성공 시'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                200_Example:
+                  value:
+                    message: 임시 비밀번호 이메일이 정상적으로 전송되었습니다.
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+        '204':
+          description: 'No Content : Request Body에 기재된 이메일이 회원이 아닐 경우'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: 'Bad Request : 요청 형식에 문제가 있을 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                400_Example:
+                  value:
+                    message: 요청 형식이 잘못되었습니다.
+      description: '비밀번호 분실 시, 이메일로 임시 비밀번호를 전송합니다.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: ''
+              type: object
+              properties:
+                email:
+                  type: string
+                  minLength: 1
+              required:
+                - email
+        description: 임시 비밀번호 이메일을 수신할 수신자 이메일 주소
 components:
   schemas: {}
   securitySchemes:
