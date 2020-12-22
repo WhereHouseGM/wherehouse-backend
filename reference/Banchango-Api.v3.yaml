@@ -7,3 +7,200 @@ servers:
 paths: {}
 components:
   schemas: {}
+  responses:
+    NewWarehouseRequestDto:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                minLength: 1
+                description: 창고 이름
+              space:
+                type: number
+                description: 창고 평수
+              address:
+                type: string
+                minLength: 1
+                description: 창고 주소
+              addressDetail:
+                type: string
+                minLength: 1
+                description: 창고 상세 주소
+              description:
+                type: string
+                minLength: 1
+                description: 창고 간단 설명
+              availableWeekdays:
+                type: number
+                description: |-
+                  일주일 단위 사용 가능한 창고 일자
+                  (ex. 일요일만 가능 --> 100000,
+                    월화수목금 가능 --> 0111110)
+              openAt:
+                type: string
+                minLength: 1
+                description: |-
+                  창고 오픈 시간
+                  ("HH:mm" 형식)
+              closeAt:
+                type: string
+                minLength: 1
+                description: |-
+                  창고 마감 시간
+                  ("HH:mm" 형식)
+              availableTimeDetail:
+                type: string
+                minLength: 1
+                description: 창고 사용 가능 시간에 대한 추가 설명
+              insurance:
+                type: string
+                description: 보험사 이름
+              cctvExist:
+                type: number
+                description: |-
+                  CCTV 존재 유무
+                  (존재 : 1, 없음 : 0)
+              securityCompanyName:
+                type: string
+                minLength: 1
+                description: 보안업체명(없다면 null)
+              doorLockExist:
+                type: number
+                description: |-
+                  도어락 존재 유무
+                  (존재 : 1, 없음 : 0)
+              airConditioningType:
+                type: string
+                minLength: 1
+                description: |-
+                  냉난방 방식
+                  ("HEATING", "COOLING", "NONE", "BOTH") 중 하나의 값.
+              workerExist:
+                type: number
+                description: |-
+                  현장 인력 존재 유무
+                  (존재 : 1, 없음 : 0)
+              canPickup:
+                type: number
+                description: |-
+                  픽업 가능 여부
+                  (가능 : 1, 불가 : 0)
+              canPark:
+                type: number
+                description: |-
+                  주차 가능 여부
+                  (가능 : 1, 불가 : 0)
+              mainItemType:
+                type: string
+                minLength: 1
+                description: |-
+                  창고가 가장 자신있게 보관할 수 있는 물품의 종류
+                  ('CLOTH','TEMPERATURE_SENSITIVE','GENERAL_MERCHANDISE','ELECTRONIC','FURNITURE','BOOK','ACCESSORY','COSMETIC','ETC') 중 하나의 값.
+              warehouseType:
+                type: string
+                minLength: 1
+                description: |-
+                  창고 종류
+                  ("THREEPL", "FULFILLMENT") 중 하나의 값.
+              minReleasePerMonth:
+                type: number
+                description: 창고주가 원하는 월별 최소 출고량
+              latitude:
+                type: number
+                description: 위도
+              longitude:
+                type: number
+                description: 경도
+              deliveryTypes:
+                type: array
+                description: 택배 업체명이 배열 형태로 옵니다.(Array Of Strings)
+                items: {}
+              warehouseCondition:
+                type: array
+                description: |-
+                  창고의 상태
+                  ('ROOM_TEMPERATURE','LOW_TEMPERATURE','BONDED','SAVAGE','HAZARDOUS','SELF_STORAGE','CONTAINER') 중 하나 이상의 값을 넣어야 합니다.
+                items:
+                  type: string
+              warehouseFacilityUsages:
+                type: array
+                description: 창고 시설 이용 유의사항(String 배열)
+                items:
+                  type: string
+              warehouseUsageCautions:
+                type: array
+                description: |-
+                  창고 이용 시 주의사항
+                  (String 배열)
+                items:
+                  type: string
+            required:
+              - name
+              - space
+              - address
+              - addressDetail
+              - description
+              - availableWeekdays
+              - openAt
+              - closeAt
+              - availableTimeDetail
+              - cctvExist
+              - securityCompanyExist
+              - securityCompanyName
+              - doorLockExist
+              - airConditioningType
+              - workerExist
+              - canPickup
+              - canPark
+              - warehouseCondition
+              - warehouseFacilityUsages
+              - warehouseUsageCautions
+              - insurance
+              - latitude
+              - longitude
+              - warehouseType
+              - minReleasePerMonth
+              - mainItemType
+              - deliveryTypes
+          examples:
+            example-1:
+              value:
+                name: TEST NAME
+                space: 999
+                address: TEST ADDR
+                addressDetail: TEST ADDR DETAIL
+                description: TEST DESC
+                availableWeekdays: 1111111
+                openAt: '01:00'
+                closeAt: '23:30'
+                availableTimeDetail: TEST AVAILABLE TIME DETAIL
+                cctvExist: 1
+                securityCompanyExist: 1
+                securityCompanyName: TEST_SEC_COMP_NAME
+                doorLockExist: 1
+                airConditioningType: BOTH
+                workerExist: 1
+                canPickup: 1
+                canPark: 1
+                warehouseCondition:
+                  - ROOM_TEMPERATURE
+                  - SELF_STORAGE
+                warehouseFacilityUsages:
+                  - 물품은 바코딩 및 박싱 작업이 필요합니다.
+                  - 물품 출고는 매일 14시에 발송됩니다.
+                warehouseUsageCautions:
+                  - 사전 협의되지 않은 물품에 대한 추가 비용이 발생할 수 있습니다.
+                  - '보관되는 물품의 크기가 1m 이상인 경우, 보관이 불가합니다.'
+                insurance: TEST INSURANCE NAME
+                latitude: 99.999
+                longitude: 88.888
+                warehouseType: THREEPL
+                minReleasePerMonth: 1000
+                mainItemType: CLOTH
+                deliveryTypes:
+                  - 한진 택배
+                  - 테스트 택배
