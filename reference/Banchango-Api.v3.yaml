@@ -4,7 +4,81 @@ info:
   version: '3.0'
 servers:
   - url: 'http://localhost:3000'
-paths: {}
+paths:
+  /v3/warehouses:
+    post:
+      summary: 새로운 창고 등록
+      operationId: post-v3-warehouses
+      responses:
+        '200':
+          description: 'OK : 창고가 정상적으로 등록된 경우'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+              examples:
+                200_Example:
+                  value:
+                    message: 창고가 정상적으로 등록 되었습니다.
+        '400':
+          description: 'Bad Request : 요청 방식이 잘못된 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                400_Example:
+                  value:
+                    message: 요청 방식이 잘못되었습니다.
+        '401':
+          description: 'Unauthorized : Token 값에 문제가 있을 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+              examples:
+                401_Example:
+                  value:
+                    message: 인증에 실패했습니다.
+        '409':
+          description: 'Conflict : Token값에 있는 userId로 등록된 사용자가 이미 등록한 창고가 존재하는 경우'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                409_Example:
+                  value:
+                    message: 해당 사용자는 이미 창고를 등록했으므로 더 이상 등록할 수 없습니다.
+      description: 새로운 창고를 등록합니다.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewWarehouseRequestDto'
+        description: ''
+      security:
+        - Authorization: []
 components:
   schemas:
     NewWarehouseRequestDto:
@@ -200,3 +274,9 @@ components:
             deliveryTypes:
               - 한진 택배
               - 테스트 택배
+  responses: {}
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+      description: Bearer Token 값입니다. JWT Token을 사용합니다.
