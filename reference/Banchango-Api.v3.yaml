@@ -7,3 +7,9 @@ servers:
 paths: {}
 components:
   schemas: {}
+  responses: {}
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+      description: Bearer Token 값입니다. JWT Token을 사용합니다.
