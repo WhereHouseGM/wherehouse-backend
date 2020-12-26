@@ -110,9 +110,7 @@ paths:
                       - name
                       - email
                       - type
-                      - telephoneNumber
                       - phoneNumber
-                      - companyName
                       - role
                     properties:
                       userId:
@@ -132,18 +130,10 @@ paths:
                         description: |-
                           해당 회원이 창고주인지, 화주인지를 알려줍니다.
                           'OWNER', 'SHIPPER' 중 하나의 값이 옵니다.
-                      telephoneNumber:
-                        type: string
-                        minLength: 1
-                        description: 회원의 회사 전화번호
                       phoneNumber:
                         type: string
                         minLength: 1
                         description: 회원의 휴대폰 전화번호
-                      companyName:
-                        type: string
-                        minLength: 1
-                        description: 회사명
                       role:
                         type: string
                         minLength: 1
