@@ -459,7 +459,7 @@ paths:
           description: 로그인 시 발급된 AccessToken값
           required: true
     patch:
-      summary: ''
+      summary: 회원 정보 수정
       operationId: patch-v3-users-userId
       responses:
         '200':
