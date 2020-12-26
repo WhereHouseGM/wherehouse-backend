@@ -37,6 +37,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorDto'
+              examples:
+                401_example:
+                  value:
+                    timestamp: 1608978553253
+                    status: 401
+                    error: Unauthorized
+                    message: 잘못된 형식의 Jwt 토큰입니다.
+                    path: /v3/users/15
       description: 새로운 창고를 등록합니다.
       requestBody:
         content:
@@ -57,7 +65,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                type: object
         '400':
           description: |-
             잘못된 요청을 보낸 경우
@@ -66,6 +74,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorDto'
+              examples:
+                400_example:
+                  value:
+                    path: /v3/warehouses
+                    error: Bad Request
+                    message: mainitem 또는 address 하나만 있어야합니다.
+                    timestamp: 1608977704448
+                    status: 400
       parameters:
         - schema:
             type: string
@@ -740,13 +756,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                type: object
         '400':
           description: 찰못된 요청을 보낸 경우
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorDto'
+              examples: {}
       operationId: get-v3-warehouses-warehouseId
     delete:
       summary: 창고 삭제
@@ -757,10 +774,10 @@ paths:
           content:
             application/json:
               schema:
-              type: object
-              properties:
-                message:
-                  type: string
+                type: object
+                properties:
+                  message:
+                    type: string
               required:
                 - message
               examples:
@@ -772,7 +789,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                type: object
         '400':
           description: 잘못된 요청을 보낸 경우
           content:
@@ -785,6 +802,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorDto'
+              examples:
+                401_example:
+                  value:
+                    timestamp: 1608978553253
+                    status: 401
+                    error: Unauthorized
+                    message: 잘못된 형식의 Jwt 토큰입니다.
+                    path: /v3/users/15
       security:
         - Authorization: []
 components:
