@@ -359,6 +359,105 @@ paths:
                 - type
                 - phoneNumber
         description: 회원 가입에 필요한 정보들 입니다.
+  '/v3/users/{userId}':
+    parameters:
+      - schema:
+          type: string
+        name: userId
+        in: path
+        required: true
+    get:
+      summary: 회원 정보 조회
+      tags: []
+      responses:
+        '200':
+          description: 'OK : 정보 조회 성공 시'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  userId:
+                    type: number
+                    description: DB 상에 저장된 회원의 고유 ID값
+                  name:
+                    type: string
+                    minLength: 1
+                  email:
+                    type: string
+                    minLength: 1
+                  type:
+                    type: string
+                    minLength: 1
+                    description: SHIPPER 또는 OWNER 중 하나의 값
+                  phoneNumber:
+                    type: string
+                    minLength: 1
+                  role:
+                    type: string
+                    minLength: 1
+                    description: 'USER, ADMIN 중 하나의 값'
+                required:
+                  - userId
+                  - name
+                  - email
+                  - type
+                  - phoneNumber
+                  - role
+              examples:
+                200_Example:
+                  value:
+                    userId: 15
+                    name: TEST NAME
+                    email: robbyra@gmail.com
+                    type: SHIPPER
+                    phoneNumber: '01029093199'
+                    role: USER
+        '401':
+          description: 'Unauthorized : Bearer 토큰 값에 문제가 있거나 토큰값과 다른 사용자의 정보를 보려고 하는 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  timestamp:
+                    type: number
+                  status:
+                    type: number
+                  error:
+                    type: string
+                    minLength: 1
+                  message:
+                    type: string
+                    minLength: 1
+                  path:
+                    type: string
+                    minLength: 1
+                required:
+                  - timestamp
+                  - status
+                  - error
+                  - message
+                  - path
+              examples:
+                401_Example:
+                  value:
+                    timestamp: 1608978553253
+                    status: 401
+                    error: Unauthorized
+                    message: 잘못된 형식의 Jwt 토큰입니다.
+                    path: /v3/users/15
+      operationId: get-v3-users-userId
+      description: 회원의 정보를 조회합니다.
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          description: 로그인 시 발급된 AccessToken값
+          required: true
 components:
   schemas:
     NewWarehouseRequestDto:
