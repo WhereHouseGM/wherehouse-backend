@@ -227,7 +227,7 @@ paths:
                 properties:
                   userId:
                     type: number
-                    description: DB 상의 회원 고유 id 값
+                    description: DB상에 저장된 회원의 고유 ID값
                   name:
                     type: string
                     minLength: 1
@@ -237,30 +237,24 @@ paths:
                   type:
                     type: string
                     minLength: 1
-                    description: 'SHIPPER, OWNER 중 하나의 값'
-                  telephoneNumber:
-                    type: string
-                    minLength: 1
+                    description: |-
+                      SHIPPER, OWNER 중 하나의 값이 옵니다.
+                      (SHIPPER : 화주, OWNER : 창고주)
                   phoneNumber:
-                    type: string
-                    minLength: 1
-                  companyName:
                     type: string
                     minLength: 1
                   role:
                     type: string
                     minLength: 1
                     description: |-
-                      USER, ADMIN 중 하나의 값
-                      (USER : 일반 회원, ADMIN: 관리자)
+                      USER, ADMIN 중 하나의 값이 옵니다.
+                      (USER : 일반 회원, ADMIN : 관리자)
                 required:
                   - userId
                   - name
                   - email
                   - type
-                  - telephoneNumber
                   - phoneNumber
-                  - companyName
                   - role
               examples:
                 200_Example:
@@ -354,40 +348,25 @@ paths:
                 name:
                   type: string
                   minLength: 1
-                  description: 회원명
                 email:
                   type: string
                   minLength: 1
-                  description: 이메일 주소
                 password:
                   type: string
                   minLength: 1
-                  description: 비밀번호 (sha256으로 인코딩 된 값)
+                  description: SHA256으로 인코딩 된 비밀번호 값
                 type:
                   type: string
                   minLength: 1
-                  description: |-
-                    창고주, 화주를 구분합니다.
-                    창고주 : OWNER, 화주 : SHIPPER
-                telephoneNumber:
-                  type: string
-                  minLength: 1
-                  description: 회사 전화번호
-                companyName:
-                  type: string
-                  minLength: 1
-                  description: 회사명
+                  description: SHIPPER(화주) 또는 OWNER(창고주) 의 값
                 phoneNumber:
                   type: string
                   minLength: 1
-                  description: 휴대폰 전화번호
               required:
                 - name
                 - email
                 - password
                 - type
-                - telephoneNumber
-                - companyName
                 - phoneNumber
         description: 회원 가입에 필요한 정보들 입니다.
 components:
