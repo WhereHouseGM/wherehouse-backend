@@ -367,7 +367,7 @@ paths:
         in: path
         required: true
     get:
-      summary: 회원 정보 수정
+      summary: 회원 정보 조회
       tags: []
       responses:
         '200':
