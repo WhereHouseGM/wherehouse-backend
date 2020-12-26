@@ -79,6 +79,139 @@ paths:
         description: ''
       security:
         - Authorization: []
+  /v3/users/sign-in:
+    post:
+      summary: 회원 로그인
+      operationId: post-v3-users-sign-in
+      responses:
+        '200':
+          description: 'OK : 로그인 성공 시'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    minLength: 1
+                    description: 추후 일부 API들에 사용될 토큰 값입니다.
+                  tokenType:
+                    type: string
+                    minLength: 1
+                    description: Bearer 토큰
+                  refreshToken:
+                    type: string
+                    minLength: 1
+                  user:
+                    type: object
+                    required:
+                      - userId
+                      - name
+                      - email
+                      - type
+                      - telephoneNumber
+                      - phoneNumber
+                      - companyName
+                      - role
+                    properties:
+                      userId:
+                        type: number
+                        description: DB상에 저장되어 있는 회원의 고유 ID 값입니다.
+                      name:
+                        type: string
+                        minLength: 1
+                        description: 회원 명
+                      email:
+                        type: string
+                        minLength: 1
+                        description: 회원 이메일
+                      type:
+                        type: string
+                        minLength: 1
+                        description: |-
+                          해당 회원이 창고주인지, 화주인지를 알려줍니다.
+                          'OWNER', 'SHIPPER' 중 하나의 값이 옵니다.
+                      telephoneNumber:
+                        type: string
+                        minLength: 1
+                        description: 회원의 회사 전화번호
+                      phoneNumber:
+                        type: string
+                        minLength: 1
+                        description: 회원의 휴대폰 전화번호
+                      companyName:
+                        type: string
+                        minLength: 1
+                        description: 회사명
+                      role:
+                        type: string
+                        minLength: 1
+                        description: |-
+                          회원의 권한값이 옵니다.
+                          'USER', 'ADMIN' 중 하나의 값이 옵니다.
+                required:
+                  - accessToken
+                  - tokenType
+                  - refreshToken
+                  - user
+        '204':
+          description: 'No Content : 로그인 실패 시'
+        '400':
+          description: 'Bad Request : Request Body가 잘못된 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  timestamp:
+                    type: number
+                  status:
+                    type: number
+                  error:
+                    type: string
+                    minLength: 1
+                  message:
+                    type: string
+                    minLength: 1
+                  path:
+                    type: string
+                    minLength: 1
+                required:
+                  - timestamp
+                  - status
+                  - error
+                  - message
+                  - path
+              examples:
+                400_Example:
+                  value:
+                    timestamp: 1608975218077
+                    status: 400
+                    error: Bad Request
+                    message: Bad Request Exception.
+                    path: /v3/users/sign-in
+      description: 회원 로그인을 진행합니다.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: ''
+              type: object
+              properties:
+                email:
+                  type: string
+                  minLength: 1
+                  description: 회원 이메일
+                password:
+                  type: string
+                  minLength: 1
+                  description: 비밀번호 값 (sha256으로 인코딩 된 값)
+              required:
+                - email
+                - password
+        description: 회원 로그인에 필요한 값들을 전달합니다.
 components:
   schemas:
     NewWarehouseRequestDto:
