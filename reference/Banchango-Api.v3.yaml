@@ -367,7 +367,7 @@ paths:
         in: path
         required: true
     get:
-      summary: 회원 정보 조회
+      summary: 회원 정보 수정
       tags: []
       responses:
         '200':
@@ -458,6 +458,168 @@ paths:
           name: Authorization
           description: 로그인 시 발급된 AccessToken값
           required: true
+    patch:
+      summary: ''
+      operationId: patch-v3-users-userId
+      responses:
+        '200':
+          description: 'OK : 정보 수정이 완료된 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  userId:
+                    type: number
+                  name:
+                    type: string
+                    minLength: 1
+                  email:
+                    type: string
+                    minLength: 1
+                  type:
+                    type: string
+                    minLength: 1
+                  phoneNumber:
+                    type: string
+                    minLength: 1
+                  role:
+                    type: string
+                    minLength: 1
+                required:
+                  - userId
+                  - name
+                  - email
+                  - type
+                  - phoneNumber
+                  - role
+              examples:
+                200_Example:
+                  value:
+                    userId: 15
+                    name: Sangwoo
+                    email: robbyra@gmail.com
+                    type: OWNER
+                    phoneNumber: '01029093199'
+                    role: USER
+        '400':
+          description: 'Bad Request : Request Body에 문제가 있는 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  path:
+                    type: string
+                    minLength: 1
+                  error:
+                    type: string
+                    minLength: 1
+                  message:
+                    type: string
+                    minLength: 1
+                  timestamp:
+                    type: number
+                  status:
+                    type: number
+                required:
+                  - path
+                  - error
+                  - message
+                  - timestamp
+                  - status
+              examples:
+                400_Example:
+                  value:
+                    path: /v3/users/15
+                    error: Bad Request
+                    message: 'Validation failed for argument [0] in public com.banchango.users.dto.UserInfoResponseDto com.banchango.users.controller.UsersApiController.updateUserInfo(com.banchango.users.dto.UserSignupRequestDto,java.lang.Integer,java.lang.String): [Field error in object ''userSignupRequestDto'' on field ''name'': rejected value [null]; codes [NotBlank.userSignupRequestDto.name,NotBlank.name,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [userSignupRequestDto.name,name]; arguments []; default message [name]]; default message [Name field is required.]] '
+                    timestamp: 1608979252493
+                    status: 400
+        '401':
+          description: 'Unauthorized : Bearer 토큰 값에 문제가 있거나 토큰값과 다른 사용자의 수정하려는 경우'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  timestamp:
+                    type: number
+                  status:
+                    type: number
+                  error:
+                    type: string
+                    minLength: 1
+                  message:
+                    type: string
+                    minLength: 1
+                  path:
+                    type: string
+                    minLength: 1
+                required:
+                  - timestamp
+                  - status
+                  - error
+                  - message
+                  - path
+              examples:
+                401_Example:
+                  value:
+                    timestamp: 1608979400307
+                    status: 401
+                    error: Unauthorized
+                    message: 해당 사용자의 정보를 조회할 권한이 없습니다.
+                    path: /v3/users/14
+      description: 회원 정보를 수정합니다.
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          description: 로그인 시 발급된 AccessToken값
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: ''
+              type: object
+              properties:
+                email:
+                  type: string
+                  minLength: 1
+                password:
+                  type: string
+                  minLength: 1
+                name:
+                  type: string
+                  minLength: 1
+                type:
+                  type: string
+                  minLength: 1
+                  description: |-
+                    USER 또는 SHIPPER
+                    (이 정보는 수정할 수 없습니다. 기존 정보와 그대로 보내야 합니다.)
+                phoneNumber:
+                  type: string
+                  minLength: 1
+                role:
+                  type: string
+                  minLength: 1
+                  description: |-
+                    USER 또는 ADMIN
+                    (이 값은 수정할 수 없습니다. 기존 정보와 그대로 보내야 합니다.)
+              required:
+                - email
+                - password
+                - name
+                - type
+                - phoneNumber
+                - role
+        description: 회원의 정보를 수정 여부에 관계 없이 모두 입력합니다.
 components:
   schemas:
     NewWarehouseRequestDto:
