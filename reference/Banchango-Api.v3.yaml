@@ -11,7 +11,7 @@ paths:
       operationId: post-v3-warehouses
       responses:
         '200':
-          description: 'OK : 창고가 정상적으로 등록된 경우'
+          description: OK
           content:
             application/json:
               schema:
@@ -22,54 +22,29 @@ paths:
                 required:
                   - message
               examples:
-                200_Example:
+                example-1:
                   value:
-                    message: 창고가 정상적으로 등록 되었습니다.
+                    message: 창고를 정상적으로 등록했습니다
         '400':
-          description: 'Bad Request : 요청 방식이 잘못된 경우'
+          description: 잛못된 body 값을 전달한 경우
           content:
             application/json:
               schema:
-                description: ''
-                type: object
-                properties:
-                  message:
-                    type: string
-                    minLength: 1
-                required:
-                  - message
-              examples:
-                400_Example:
-                  value:
-                    message: 요청 방식이 잘못되었습니다.
+                $ref: '#/components/schemas/ErrorDto'
         '401':
-          description: 'Unauthorized : Token 값에 문제가 있을 경우'
+          description: 토큰이 없거나 만료된 경우
           content:
             application/json:
               schema:
-                description: ''
-                type: object
-                properties:
-                  message:
-                    type: string
-                    minLength: 1
-                required:
-                  - message
+                $ref: '#/components/schemas/ErrorDto'
               examples:
-                401_Example:
+                401_example:
                   value:
-                    message: 인증에 실패했습니다.
-        '409':
-          description: 'Conflict : Token값에 있는 userId로 등록된 사용자가 이미 등록한 창고가 존재하는 경우'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties: {}
-              examples:
-                409_Example:
-                  value:
-                    message: 해당 사용자는 이미 창고를 등록했으므로 더 이상 등록할 수 없습니다.
+                    timestamp: 1608978553253
+                    status: 401
+                    error: Unauthorized
+                    message: 잘못된 형식의 Jwt 토큰입니다.
+                    path: /v3/users/15
       description: 새로운 창고를 등록합니다.
       requestBody:
         content:
@@ -79,6 +54,65 @@ paths:
         description: ''
       security:
         - Authorization: []
+    get:
+      summary: '창고 조회 및 검색 [주소 검색, 주요 품목별 검색]'
+      operationId: get-v3-warehouses
+      responses:
+        '200':
+          $ref: '#/components/responses/WarehouseSearchResponseDto'
+        '204':
+          description: 조회한 창고들이 아예 없을 경우
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: |-
+            잘못된 요청을 보낸 경우
+            [address와 category 쿼리 파라미터는 동시에 사용할 수 없습니다]
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+              examples:
+                400_example:
+                  value:
+                    path: /v3/warehouses
+                    error: Bad Request
+                    message: mainitem 또는 address 하나만 있어야합니다.
+                    timestamp: 1608977704448
+                    status: 400
+      parameters:
+        - schema:
+            type: string
+            minLength: 1
+          in: query
+          name: address
+          description: 검색할 주소. 주소로 창고를 검색할 때 사용합니다
+        - schema:
+            type: string
+            enum:
+              - CLOTH
+              - FOOD
+              - GENERAL_MERCHANDISE
+              - FURNITURE
+              - COSMETIC
+              - ACCESSORY
+          in: query
+          name: category
+          description: 창고 주요 품목. 특정 품목들을 취금하는 창고들을  찾을 때 사용합니다
+        - schema:
+            type: integer
+          in: query
+          name: page
+          description: 페이지 번호입니다. 페이지네이션에 사용됩니다.
+          required: true
+        - schema:
+            type: integer
+          in: query
+          name: size
+          description: 불러올 창고 개수입니다. 페이지네이션에 사용됩니다.
+          required: true
   /v3/users/sign-in:
     post:
       summary: 회원 로그인
@@ -699,11 +733,128 @@ paths:
                 - email
         description: 임시 비밀번호를 발급받을 이메일을 전달합니다.
     parameters: []
+  '/v3/warehouses/{warehouseId}':
+    parameters:
+      - schema:
+          type: integer
+        name: warehouseId
+        in: path
+        required: true
+        description: 창고 id
+    get:
+      summary: 창고 상세정보 조회
+      tags: []
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WarehouseDetailDto'
+        '204':
+          description: 해당 창고가 존재하지 않는 경우
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: 찰못된 요청을 보낸 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+              examples: {}
+      operationId: get-v3-warehouses-warehouseId
+    delete:
+      summary: 창고 삭제
+      operationId: delete-v3-warehouses-warehouseId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              required:
+                - message
+              examples:
+                example-1:
+                  value:
+                    message: 창고를 정상적으로 삭제했습니다
+        '204':
+          description: 삭제할 창고가 없는 경우
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: 잘못된 요청을 보낸 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '401':
+          description: 토큰이 없거나 만료된 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+              examples:
+                401_example:
+                  value:
+                    timestamp: 1608978553253
+                    status: 401
+                    error: Unauthorized
+                    message: 잘못된 형식의 Jwt 토큰입니다.
+                    path: /v3/users/15
+      security:
+        - Authorization: []
 components:
   schemas:
     NewWarehouseRequestDto:
       title: NewWarehouseRequestDto
       type: object
+      x-examples:
+        example-1:
+          value:
+            name: TEST NAME
+            space: 999
+            address: TEST ADDR
+            addressDetail: TEST ADDR DETAIL
+            description: TEST DESC
+            availableWeekdays: 1111111
+            openAt: '01:00'
+            closeAt: '23:30'
+            availableTimeDetail: TEST AVAILABLE TIME DETAIL
+            cctvExist: 1
+            securityCompanyExist: 1
+            securityCompanyName: TEST_SEC_COMP_NAME
+            doorLockExist: 1
+            airConditioningType: BOTH
+            workerExist: 1
+            canPickup: 1
+            canPark: 1
+            warehouseCondition:
+              - ROOM_TEMPERATURE
+              - SELF_STORAGE
+            warehouseFacilityUsages:
+              - 물품은 바코딩 및 박싱 작업이 필요합니다.
+              - 물품 출고는 매일 14시에 발송됩니다.
+            warehouseUsageCautions:
+              - 사전 협의되지 않은 물품에 대한 추가 비용이 발생할 수 있습니다.
+              - '보관되는 물품의 크기가 1m 이상인 경우, 보관이 불가합니다.'
+            insurance: TEST INSURANCE NAME
+            latitude: 99.999
+            longitude: 88.888
+            warehouseType: THREEPL
+            minReleasePerMonth: 1000
+            mainItemType: CLOTH
+            deliveryTypes:
+              - 한진 택배
+              - 테스트 택배
       properties:
         name:
           type: string
@@ -755,7 +906,9 @@ components:
             CCTV 존재 유무
             (존재 : 1, 없음 : 0)
         securityCompanyName:
-          type: string
+          type:
+            - string
+            - 'null'
           minLength: 1
           description: 보안업체명(없다면 null)
         doorLockExist:
@@ -838,63 +991,341 @@ components:
         - openAt
         - closeAt
         - availableTimeDetail
+        - insurance
         - cctvExist
-        - securityCompanyExist
         - securityCompanyName
         - doorLockExist
         - airConditioningType
         - workerExist
         - canPickup
         - canPark
+        - mainItemType
+        - warehouseType
+        - minReleasePerMonth
+        - latitude
+        - longitude
+        - deliveryTypes
         - warehouseCondition
         - warehouseFacilityUsages
         - warehouseUsageCautions
+    WarehouseSearchDto:
+      description: ''
+      type: object
+      title: ''
+      properties:
+        address:
+          type: string
+          minLength: 1
+          description: 창고 주소
+        warehouseId:
+          type: integer
+          description: 창고 id
+        warehouseCondition:
+          type: array
+          description: 상온창고 vs 저온창고 vs ...
+          items:
+            type: string
+            enum:
+              - ROOM_TEMPERATURE
+              - LOW_TEMPERATURE
+              - BONDED
+              - SAVAGE
+              - HAZARDOUS
+              - SELF_STORAGE
+              - CONTAINER
+        minReleasePerMonth:
+          type: integer
+          description: '월 최소 출고량 '
+        name:
+          type: string
+          minLength: 1
+          description: 창고 이름
+        warehouseType:
+          type: string
+          minLength: 1
+          enum:
+            - THREEPL
+            - FULFILLMENT
+          description: 3PL 업체 vs 풀필먼트 업체
+        closeAt:
+          type: string
+          minLength: 1
+          description: 창고 닫는 시간
+        mainImageUrl:
+          type: string
+          minLength: 1
+          format: uri
+          description: 메인 이미지 url
+        openAt:
+          type: string
+          minLength: 1
+          description: 창고 여는 시간
+        space:
+          type: integer
+          description: 창고 평 수
+        deliveryTypes:
+          type: array
+          description: 사용하는 택배사 종류
+          items:
+            type: string
+            minLength: 1
+        mainItemType:
+          type: string
+          enum:
+            - CLOTH
+            - FOOD
+            - GENERAL_MERCHANDISE
+            - FURNITURE
+            - COSMETIC
+            - ACCESSORY
+          description: 주요 취급 품목
+      required:
+        - address
+        - warehouseId
+        - warehouseCondition
+        - minReleasePerMonth
+        - name
+        - warehouseType
+        - closeAt
+        - mainImageUrl
+        - openAt
+        - space
+        - deliveryTypes
+        - mainItemType
+    ErrorDto:
+      description: ''
+      type: object
+      properties:
+        timestamp:
+          type: number
+          description: 에러 발생 시간 timestamp
+        status:
+          type: number
+          description: http status code
+        error:
+          type: string
+          minLength: 1
+          description: http status reason phrase
+        message:
+          type: string
+          minLength: 1
+          description: 에러 메시지
+        path:
+          type: string
+          minLength: 1
+          description: 에러 발생한 url 엔드포인트
+      required:
+        - timestamp
+        - status
+        - error
+        - message
+        - path
+    WarehouseDetailDto:
+      description: ''
+      type: object
+      properties:
+        warehouseId:
+          type: integer
+          description: 창고 id
+        ownerId:
+          description: 창고 소유한 유저 id
+          type: integer
+        name:
+          type: string
+          minLength: 1
+          description: 창고 이름
+        space:
+          type: integer
+          description: 창고 평 수
+        address:
+          type: string
+          minLength: 1
+          description: 창고 주소
+        addressDetail:
+          type: string
+          minLength: 1
+          description: 창고 상세 주소
+        description:
+          type: string
+          minLength: 1
+          description: 창고 설명
+        availableWeekdays:
+          description: 창고 여는 요일
+          type: integer
+        openAt:
+          type: string
+          minLength: 1
+          description: 창고 여는 시간
+        closeAt:
+          type: string
+          minLength: 1
+          description: 창고 닫는 시간
+        availableTimeDetail:
+          type: string
+          minLength: 1
+          description: ''
+        insurance:
+          type: string
+          minLength: 1
+          description: 보험 회사명
+        cctvExist:
+          type: integer
+          description: cctv 유무 여부
+        securityCompanyName:
+          type:
+            - string
+            - null
+          description: 보안업체명(없으면 null)
+        doorLockExist:
+          type: integer
+          description: '도어락 존재 유무 '
+        airConditioningType:
+          type: string
+          minLength: 1
+          enum:
+            - HEATING
+            - COOLING
+            - NONE
+            - BOTH
+          description: 냉난방 현황
+        workerExist:
+          type: integer
+          description: ''
+        canPickup:
+          type: integer
+          description: 픽업 서비스 유무 여부
+        canPark:
+          type: integer
+          description: 주차 가능 여부
+        mainItemType:
+          type: string
+          minLength: 1
+          enum:
+            - CLOTH
+            - FOOD
+            - GENERAL_MERCHANDISE
+            - FURNITURE
+            - COSMETIC
+            - ACCESSORY
+          description: 주요 취급 품목
+        warehouseType:
+          type: string
+          minLength: 1
+          description: 3PL 창고 vs 풀필먼트 차고
+          enum:
+            - THREEPL
+            - FULFILLMENT
+        minReleasePerMonth:
+          description: 월 최소 출고량
+          type: integer
+        latitude:
+          type: number
+          description: 창고 위치 위도
+        longitude:
+          type: number
+          description: 창고 위치 경도
+        mainImageUrl:
+          type: string
+          minLength: 1
+          description: 메인 이미지 url 주소
+          format: uri
+        deliveryTypes:
+          type: array
+          description: 택배 회사명
+          items:
+            type: string
+        warehouseCondition:
+          type: array
+          description: 상온창고 vs 저온창고 vs ...
+          items:
+            type: string
+            enum:
+              - ROOM_TEMPERATURE
+              - LOW_TEMPERATURE
+              - BONDED
+              - SAVAGE
+              - HAZARDOUS
+              - SELF_STORAGE
+              - CONTAINER
+        warehouseFacilityUsages:
+          type: array
+          description: 창고 시설 안내
+          items:
+            type: string
+        warehouseUsageCautions:
+          type: array
+          description: 창고 이용 시 주의사항
+          items:
+            type: string
+        images:
+          type: array
+          description: 창고 이미지 url 목록
+          items:
+            type: string
+            format: uri
+      required:
+        - warehouseId
+        - ownerId
+        - name
+        - space
+        - address
+        - addressDetail
+        - description
+        - availableWeekdays
+        - openAt
+        - closeAt
+        - availableTimeDetail
         - insurance
-        - latitude
-        - longitude
+        - cctvExist
+        - securityCompanyName
+        - doorLockExist
+        - airConditioningType
+        - workerExist
+        - canPickup
+        - canPark
+        - mainItemType
         - warehouseType
         - minReleasePerMonth
-        - mainItemType
+        - latitude
+        - longitude
+        - mainImageUrl
         - deliveryTypes
-      x-examples:
-        example-1:
-          value:
-            name: TEST NAME
-            space: 999
-            address: TEST ADDR
-            addressDetail: TEST ADDR DETAIL
-            description: TEST DESC
-            availableWeekdays: 1111111
-            openAt: '01:00'
-            closeAt: '23:30'
-            availableTimeDetail: TEST AVAILABLE TIME DETAIL
-            cctvExist: 1
-            securityCompanyExist: 1
-            securityCompanyName: TEST_SEC_COMP_NAME
-            doorLockExist: 1
-            airConditioningType: BOTH
-            workerExist: 1
-            canPickup: 1
-            canPark: 1
-            warehouseCondition:
-              - ROOM_TEMPERATURE
-              - SELF_STORAGE
-            warehouseFacilityUsages:
-              - 물품은 바코딩 및 박싱 작업이 필요합니다.
-              - 물품 출고는 매일 14시에 발송됩니다.
-            warehouseUsageCautions:
-              - 사전 협의되지 않은 물품에 대한 추가 비용이 발생할 수 있습니다.
-              - '보관되는 물품의 크기가 1m 이상인 경우, 보관이 불가합니다.'
-            insurance: TEST INSURANCE NAME
-            latitude: 99.999
-            longitude: 88.888
-            warehouseType: THREEPL
-            minReleasePerMonth: 1000
-            mainItemType: CLOTH
-            deliveryTypes:
-              - 한진 택배
-              - 테스트 택배
-  responses: {}
+        - warehouseCondition
+        - warehouseFacilityUsages
+        - warehouseUsageCautions
+        - images
+  responses:
+    WarehouseSearchResponseDto:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              warehouses:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WarehouseSearchDto'
+            required:
+              - warehouses
+          examples:
+            example-1:
+              value:
+                warehouses:
+                  - address: address
+                    warehouseId: 1
+                    warehouseCondition:
+                      - ROOM_TEMPERATURE
+                    minReleasePerMonth: 100
+                    name: 창고
+                    warehouseType: THREEPL
+                    closeAt: '18:00'
+                    mainImageUrl: 'http://example.com'
+                    openAt: '06:00'
+                    space: 30
+                    deliveryTypes:
+                      - 한진 택배
+                    mainItemType: CLOTH
   securitySchemes:
     Authorization:
       type: http
