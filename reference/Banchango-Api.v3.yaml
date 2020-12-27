@@ -861,8 +861,8 @@ components:
           minLength: 1
           description: 창고 이름
         space:
-          type: number
           description: 창고 평수
+          type: integer
         address:
           type: string
           minLength: 1
@@ -876,11 +876,11 @@ components:
           minLength: 1
           description: 창고 간단 설명
         availableWeekdays:
-          type: number
           description: |-
             일주일 단위 사용 가능한 창고 일자
             (ex. 일요일만 가능 --> 100000,
               월화수목금 가능 --> 0111110)
+          type: integer
         openAt:
           type: string
           minLength: 1
@@ -901,10 +901,10 @@ components:
           type: string
           description: 보험사 이름
         cctvExist:
-          type: number
           description: |-
             CCTV 존재 유무
             (존재 : 1, 없음 : 0)
+          type: integer
         securityCompanyName:
           type:
             - string
@@ -912,10 +912,10 @@ components:
           minLength: 1
           description: 보안업체명(없다면 null)
         doorLockExist:
-          type: number
           description: |-
             도어락 존재 유무
             (존재 : 1, 없음 : 0)
+          type: integer
         airConditioningType:
           type: string
           minLength: 1
@@ -923,20 +923,20 @@ components:
             냉난방 방식
             ("HEATING", "COOLING", "NONE", "BOTH") 중 하나의 값.
         workerExist:
-          type: number
           description: |-
             현장 인력 존재 유무
             (존재 : 1, 없음 : 0)
+          type: integer
         canPickup:
-          type: number
           description: |-
             픽업 가능 여부
             (가능 : 1, 불가 : 0)
+          type: integer
         canPark:
-          type: number
           description: |-
             주차 가능 여부
             (가능 : 1, 불가 : 0)
+          type: integer
         mainItemType:
           type: string
           minLength: 1
@@ -950,8 +950,8 @@ components:
             창고 종류
             ("THREEPL", "FULFILLMENT") 중 하나의 값.
         minReleasePerMonth:
-          type: number
           description: 창고주가 원하는 월별 최소 출고량
+          type: integer
         latitude:
           type: number
           description: 위도
@@ -961,7 +961,8 @@ components:
         deliveryTypes:
           type: array
           description: 택배 업체명이 배열 형태로 옵니다.(Array Of Strings)
-          items: {}
+          items:
+            type: string
         warehouseCondition:
           type: array
           description: |-
@@ -1172,10 +1173,10 @@ components:
           type: integer
           description: cctv 유무 여부
         securityCompanyName:
+          description: 보안업체명(없으면 null)
           type:
             - string
-            - null
-          description: 보안업체명(없으면 null)
+            - 'null'
         doorLockExist:
           type: integer
           description: '도어락 존재 유무 '
