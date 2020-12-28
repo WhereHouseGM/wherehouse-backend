@@ -812,6 +812,56 @@ paths:
                     path: /v3/users/15
       security:
         - Authorization: []
+  /v3/admin/warehouses:
+    get:
+      summary: 관리자용 창고 조회
+      tags: []
+      responses:
+        '200':
+          $ref: '#/components/responses/WarehouseSearchResponseDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+              examples: {}
+      operationId: get-v3-admin-warehouses
+      description: |
+        관리자 페이지에서 호출하는 창고 조회 API입니다
+        창고는 검증된 창고와 검증되지 않은 창고가 있습니다
+
+        1. `/v3/admin/warehouses?isverified=false`
+
+        검증되지 않은 창고를 조회하는 API입니다
+
+        2. `/v3/admin/warehouses?isverified=true`
+
+        검증된 창고를 조회하는 API입니다
+
+        3. `/v3/admin/warehouses`
+
+        모든 창고를 조회하는 API입니다
+      security:
+        - Authorization: []
+      parameters:
+        - schema:
+            type: boolean
+          in: query
+          name: isverified
+          description: 창고 검증 여부입니다. 만약 쿼리 파라미터로 전달하지 않으면 모든 창고를 조회할 수 있습니다
 components:
   schemas:
     NewWarehouseRequestDto:
@@ -1080,6 +1130,9 @@ components:
             - COSMETIC
             - ACCESSORY
           description: 주요 취급 품목
+        isVerified:
+          type: boolean
+          description: 창고 검증 여부
       required:
         - address
         - warehouseId
@@ -1093,6 +1146,7 @@ components:
         - space
         - deliveryTypes
         - mainItemType
+        - isVerified
     ErrorDto:
       description: ''
       type: object
@@ -1264,6 +1318,9 @@ components:
           items:
             type: string
             format: uri
+        isVerified:
+          type: boolean
+          description: 창고 검증 여부
       required:
         - warehouseId
         - ownerId
@@ -1295,6 +1352,7 @@ components:
         - warehouseFacilityUsages
         - warehouseUsageCautions
         - images
+        - isVerified
   responses:
     WarehouseSearchResponseDto:
       description: Example response
@@ -1327,6 +1385,7 @@ components:
                     deliveryTypes:
                       - 한진 택배
                     mainItemType: CLOTH
+                    isVerified: true
   securitySchemes:
     Authorization:
       type: http
