@@ -841,15 +841,15 @@ paths:
       operationId: get-v3-admin-warehouses
       description: |
         관리자 페이지에서 호출하는 창고 조회 API입니다
-        창고는 검증된 창고와 검증되지 않은 창고가 있습니다
+        창고는 조회할 수 있는 창고와 조회할 수 없는 창고가 있습니다
 
         1. `/v3/admin/warehouses?isverified=false`
 
-        검증되지 않은 창고를 조회하는 API입니다
+        조회 가능하지 않은 창고를 조회하는 API입니다
 
         2. `/v3/admin/warehouses?isverified=true`
 
-        검증된 창고를 조회하는 API입니다
+        조회 가능한 창고를 조회하는 API입니다
 
         3. `/v3/admin/warehouses`
 
@@ -860,8 +860,59 @@ paths:
         - schema:
             type: boolean
           in: query
-          name: isverified
-          description: 창고 검증 여부입니다. 만약 쿼리 파라미터로 전달하지 않으면 모든 창고를 조회할 수 있습니다
+          name: isviewable
+          description: 창고 조회 가능 여부입니다. 만약 쿼리 파라미터로 전달하지 않으면 모든 창고를 조회할 수 있습니다
+  /v3/warehouses/change-viewable:
+    post:
+      summary: 창고 조회 가능여부 수정
+      operationId: post-v3-warehouse-change-view
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+              examples:
+                example-1:
+                  value:
+                    message: viewable를 성공적으로 수정했습니다
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '403':
+          description: ADMIN이 아닌 경우입니다
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+      description: ''
+      security:
+        - Authorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WarehouseChangeViewableRequestDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/ChangeWarehouseViewableRequestDto'
+        description: ''
+    parameters: []
 components:
   schemas:
     NewWarehouseRequestDto:
@@ -1130,9 +1181,6 @@ components:
             - COSMETIC
             - ACCESSORY
           description: 주요 취급 품목
-        isVerified:
-          type: boolean
-          description: 창고 검증 여부
       required:
         - address
         - warehouseId
@@ -1146,7 +1194,6 @@ components:
         - space
         - deliveryTypes
         - mainItemType
-        - isVerified
     ErrorDto:
       description: ''
       type: object
@@ -1224,16 +1271,16 @@ components:
           minLength: 1
           description: 보험 회사명
         cctvExist:
-          type: integer
           description: cctv 유무 여부
+          type: boolean
         securityCompanyName:
           description: 보안업체명(없으면 null)
           type:
             - string
             - 'null'
         doorLockExist:
-          type: integer
           description: '도어락 존재 유무 '
+          type: boolean
         airConditioningType:
           type: string
           minLength: 1
@@ -1244,14 +1291,11 @@ components:
             - BOTH
           description: 냉난방 현황
         workerExist:
-          type: integer
           description: ''
-        canPickup:
-          type: integer
-          description: 픽업 서비스 유무 여부
+          type: boolean
         canPark:
-          type: integer
           description: 주차 가능 여부
+          type: boolean
         mainItemType:
           type: string
           minLength: 1
@@ -1318,9 +1362,6 @@ components:
           items:
             type: string
             format: uri
-        isVerified:
-          type: boolean
-          description: 창고 검증 여부
       required:
         - warehouseId
         - ownerId
@@ -1339,7 +1380,6 @@ components:
         - doorLockExist
         - airConditioningType
         - workerExist
-        - canPickup
         - canPark
         - mainItemType
         - warehouseType
@@ -1352,7 +1392,19 @@ components:
         - warehouseFacilityUsages
         - warehouseUsageCautions
         - images
-        - isVerified
+    WarehouseChangeViewableRequestDto:
+      title: WarehouseChangeViewableRequestDto
+      type: object
+      properties:
+        warehouseId:
+          type: integer
+          description: 창고 id
+        viewable:
+          type: boolean
+          description: 창고 조회 가능 여부
+      required:
+        - warehouseId
+        - viewable
   responses:
     WarehouseSearchResponseDto:
       description: Example response
