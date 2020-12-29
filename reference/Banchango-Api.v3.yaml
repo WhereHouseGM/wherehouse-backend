@@ -843,11 +843,11 @@ paths:
         관리자 페이지에서 호출하는 창고 조회 API입니다
         창고는 조회할 수 있는 창고와 조회할 수 없는 창고가 있습니다
 
-        1. `/v3/admin/warehouses?isverified=false`
+        1. `/v3/admin/warehouses?isviewable=false`
 
         조회 가능하지 않은 창고를 조회하는 API입니다
 
-        2. `/v3/admin/warehouses?isverified=true`
+        2. `/v3/admin/warehouses?isviewable=true`
 
         조회 가능한 창고를 조회하는 API입니다
 
