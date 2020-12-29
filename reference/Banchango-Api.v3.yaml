@@ -60,6 +60,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/WarehouseSearchResponseDto'
+        '201':
+          description: Created
         '204':
           description: 조회한 창고들이 아예 없을 경우
           content:
@@ -1028,11 +1030,6 @@ components:
             현장 인력 존재 유무
             (존재 : 1, 없음 : 0)
           type: integer
-        canPickup:
-          description: |-
-            픽업 가능 여부
-            (가능 : 1, 불가 : 0)
-          type: integer
         canPark:
           description: |-
             주차 가능 여부
@@ -1099,7 +1096,6 @@ components:
         - doorLockExist
         - airConditioningType
         - workerExist
-        - canPickup
         - canPark
         - mainItemType
         - warehouseType
