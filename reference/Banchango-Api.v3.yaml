@@ -912,7 +912,7 @@ paths:
               $ref: '#/components/schemas/WarehouseChangeViewableRequestDto'
           application/xml:
             schema:
-              $ref: '#/components/schemas/ChangeWarehouseViewableRequestDto'
+              $ref: '#/components/schemas/WarehouseChangeViewableRequestDto'
         description: ''
     parameters: []
 components:
@@ -954,7 +954,7 @@ components:
             longitude: 88.888
             warehouseType: THREEPL
             minReleasePerMonth: 1000
-            mainItemType: CLOTH
+            mainItemTypes: ['CLOTH', 'BOOK']
             deliveryTypes:
               - 한진 택배
               - 테스트 택배
@@ -1035,12 +1035,25 @@ components:
             주차 가능 여부
             (가능 : 1, 불가 : 0)
           type: integer
-        mainItemType:
-          type: string
-          minLength: 1
+        mainItemTypes:
+          type: array
           description: |-
-            창고가 가장 자신있게 보관할 수 있는 물품의 종류
-            ('CLOTH','TEMPERATURE_SENSITIVE','GENERAL_MERCHANDISE','ELECTRONIC','FURNITURE','BOOK','ACCESSORY','COSMETIC','ETC') 중 하나의 값.
+            창고가 가장 자신있게 보관할 수 있는 물품의 종류들
+          items:
+            type: string
+            enum:
+              - CLOTH
+              - COSMETIC
+              - ACCESSORY
+              - GENERAL_MERCHANDISE
+              - FOOD
+              - BOOK
+              - INTERIOR
+              - ELECTRONICS
+              - SPORTS
+              - COLD_STORAGE
+              - FREEZE_STORAGE
+              - LARGE_SIZE
         warehouseType:
           type: string
           minLength: 1
@@ -1097,7 +1110,7 @@ components:
         - airConditioningType
         - workerExist
         - canPark
-        - mainItemType
+        - mainItemTypes
         - warehouseType
         - minReleasePerMonth
         - latitude
@@ -1167,16 +1180,25 @@ components:
           items:
             type: string
             minLength: 1
-        mainItemType:
-          type: string
-          enum:
-            - CLOTH
-            - FOOD
-            - GENERAL_MERCHANDISE
-            - FURNITURE
-            - COSMETIC
-            - ACCESSORY
-          description: 주요 취급 품목
+        mainItemTypes:
+          type: array
+          description: |-
+            창고가 가장 자신있게 보관할 수 있는 물품의 종류들
+          items:
+            type: string
+            enum:
+              - CLOTH
+              - COSMETIC
+              - ACCESSORY
+              - GENERAL_MERCHANDISE
+              - FOOD
+              - BOOK
+              - INTERIOR
+              - ELECTRONICS
+              - SPORTS
+              - COLD_STORAGE
+              - FREEZE_STORAGE
+              - LARGE_SIZE
       required:
         - address
         - warehouseId
@@ -1189,7 +1211,7 @@ components:
         - openAt
         - space
         - deliveryTypes
-        - mainItemType
+        - mainItemTypes
     ErrorDto:
       description: ''
       type: object
@@ -1292,17 +1314,25 @@ components:
         canPark:
           description: 주차 가능 여부
           type: boolean
-        mainItemType:
-          type: string
-          minLength: 1
-          enum:
-            - CLOTH
-            - FOOD
-            - GENERAL_MERCHANDISE
-            - FURNITURE
-            - COSMETIC
-            - ACCESSORY
-          description: 주요 취급 품목
+        mainItemTypes:
+          type: array
+          description: |-
+            창고가 가장 자신있게 보관할 수 있는 물품의 종류들
+          items:
+            type: string
+            enum:
+              - CLOTH
+              - COSMETIC
+              - ACCESSORY
+              - GENERAL_MERCHANDISE
+              - FOOD
+              - BOOK
+              - INTERIOR
+              - ELECTRONICS
+              - SPORTS
+              - COLD_STORAGE
+              - FREEZE_STORAGE
+              - LARGE_SIZE
         warehouseType:
           type: string
           minLength: 1
@@ -1377,7 +1407,7 @@ components:
         - airConditioningType
         - workerExist
         - canPark
-        - mainItemType
+        - mainItemTypes
         - warehouseType
         - minReleasePerMonth
         - latitude
@@ -1432,7 +1462,7 @@ components:
                     space: 30
                     deliveryTypes:
                       - 한진 택배
-                    mainItemType: CLOTH
+                    mainItemTypes: ['CLOTH', 'BOOK']
                     isVerified: true
   securitySchemes:
     Authorization:
