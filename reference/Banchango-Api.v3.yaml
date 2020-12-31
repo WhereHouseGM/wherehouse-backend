@@ -92,7 +92,7 @@ paths:
           name: address
           description: 검색할 주소. 주소로 창고를 검색할 때 사용합니다
         - schema:
-            type: array
+            type: string
             enum:
               - CLOTH
               - FOOD
@@ -101,8 +101,8 @@ paths:
               - COSMETIC
               - ACCESSORY
           in: query
-          name: mainItemTypes
-          description: 창고 주요 품목둘. 특정 품목들을 취금하는 창고들을  찾을 때 사용합니다
+          name: category
+          description: 창고 주요 품목. 특정 품목들을 취금하는 창고들을  찾을 때 사용합니다
         - schema:
             type: integer
           in: query
@@ -954,11 +954,7 @@ components:
             longitude: 88.888
             warehouseType: THREEPL
             minReleasePerMonth: 1000
-            mainItemTypes:
-              - name: CLOTH
-                match: true
-              - name: BOOK
-                match: false
+            mainItemTypes: ['CLOTH', 'BOOK']
             deliveryTypes:
               - 한진 택배
               - 테스트 택배
@@ -1013,10 +1009,11 @@ components:
             (존재 : 1, 없음 : 0)
           type: integer
         securityCompanyName:
-          description: 보안업체명(없다면 null)
           type:
             - string
             - 'null'
+          minLength: 1
+          description: 보안업체명(없다면 null)
         doorLockExist:
           description: |-
             도어락 존재 유무
@@ -1040,9 +1037,23 @@ components:
           type: integer
         mainItemTypes:
           type: array
-          description: 창고가 가장 자신있게 보관할 수 있는 물품의 종류들
+          description: |-
+            창고가 가장 자신있게 보관할 수 있는 물품의 종류들
           items:
-            $ref: '#/components/schemas/WarehouseMainItemTypeMatchDto'
+            type: string
+            enum:
+              - CLOTH
+              - COSMETIC
+              - ACCESSORY
+              - GENERAL_MERCHANDISE
+              - FOOD
+              - BOOK
+              - INTERIOR
+              - ELECTRONICS
+              - SPORTS
+              - COLD_STORAGE
+              - FREEZE_STORAGE
+              - LARGE_SIZE
         warehouseType:
           type: string
           minLength: 1
@@ -1171,7 +1182,8 @@ components:
             minLength: 1
         mainItemTypes:
           type: array
-          description: 창고가 가장 자신있게 보관할 수 있는 물품의 종류들
+          description: |-
+            창고가 가장 자신있게 보관할 수 있는 물품의 종류들
           items:
             type: string
             enum:
@@ -1304,7 +1316,8 @@ components:
           type: boolean
         mainItemTypes:
           type: array
-          description: 창고가 가장 자신있게 보관할 수 있는 물품의 종류들
+          description: |-
+            창고가 가장 자신있게 보관할 수 있는 물품의 종류들
           items:
             type: string
             enum:
@@ -1418,19 +1431,6 @@ components:
       required:
         - warehouseId
         - viewable
-    WarehouseMainItemTypeMatchDto:
-      title: WarehouseMainItemTypeMatchDto
-      type: object
-      properties:
-        name:
-          type: string
-          description: 주요 취급 품목 이름
-        match:
-          type: boolean
-          description: 검색한 주요 취급 품목인지 여부
-      required:
-        - name
-        - match
   responses:
     WarehouseSearchResponseDto:
       description: Example response
@@ -1462,9 +1462,7 @@ components:
                     space: 30
                     deliveryTypes:
                       - 한진 택배
-                    mainItemTypes:
-                      - CLOTH
-                      - BOOK
+                    mainItemTypes: ['CLOTH', 'BOOK']
                     isVerified: true
   securitySchemes:
     Authorization:
