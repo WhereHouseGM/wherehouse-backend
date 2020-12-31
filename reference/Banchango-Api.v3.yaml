@@ -1466,23 +1466,22 @@ components:
             example-1:
               value:
                 warehouses:
-                  - address: address
+                  - address: 경기도 화성
                     warehouseId: 1
                     warehouseCondition:
                       - ROOM_TEMPERATURE
-                    minReleasePerMonth: 100
-                    name: 창고
+                    minReleasePerMonth: 110
+                    name: 반창고
                     warehouseType: THREEPL
                     closeAt: '18:00'
                     mainImageUrl: 'http://example.com'
-                    openAt: '06:00'
-                    space: 30
+                    openAt: '09:00'
+                    space: 0
                     deliveryTypes:
-                      - 한진 택배
+                      - 한진택배
                     mainItemTypes:
-                      - CLOTH
-                      - BOOK
-                    isVerified: true
+                      - name: COSMETIC
+                        match: true
   securitySchemes:
     Authorization:
       type: http
