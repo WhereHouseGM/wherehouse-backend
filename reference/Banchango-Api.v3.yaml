@@ -820,21 +820,51 @@ paths:
       tags: []
       responses:
         '200':
-          $ref: '#/components/responses/WarehouseSearchResponseDto'
-        '400':
-          description: Bad Request
+          description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDto'
+                type: array
+                description: ''
+                minItems: 1
+                uniqueItems: true
+                items:
+                  type: object
+                  properties:
+                    warehouseId:
+                      type: number
+                      description: 해당 창고의 id 값입니다.
+                    name:
+                      type: string
+                      minLength: 1
+                      description: 창고 이름입니다.
+                    createdAt:
+                      type: string
+                      minLength: 1
+                      description: 창고 요청이 등록된 날짜입니다.
+                  required:
+                    - warehouseId
+                    - name
+                    - createdAt
+              examples:
+                200_Example:
+                  value:
+                    - warehouseId: 9
+                      name: 에스에스팩
+                      createdAt: 2021년 1월 4일 19시 2분 0초
+                    - warehouseId: 10
+                      name: 가야물류
+                      createdAt: 2021년 1월 4일 19시 3분 0초
+        '204':
+          description: 'Not Found : 대기중인 창고 등록 요청이 없는 경우'
         '401':
-          description: Unauthorized
+          description: 'Unauthorized : 토큰 값이 잘못된 경우 입니다.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorDto'
         '403':
-          description: Forbidden
+          description: 'Forbidden : 토큰 값이 잘못된 경우 입니다. (관리자가 아닌 계정으로 로그인했을 경우 등)'
           content:
             application/json:
               schema:
@@ -842,28 +872,26 @@ paths:
               examples: {}
       operationId: get-v3-admin-warehouses
       description: |
-        관리자 페이지에서 호출하는 창고 조회 API입니다
-        창고는 조회할 수 있는 창고와 조회할 수 없는 창고가 있습니다
-
-        1. `/v3/admin/warehouses?isviewable=false`
-
-        조회 가능하지 않은 창고를 조회하는 API입니다
-
-        2. `/v3/admin/warehouses?isviewable=true`
-
-        조회 가능한 창고를 조회하는 API입니다
-
-        3. `/v3/admin/warehouses`
-
-        모든 창고를 조회하는 API입니다
-      security:
-        - Authorization: []
+        창고 등록 요청이 온 창고들을 조회합니다.
       parameters:
         - schema:
-            type: boolean
+            type: string
+          in: header
+          name: Authorization
+          description: 관리자로 로그인한 계정의 JWT Token 값 입니다.
+          required: true
+        - schema:
+            type: integer
           in: query
-          name: isviewable
-          description: 창고 조회 가능 여부입니다. 만약 쿼리 파라미터로 전달하지 않으면 모든 창고를 조회할 수 있습니다
+          name: page
+          description: 조회할 페이지 입니다.(0-base)
+          required: true
+        - schema:
+            type: integer
+          in: query
+          name: size
+          description: 한 페이지 당 불러올 항목의 개수입니다.
+          required: true
   /v3/admin/warehouses/change-viewable:
     post:
       summary: 창고 조회 가능여부 수정
