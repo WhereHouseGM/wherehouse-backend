@@ -940,9 +940,55 @@ paths:
               $ref: '#/components/schemas/WarehouseChangeViewableRequestDto'
           application/xml:
             schema:
-              $ref: '#/components/schemas/ChangeWarehouseViewableRequestDto'
+              $ref: '#/components/schemas/WarehouseChangeViewableRequestDto'
         description: ''
     parameters: []
+  /v3/estimates:
+    post:
+      summary: 견적 문의 생성 API
+      operationId: post-v3-estimates
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                201 example:
+                  value:
+                    message: 견적 문의가 성공적으로 생성되었습니다
+        '400':
+          description: 잘못된 요청을 보낸 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '401':
+          description: access token에 문제가 있는 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '403':
+          description: |-
+            창고가 VIEWABLE이 아닌 경우
+            (DELETED 또는 IN_PROGRESS일 경우)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+      description: ''
+      security:
+        - Authorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WarehouseEstimateRequestDto'
 components:
   schemas:
     NewWarehouseRequestDto:
@@ -982,7 +1028,9 @@ components:
             longitude: 88.888
             warehouseType: THREEPL
             minReleasePerMonth: 1000
-            mainItemType: CLOTH
+            mainItemTypes:
+              - CLOTH
+              - BOOK
             deliveryTypes:
               - 한진 택배
               - 테스트 택배
@@ -1063,12 +1111,24 @@ components:
             주차 가능 여부
             (가능 : 1, 불가 : 0)
           type: integer
-        mainItemType:
-          type: string
-          minLength: 1
-          description: |-
-            창고가 가장 자신있게 보관할 수 있는 물품의 종류
-            ('CLOTH','TEMPERATURE_SENSITIVE','GENERAL_MERCHANDISE','ELECTRONIC','FURNITURE','BOOK','ACCESSORY','COSMETIC','ETC') 중 하나의 값.
+        mainItemTypes:
+          type: array
+          description: 창고가 가장 자신있게 보관할 수 있는 물품의 종류들
+          items:
+            type: string
+            enum:
+              - CLOTH
+              - COSMETIC
+              - ACCESSORY
+              - GENERAL_MERCHANDISE
+              - FOOD
+              - BOOK
+              - INTERIOR
+              - ELECTRONICS
+              - SPORTS
+              - COLD_STORAGE
+              - FREEZE_STORAGE
+              - LARGE_SIZE
         warehouseType:
           type: string
           minLength: 1
@@ -1125,7 +1185,7 @@ components:
         - airConditioningType
         - workerExist
         - canPark
-        - mainItemType
+        - mainItemTypes
         - warehouseType
         - minReleasePerMonth
         - latitude
@@ -1195,16 +1255,11 @@ components:
           items:
             type: string
             minLength: 1
-        mainItemType:
-          type: string
-          enum:
-            - CLOTH
-            - FOOD
-            - GENERAL_MERCHANDISE
-            - FURNITURE
-            - COSMETIC
-            - ACCESSORY
-          description: 주요 취급 품목
+        mainItemTypes:
+          type: array
+          description: 창고가 가장 자신있게 보관할 수 있는 물품의 종류들
+          items:
+            $ref: '#/components/schemas/WarehouseMainItemTypeMatchDto'
       required:
         - address
         - warehouseId
@@ -1217,7 +1272,25 @@ components:
         - openAt
         - space
         - deliveryTypes
-        - mainItemType
+        - mainItemTypes
+      x-examples:
+        example-1:
+          address: 경기도 화성
+          warehouseId: 1
+          warehouseCondition:
+            - ROOM_TEMPERATURE
+          minReleasePerMonth: 110
+          name: 반창고
+          warehouseType: THREEPL
+          closeAt: '18:00'
+          mainImageUrl: 'http://example.com'
+          openAt: '09:00'
+          space: 100
+          deliveryTypes:
+            - 한진택배
+          mainItemTypes:
+            - name: COSMETIC
+              match: true
     ErrorDto:
       description: ''
       type: object
@@ -1320,17 +1393,24 @@ components:
         canPark:
           description: 주차 가능 여부
           type: boolean
-        mainItemType:
-          type: string
-          minLength: 1
-          enum:
-            - CLOTH
-            - FOOD
-            - GENERAL_MERCHANDISE
-            - FURNITURE
-            - COSMETIC
-            - ACCESSORY
-          description: 주요 취급 품목
+        mainItemTypes:
+          type: array
+          description: 창고가 가장 자신있게 보관할 수 있는 물품의 종류들
+          items:
+            type: string
+            enum:
+              - CLOTH
+              - COSMETIC
+              - ACCESSORY
+              - GENERAL_MERCHANDISE
+              - FOOD
+              - BOOK
+              - INTERIOR
+              - ELECTRONICS
+              - SPORTS
+              - COLD_STORAGE
+              - FREEZE_STORAGE
+              - LARGE_SIZE
         warehouseType:
           type: string
           minLength: 1
@@ -1405,7 +1485,7 @@ components:
         - airConditioningType
         - workerExist
         - canPark
-        - mainItemType
+        - mainItemTypes
         - warehouseType
         - minReleasePerMonth
         - latitude
@@ -1429,6 +1509,84 @@ components:
       required:
         - warehouseId
         - viewable
+    WarehouseMainItemTypeMatchDto:
+      title: WarehouseMainItemTypeMatchDto
+      type: object
+      properties:
+        name:
+          type: string
+          description: 주요 취급 품목 이름
+        match:
+          description: 검색한 주요 취급 품묵인지 여부
+          type: boolean
+      required:
+        - name
+        - match
+    WarehouseEstimateRequestDto:
+      title: WarehouseEstimateRequestDto
+      type: object
+      properties:
+        warehouseId:
+          type: integer
+          description: 견적 요청한 창고 id
+        estimateItems:
+          type: array
+          description: 상품 정보 목록
+          items:
+            $ref: '#/components/schemas/WarehouseEstimateItemRequestDto'
+        content:
+          type: string
+          description: 견적 요청 및 문의사항
+      required:
+        - warehouseId
+        - estimateItems
+        - content
+    WarehouseEstimateItemRequestDto:
+      title: WarehouseEstimateItemDto
+      type: object
+      description: ''
+      properties:
+        name:
+          type: string
+          description: 상품 종류
+        keepingNumber:
+          type: integer
+          description: 보관 수량
+        perimeter:
+          type: number
+          description: 상품 크기
+        keepingType:
+          type: string
+          enum:
+            - WARM
+            - COLD
+            - FREEZE
+          description: 보관종류
+        weight:
+          type: number
+          description: 상품 무게
+        barcode:
+          type: string
+          enum:
+            - ALL
+            - NONE
+            - PARTIAL
+          description: 바코드 유무
+        sku:
+          type: integer
+          description: sku
+        url:
+          type: string
+          description: 상품 url
+      required:
+        - name
+        - keepingNumber
+        - perimeter
+        - keepingType
+        - weight
+        - barcode
+        - sku
+        - url
   responses:
     WarehouseSearchResponseDto:
       description: Example response
@@ -1447,21 +1605,22 @@ components:
             example-1:
               value:
                 warehouses:
-                  - address: address
+                  - address: 경기도 화성
                     warehouseId: 1
                     warehouseCondition:
                       - ROOM_TEMPERATURE
-                    minReleasePerMonth: 100
-                    name: 창고
+                    minReleasePerMonth: 110
+                    name: 반창고
                     warehouseType: THREEPL
                     closeAt: '18:00'
                     mainImageUrl: 'http://example.com'
-                    openAt: '06:00'
-                    space: 30
+                    openAt: '09:00'
+                    space: 0
                     deliveryTypes:
-                      - 한진 택배
-                    mainItemType: CLOTH
-                    isVerified: true
+                      - 한진택배
+                    mainItemTypes:
+                      - name: COSMETIC
+                        match: true
   securitySchemes:
     Authorization:
       type: http
