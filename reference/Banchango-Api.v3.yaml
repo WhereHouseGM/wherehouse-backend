@@ -915,6 +915,44 @@ paths:
               $ref: '#/components/schemas/WarehouseChangeViewableRequestDto'
         description: ''
     parameters: []
+  /v3/estimates:
+    post:
+      summary: 견적 문의 생성 API
+      operationId: post-v3-estimates
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                201 example:
+                  value:
+                    message: 견적 문의가 성공적으로 생성되었습니다
+        '400':
+          description: 잘못된 요청을 보낸 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '401':
+          description: access token에 문제가 있는 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+      description: ''
+      security:
+        - Authorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WarehouseEstimateRequestDto'
 components:
   schemas:
     NewWarehouseRequestDto:
@@ -1448,6 +1486,62 @@ components:
       required:
         - name
         - match
+    WarehouseEstimateRequestDto:
+      title: WarehouseEstimateRequestDto
+      type: object
+      properties:
+        warehouseId:
+          type: integer
+        estimateItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/WarehouseEstimateItemRequestDto'
+    WarehouseEstimateItemRequestDto:
+      title: WarehouseEstimateItemDto
+      type: object
+      description: ''
+      properties:
+        name:
+          type: string
+          description: 상품 종류
+        keepingNumber:
+          type: integer
+          description: 보관 수량
+        perimeter:
+          type: number
+          description: 상품 크기
+        keepingType:
+          type: string
+          enum:
+            - WARM
+            - COLD
+            - FREEZE
+          description: 보관종류
+        weight:
+          type: number
+          description: 상품 무게
+        barcode:
+          type: string
+          enum:
+            - ALL
+            - NONE
+            - PARTIAL
+          description: 바코드 유무
+        sku:
+          type: integer
+          description: sku
+        url:
+          type: string
+          description: 상품 url
+      required:
+        - name
+        - keepingNumber
+        - perimeter
+        - keepingType
+        - weight
+        - barcode
+        - sku
+        - url
   responses:
     WarehouseSearchResponseDto:
       description: Example response
