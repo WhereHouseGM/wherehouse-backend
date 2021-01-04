@@ -1492,10 +1492,19 @@ components:
       properties:
         warehouseId:
           type: integer
+          description: 견적 요청한 창고 id
         estimateItems:
           type: array
+          description: 상품 정보 목록
           items:
             $ref: '#/components/schemas/WarehouseEstimateItemRequestDto'
+        content:
+          type: string
+          description: 견적 요청 및 문의사항
+      required:
+        - warehouseId
+        - estimateItems
+        - content
     WarehouseEstimateItemRequestDto:
       title: WarehouseEstimateItemDto
       type: object
