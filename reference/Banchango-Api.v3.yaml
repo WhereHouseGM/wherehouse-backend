@@ -994,11 +994,7 @@ paths:
       operationId: get-v3-estimates
       responses:
         '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EstimateSearchDto'
+          $ref: '#/components/responses/EstimateSearchResponseDto'
         '204':
           description: 견적 문의 내역이 없는 경우
         '400':
@@ -1748,6 +1744,17 @@ components:
                     mainItemTypes:
                       - name: COSMETIC
                         match: true
+    EstimateSearchResponseDto:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              estimates:
+                $ref: '#/components/schemas/EstimateSearchDto'
+            required:
+              - estimates
   securitySchemes:
     Authorization:
       type: http
