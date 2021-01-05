@@ -990,7 +990,7 @@ paths:
             schema:
               $ref: '#/components/schemas/WarehouseEstimateRequestDto'
   /v3/users/change-password:
-    post:
+    patch:
       summary: 비밀번호 변경하기
       operationId: post-v3-users-change-password
       responses:
@@ -1007,6 +1007,8 @@ paths:
                 example-1:
                   value:
                     message: 비밀번호를 성공적으로 변경했습니다
+        '204':
+          description: access token에 있는 사용자 id가 존재하지 않을 때
         '400':
           description: Bad Request
           content:
