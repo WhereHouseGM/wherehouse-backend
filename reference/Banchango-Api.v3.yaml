@@ -1699,7 +1699,7 @@ components:
       type: object
       properties:
         id:
-          description: 창고 id
+          description: 견적 문의 id
           type: integer
         warehouse:
           $ref: '#/components/schemas/WarehouseNameAndAddress'
