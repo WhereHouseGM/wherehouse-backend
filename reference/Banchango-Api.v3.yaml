@@ -948,8 +948,8 @@ paths:
       summary: 견적 문의 생성 API
       operationId: post-v3-estimates
       responses:
-        '201':
-          description: Created
+        '200':
+          description: OK
           content:
             application/json:
               schema:
