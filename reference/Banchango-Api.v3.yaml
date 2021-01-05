@@ -989,6 +989,46 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/WarehouseEstimateRequestDto'
+    get:
+      summary: 사용자가 작성한 견적 문의 목록
+      operationId: get-v3-estimates
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EstimateSearchDto'
+        '204':
+          description: 견적 문의 내역이 없는 경우
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '401':
+          description: access token에 문제가 있는 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '403':
+          description: access token에 있는 userId와 쿼리 파라미터로 주어진 userId가 일치하지 않을 때
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+      parameters:
+        - schema:
+            type: integer
+          in: query
+          name: userId
+          description: 사용자 id
+          required: true
+      description: ''
+      security:
+        - Authorization: []
   /v3/users/change-password:
     patch:
       summary: 비밀번호 변경하기
@@ -1637,6 +1677,43 @@ components:
           description: 새로운 비밀번호
       required:
         - password
+    WarehouseNestedInEstimateDto:
+      title: WarehouseNestedInEstimateDto
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 창고 id
+        name:
+          type: string
+          description: 창고 이름
+        address:
+          type: string
+          description: 창고 주소
+      required:
+        - id
+        - name
+        - address
+    EstimateSearchDto:
+      title: EstimateSearchDto
+      type: object
+      properties:
+        id:
+          description: 창고 id
+          type: integer
+        warehouse:
+          $ref: '#/components/schemas/WarehouseNameAndAddress'
+        status:
+          type: string
+          enum:
+            - IN_PROGRESS
+            - RECEPTED
+            - DONE
+          description: 견적 문의 처리 진행 상황
+      required:
+        - id
+        - warehouse
+        - status
   responses:
     WarehouseSearchResponseDto:
       description: Example response
