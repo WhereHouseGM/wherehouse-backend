@@ -1677,8 +1677,8 @@ components:
           description: 새로운 비밀번호
       required:
         - password
-    WarehouseNestedInEstimateDto:
-      title: WarehouseNestedInEstimateDto
+    WarehouseSummaryDto:
+      title: WarehouseSummaryDto
       type: object
       properties:
         id:
@@ -1702,7 +1702,7 @@ components:
           description: 견적 문의 id
           type: integer
         warehouse:
-          $ref: '#/components/schemas/WarehouseNameAndAddress'
+          $ref: '#/components/schemas/WarehouseSummaryDto'
         status:
           type: string
           enum:
