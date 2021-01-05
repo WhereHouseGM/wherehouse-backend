@@ -989,6 +989,45 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/WarehouseEstimateRequestDto'
+  /v3/users/change-password:
+    post:
+      summary: 비밀번호 변경하기
+      operationId: post-v3-users-change-password
+      responses:
+        '200':
+          description: 비밀번호 변경 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                example-1:
+                  value:
+                    message: 비밀번호를 성공적으로 변경했습니다
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '401':
+          description: access token에 문제가 있을 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+      description: ''
+      security:
+        - Authorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WarehouseChangeViewableRequestDto'
+        description: ''
 components:
   schemas:
     NewWarehouseRequestDto:
@@ -1587,6 +1626,15 @@ components:
         - barcode
         - sku
         - url
+    ChangePasswordRequestDto:
+      title: ChangePasswordRequestDto
+      type: object
+      properties:
+        password:
+          type: string
+          description: 새로운 비밀번호
+      required:
+        - password
   responses:
     WarehouseSearchResponseDto:
       description: Example response
