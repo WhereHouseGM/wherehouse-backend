@@ -131,6 +131,7 @@ paths:
           description: Bearer Token 값. JWT Token 사용
           required: true
       description: 사용자 정보를 가져옵니다.
+      deprecated: true
     patch:
       summary: 사용자 정보 수정
       operationId: patch-v2-users-userId
@@ -325,6 +326,7 @@ paths:
           name: Authorization
           description: Bearer Token값. JWT Token 사용
           required: true
+      deprecated: true
   /v2/users/sign-in:
     post:
       summary: 사용자 로그인
@@ -457,6 +459,7 @@ paths:
                   email: test@naver.com
                   password: '1234'
         description: 사용자 로그인에 필요한 값
+      deprecated: true
   /v2/users/sign-up:
     post:
       summary: 사용자 회원 가입
@@ -598,6 +601,7 @@ paths:
                   companyName: testCompanyName
                   phoneNumber: '01012341234'
         description: 사용자 회원가입을 위한 정보
+      deprecated: true
   /v2/auth/refresh-token:
     post:
       summary: 액세스 토큰을 재발급 받습니다.
@@ -650,6 +654,7 @@ paths:
           description: Bearer Token값. JWT Token 사용
           required: true
       description: 유효기간이 지난 액세스 토큰을 재발급 받습니다.
+      deprecated: true
   /v2/warehouses:
     get:
       summary: 창고 검색 결과 조회
@@ -771,6 +776,7 @@ paths:
           name: offset
           description: 창고들의 offset값
           required: true
+      deprecated: true
   '/v2/warehouses/{warehouseId}':
     parameters:
       - schema:
@@ -1060,6 +1066,7 @@ paths:
           name: Authorization
           description: Bearer Token 값입니다. JWT Token을 사용합니다.
           required: true
+      deprecated: true
     delete:
       summary: 창고를 삭제합니다.
       operationId: delete-v2-warehouses-warehouseId
@@ -1158,6 +1165,7 @@ paths:
           name: Authorization
           description: Bearer Token 값입니다. JWT Token을 사용합니다.
           required: true
+      deprecated: true
   '/v2/warehouses/{warehouseId}/reviews':
     parameters:
       - schema:
@@ -1320,6 +1328,7 @@ paths:
           name: offset
           required: true
           description: offset 값입니다.
+      deprecated: true
     post:
       summary: 창고 리뷰를 등록합니다.
       operationId: post-v2-warehouses-warehouseId-reviews
@@ -1483,6 +1492,7 @@ paths:
                 value:
                   rating: 4
                   content: 리뷰 내용!
+      deprecated: true
   '/v2/warehouses/{warehouseId}/reviews/{reviewId}':
     parameters:
       - schema:
@@ -1578,6 +1588,7 @@ paths:
           in: header
           name: Authorization
           description: Bearer Token 값입니다. JWT Token을 사용합니다.
+      deprecated: true
   /v2/warehouses/agency:
     post:
       summary: 새로운 Agency 창고 등록
@@ -1904,6 +1915,7 @@ paths:
                       - 한진 택배
                       - 테스트 택배
         description: 새로운 Agency 창고 등록을 위한 모든 정보를 기입합니다.
+      deprecated: true
     parameters: []
     get:
       summary: 메인 화면을 위한 창고 리스트 정보
@@ -2031,6 +2043,7 @@ paths:
           name: size
           description: 한 page 당 가져올 항목의 개수
           required: true
+      deprecated: true
   /v2/warehouses/general:
     post:
       summary: 새로운 General 창고 등록
@@ -2544,6 +2557,7 @@ paths:
           description: 'No Content : 해당 mainItemType으로 조회된 창고가 없는 경우'
       operationId: get-v2-warehouses-agency-mainItemType
       description: 창고 타입에 알맞은 창고의 목록을 조회합니다.
+      deprecated: true
   '/v2/images/upload/{warehouseId}':
     parameters:
       - schema:
@@ -2659,6 +2673,7 @@ paths:
               type: object
               properties: {}
         description: '사진 파일을 Body로 보냅니다. Key는 무조건 file, Value는 파일 자체를 보내면 됩니다.'
+      deprecated: true
   '/v2/images/upload/main/{warehouseId}':
     parameters:
       - schema:
@@ -2775,6 +2790,7 @@ paths:
         description: |-
           창고의 메인 이미지 파일을 보냅니다.
           Key는 무조건 file, Value는 파일을 전송하면 됩니다.
+      deprecated: true
   /v2/images/delete:
     delete:
       summary: 창고 추가 이미지 삭제
@@ -2878,6 +2894,7 @@ paths:
             schema:
               type: object
               properties: {}
+      deprecated: true
   '/v2/images/delete/main/{warehouseId}':
     parameters:
       - schema:
@@ -2965,6 +2982,7 @@ paths:
                 type: object
                 properties: {}
       description: 창고의 메인 이미지를 삭제합니다.
+      deprecated: true
   /v2/users/password-lost:
     post:
       summary: 임시 비밀번호 이메일 발송
@@ -3029,6 +3047,7 @@ paths:
               required:
                 - email
         description: 임시 비밀번호 이메일을 수신할 수신자 이메일 주소
+      deprecated: true
 components:
   schemas: {}
   securitySchemes:
