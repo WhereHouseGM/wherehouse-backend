@@ -101,7 +101,7 @@ paths:
               - COSMETIC
               - ACCESSORY
           in: query
-          name: category
+          name: mainItemTypes
           description: 창고 주요 품목. 특정 품목들을 취금하는 창고들을  찾을 때 사용합니다
         - schema:
             type: integer
