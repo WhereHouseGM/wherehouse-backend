@@ -59,7 +59,18 @@ paths:
       operationId: get-v3-warehouses
       responses:
         '200':
-          $ref: '#/components/responses/WarehouseSearchResponseDto'
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  warehouses:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/WarehouseSearchDto'
+                required:
+                  - warehouses
         '201':
           description: Created
         '204':
@@ -989,13 +1000,24 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/WarehouseEstimateRequestDto'
-  '/v3/estimates/users/{userId}':
+  '/v3/users/{userId}/estimates':
     get:
       summary: 사용자가 작성한 견적 문의 목록
       operationId: get-v3-estimates
       responses:
         '200':
-          $ref: '#/components/responses/EstimateSearchResponseDto'
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estimates:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EstimateSearchDto'
+                required:
+                  - estimates
         '204':
           description: 견적 문의 내역이 없는 경우
         '400':
@@ -1074,7 +1096,18 @@ paths:
       tags: []
       responses:
         '200':
-          $ref: '#/components/responses/EstimateItemSearchResponseDto'
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estimateItems:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EstimateItemSearchDto'
+                required:
+                  - estimateItems
         '204':
           description: No Content
         '400':
