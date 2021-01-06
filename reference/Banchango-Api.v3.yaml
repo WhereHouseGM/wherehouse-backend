@@ -71,8 +71,6 @@ paths:
                       $ref: '#/components/schemas/WarehouseSearchDto'
                 required:
                   - warehouses
-        '201':
-          description: Created
         '204':
           description: 조회한 창고들이 아예 없을 경우
           content:
