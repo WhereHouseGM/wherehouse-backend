@@ -1747,10 +1747,14 @@ components:
             - RECEPTED
             - DONE
           description: 견적 문의 처리 진행 상황
+        monthlyAverageRelease:
+          type: integer
+          description: 월 평균 출고량
       required:
         - id
         - warehouse
         - status
+        - monthlyAverageRelease
     EstimateItemSearchDto:
       title: EstimateItemSearchDto
       type: object
@@ -1765,20 +1769,31 @@ components:
           type: integer
           description: 보관 수량
         weight:
-          type: string
           description: 상품 무게
+          type: number
         barcode:
           type: string
           description: 바코드 종류
+          enum:
+            - ALL
+            - NONE
+            - PARTIAL
         sku:
-          type: string
           description: sku
+          type: integer
         url:
           type: string
           description: 상품 url
-        monthlyAverageRelease:
+        perimeter:
+          type: number
+          description: 상품 크기
+        keepingType:
           type: string
-          description: 월 평균 출고량
+          description: 보관 형태
+          enum:
+            - WARM
+            - COLD
+            - FREEZE
       required:
         - id
         - name
@@ -1787,7 +1802,8 @@ components:
         - barcode
         - sku
         - url
-        - monthlyAverageRelease
+        - perimeter
+        - keepingType
   responses:
     WarehouseSearchResponseDto:
       description: Example response
