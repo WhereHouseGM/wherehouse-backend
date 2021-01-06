@@ -420,36 +420,7 @@ paths:
           content:
             application/json:
               schema:
-                description: ''
-                type: object
-                properties:
-                  userId:
-                    type: number
-                    description: DB 상에 저장된 회원의 고유 ID값
-                  name:
-                    type: string
-                    minLength: 1
-                  email:
-                    type: string
-                    minLength: 1
-                  type:
-                    type: string
-                    minLength: 1
-                    description: SHIPPER 또는 OWNER 중 하나의 값
-                  phoneNumber:
-                    type: string
-                    minLength: 1
-                  role:
-                    type: string
-                    minLength: 1
-                    description: 'USER, ADMIN 중 하나의 값'
-                required:
-                  - userId
-                  - name
-                  - email
-                  - type
-                  - phoneNumber
-                  - role
+                $ref: '#/components/schemas/UserInfoResponseDto'
               examples:
                 200_Example:
                   value:
@@ -457,6 +428,7 @@ paths:
                     name: TEST NAME
                     email: robbyra@gmail.com
                     type: SHIPPER
+                    telephoneNumber: '0229093199'
                     phoneNumber: '01029093199'
                     role: USER
         '401':
@@ -512,33 +484,7 @@ paths:
           content:
             application/json:
               schema:
-                description: ''
-                type: object
-                properties:
-                  userId:
-                    type: number
-                  name:
-                    type: string
-                    minLength: 1
-                  email:
-                    type: string
-                    minLength: 1
-                  type:
-                    type: string
-                    minLength: 1
-                  phoneNumber:
-                    type: string
-                    minLength: 1
-                  role:
-                    type: string
-                    minLength: 1
-                required:
-                  - userId
-                  - name
-                  - email
-                  - type
-                  - phoneNumber
-                  - role
+                $ref: '#/components/schemas/UserInfoResponseDto'
               examples:
                 200_Example:
                   value:
@@ -1138,6 +1084,57 @@ paths:
         in: path
         required: true
         description: 견적 문의 id
+  /v3/admin/estimates:
+    get:
+      summary: '[관리자] 견적 문의 요청한 것 보기'
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estimates:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EstimateSearchDto'
+                required:
+                  - estimates
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '401':
+          description: access token에 문제가 있는 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+      operationId: get-v3-admin-estimates
+      description: |
+        `/v3/admin/estimates`: 모든 견적 문의 보기
+
+        `/v3/admin/estimates?status=RECEPTED`
+        `/v3/admin/estimates?status=IN_PROGRESS`
+        `/v3/admin/estimates?status=DONE`
+      parameters:
+        - schema:
+            type: string
+            enum:
+              - RECEPTED
+              - IN_PROGRESS
+              - DONE
+          in: query
+          name: status
+          description: 견적 상태
+      security:
+        - Authorization: []
 components:
   schemas:
     NewWarehouseRequestDto:
@@ -1848,6 +1845,87 @@ components:
         - url
         - perimeter
         - keepingType
+    UserInfoResponseDto:
+      title: UserInfoResponseDto
+      type: object
+      properties:
+        userId:
+          type: integer
+          description: 사용자 id
+        name:
+          type: string
+          description: 사용자 이름
+        email:
+          type: string
+          description: 사용자 이메일
+          format: email
+        type:
+          type: string
+          description: 사용자 종류
+          enum:
+            - SHIPPER
+            - OWNER
+        companyName:
+          type: string
+          description: 회사명
+        phoneNumber:
+          type: string
+          description: 전화번호
+        telephoneNumber:
+          type: string
+          description: 사무실 번호
+        role:
+          type: string
+          description: 사용자 권한
+          enum:
+            - USER
+            - ADMIN
+      required:
+        - userId
+        - name
+        - email
+        - type
+        - companyName
+        - phoneNumber
+        - telephoneNumber
+        - role
+    UserSignupRequestDto:
+      title: UserSignupRequestDto
+      type: object
+      properties:
+        name:
+          type: string
+          description: 사용자 이름
+        email:
+          type: string
+          description: 사용자 이메일
+          format: email
+        password:
+          type: string
+          description: 사용자 비밀번호
+        type:
+          type: string
+          description: 사용자 종류
+          enum:
+            - SHIPPER
+            - OWNER
+        companyName:
+          type: string
+          description: 회사명
+        telephoneNumber:
+          type: string
+          description: 사무실 번호
+        phoneNumber:
+          type: string
+          description: 전화번호
+      required:
+        - name
+        - email
+        - password
+        - type
+        - companyName
+        - telephoneNumber
+        - phoneNumber
   responses:
     WarehouseSearchResponseDto:
       description: Example response
