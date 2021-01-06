@@ -989,6 +989,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/WarehouseEstimateRequestDto'
+  '/v3/estimates/users/{userId}':
     get:
       summary: 사용자가 작성한 견적 문의 목록
       operationId: get-v3-estimates
@@ -1015,16 +1016,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorDto'
-      parameters:
-        - schema:
-            type: integer
-          in: query
-          name: userId
-          description: 사용자 id
-          required: true
+      parameters: []
       description: ''
       security:
         - Authorization: []
+    parameters:
+      - schema:
+          type: integer
+        name: userId
+        in: path
+        required: true
+        description: 사용자 id
   /v3/users/change-password:
     patch:
       summary: 비밀번호 변경하기
@@ -1719,7 +1721,7 @@ components:
       title: WarehouseSummaryDto
       type: object
       properties:
-        id:
+        warehouseId:
           type: integer
           description: 창고 id
         name:
@@ -1729,7 +1731,7 @@ components:
           type: string
           description: 창고 주소
       required:
-        - id
+        - warehouseId
         - name
         - address
     EstimateSearchDto:
