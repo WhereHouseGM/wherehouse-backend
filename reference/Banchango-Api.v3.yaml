@@ -1667,6 +1667,19 @@ components:
         name:
           type: string
           description: 주요 취급 품목 이름
+          enum:
+            - CLOTH
+            - COSMETIC
+            - ACCESSORY
+            - GENERAL_MERCHANDISE
+            - FOOD
+            - BOOK
+            - INTERIOR
+            - ELECTRONICS
+            - SPORTS
+            - COLD_STORAGE
+            - FREEZE_STORAGE
+            - LARGE_SIZE
         match:
           description: 검색한 주요 취급 품묵인지 여부
           type: boolean
