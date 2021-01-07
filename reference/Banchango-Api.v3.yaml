@@ -388,12 +388,21 @@ paths:
                 phoneNumber:
                   type: string
                   minLength: 1
+                  description: 휴대폰 전화번호
+                telephoneNumber:
+                  type: string
+                  description: 유선 전화번호
+                companyName:
+                  type: string
+                  description: 회사명
               required:
                 - name
                 - email
                 - password
                 - type
                 - phoneNumber
+                - telephoneNumber
+                - companyName
         description: 회원 가입에 필요한 정보들 입니다.
   '/v3/users/{userId}':
     parameters:
@@ -842,6 +851,8 @@ paths:
                       type: string
                       minLength: 1
                       description: 창고 요청이 등록된 날짜입니다.
+                    '':
+                      type: string
                   required:
                     - warehouseId
                     - name
