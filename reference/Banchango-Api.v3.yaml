@@ -515,6 +515,8 @@ paths:
                     name: Sangwoo
                     email: robbyra@gmail.com
                     type: OWNER
+                    companyName: 'CompanyName'
+                    telephoneNumber: "027021033"
                     phoneNumber: '01029093199'
                     role: USER
         '400':
