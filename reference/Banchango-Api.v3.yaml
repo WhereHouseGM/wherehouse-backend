@@ -515,8 +515,8 @@ paths:
                     name: Sangwoo
                     email: robbyra@gmail.com
                     type: OWNER
-                    companyName: 'CompanyName'
-                    telephoneNumber: "027021033"
+                    companyName: CompanyName
+                    telephoneNumber: '027021033'
                     phoneNumber: '01029093199'
                     role: USER
         '400':
@@ -1139,6 +1139,54 @@ paths:
           description: 한 페이지 당 불러올 항목의 개수입니다.
       security:
         - Authorization: []
+  /v3/admin/estimates/status:
+    patch:
+      summary: 견적 문의 상태 변경
+      operationId: patch-v3-estimates-status
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: ''
+                required:
+                  - message
+              examples:
+                example-1:
+                  value:
+                    message: 견적 문의 상태가 성공적으로 변경됐습니다
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '401':
+          description: access token에 문제가 있을 경우입니다
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '403':
+          description: 관리자가 아닌 경우입니다
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+      security:
+        - Authorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EstimateStatusUpdqteRequestDto'
+      description: ''
+    parameters: []
 components:
   schemas:
     NewWarehouseRequestDto:
@@ -1934,6 +1982,19 @@ components:
         - companyName
         - telephoneNumber
         - phoneNumber
+    EstimateStatusUpdqteRequestDto:
+      title: EstimateStatusUpdqteRequestDto
+      type: object
+      properties:
+        status:
+          type: string
+          description: 견적 문의 상태
+          enum:
+            - RECEPTED
+            - IN_PROGRESS
+            - DONE
+      required:
+        - status
   responses:
     WarehouseSearchResponseDto:
       description: Example response
