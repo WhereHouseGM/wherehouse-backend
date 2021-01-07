@@ -42,7 +42,9 @@ paths:
                 required:
                   - warehouses
         '400':
-          description: "Bad Request\n잘못된 요청 보냈을 때 "
+          description: |-
+            Bad Request
+            잘못된 요청 보냈을 때 
           content:
             application/json:
               schema:
@@ -72,6 +74,7 @@ paths:
           in: query
           name: limit
           description: '불러올 창고 목록 개수입니다 '
+      deprecated: true
     post:
       summary: 새로운 창고 등록
       operationId: post-v1-warehouses
@@ -207,6 +210,7 @@ paths:
         description: ''
       tags:
         - warehouses
+      deprecated: true
     parameters: []
   '/v1/warehouses/{warehouseId}':
     get:
@@ -263,7 +267,9 @@ paths:
                   message:
                     type: string
       operationId: get-v1-warehouse
-      description: "창고 상세정보를 가져옵니다.\n창고 상세정보 페이지에서 사용할 수 있습니다. "
+      description: |-
+        창고 상세정보를 가져옵니다.
+        창고 상세정보 페이지에서 사용할 수 있습니다. 
       parameters:
         - schema:
             type: string
@@ -274,6 +280,7 @@ paths:
             Bearer 토큰 값입니다.
             jwt 토큰을 사용합니다.
           required: true
+      deprecated: true
     parameters:
       - schema:
           type: string
@@ -352,6 +359,7 @@ paths:
           required: true
       tags:
         - warehouses
+      deprecated: true
     delete:
       summary: 창고 정보 삭제
       operationId: delete-v1-warehouse-warehouseId
@@ -410,6 +418,7 @@ paths:
             jwt 토큰을 사용합니다.
       tags:
         - warehouses
+      deprecated: true
   '/v1/warehouses/{warehouseId}/reviews':
     parameters:
       - schema:
@@ -497,6 +506,7 @@ paths:
           name: limit
           description: '불러올 리뷰 목록 개수입니다 '
       description: 창고 리뷰 목록을 불러옵니다
+      deprecated: true
     post:
       summary: 창고 리뷰 작성
       operationId: post-v1-warehouse-warehouseId-reviews
@@ -566,6 +576,7 @@ paths:
         창고 리뷰를 작성할 때 사용함
       tags:
         - warehouse-reviews
+      deprecated: true
   '/v1/warehouses/{warehouseId}/reviews/{reviewId}':
     parameters:
       - schema:
@@ -638,6 +649,7 @@ paths:
             jwt 토큰을 사용합니다.
       tags:
         - warehouse-reviews
+      deprecated: true
   /v1/auth/sign-up:
     post:
       summary: 회원가입
@@ -657,7 +669,13 @@ paths:
                     type: string
                   tokenType:
                     type: string
-                    description: "토큰 종류\naccessToken과 concat해서 사용하면 됨\n\nex. `${tokenType} ${accessToken}` \n\n     -> Bearer ${accessToken}"
+                    description: |-
+                      토큰 종류
+                      accessToken과 concat해서 사용하면 됨
+
+                      ex. `${tokenType} ${accessToken}` 
+
+                           -> Bearer ${accessToken}
                     default: Bearer
                   user:
                     $ref: '#/components/schemas/SimplifiedUserInfo'
@@ -668,7 +686,9 @@ paths:
         '400':
           description: Bad Request
         '409':
-          description: "Conflict\n중복된 이메일로 회원가입을 시도했을 때입니다 "
+          description: |-
+            Conflict
+            중복된 이메일로 회원가입을 시도했을 때입니다 
           content:
             application/json:
               schema:
@@ -683,6 +703,7 @@ paths:
             schema:
               $ref: '#/components/schemas/SignUpForm'
       description: 회원가입할 때 사용함
+      deprecated: true
     parameters: []
   /v1/auth/sign-in:
     post:
@@ -702,7 +723,13 @@ paths:
                     type: string
                   tokenType:
                     type: string
-                    description: "토큰 종류\naccessToken과 concat해서 사용하면 됨\n\nex. `${tokenType} ${accessToken}` \n\n     -> Bearer ${accessToken}"
+                    description: |-
+                      토큰 종류
+                      accessToken과 concat해서 사용하면 됨
+
+                      ex. `${tokenType} ${accessToken}` 
+
+                           -> Bearer ${accessToken}
                     default: Bearer
                   user:
                     $ref: '#/components/schemas/SimplifiedUserInfo'
@@ -738,6 +765,7 @@ paths:
               $ref: '#/components/schemas/SignInForm'
       tags:
         - auth
+      deprecated: true
     parameters: []
   '/v1/users/{userId}':
     parameters:
@@ -775,7 +803,9 @@ paths:
                   message:
                     type: string
         '401':
-          description: "Unauthorized\n사용자가 로그인 하지 않았을때 또는 access token 값에 이상이 있을 때 "
+          description: |-
+            Unauthorized
+            사용자가 로그인 하지 않았을때 또는 access token 값에 이상이 있을 때 
           content:
             application/json:
               schema:
@@ -817,6 +847,7 @@ paths:
             Bearer 토큰 값입니다.
             jwt 토큰을 사용합니다.
           required: true
+      deprecated: true
     patch:
       summary: 사용자 정보 수정
       operationId: patch-v1-users-userId
@@ -906,6 +937,7 @@ paths:
               $ref: '#/components/schemas/EditUserForm'
       tags:
         - users
+      deprecated: true
   /v1/auth/refresh-token:
     post:
       summary: 액세스 토큰 재발급
@@ -924,7 +956,13 @@ paths:
                     type: string
                   tokenType:
                     type: string
-                    description: "토큰 종류\naccessToken과 concat해서 사용하면 됨\n\nex. `${tokenType} ${accessToken}` \n\n     -> Bearer ${accessToken}"
+                    description: |-
+                      토큰 종류
+                      accessToken과 concat해서 사용하면 됨
+
+                      ex. `${tokenType} ${accessToken}` 
+
+                           -> Bearer ${accessToken}
                     default: Bearer
                 required:
                   - accessToken
@@ -953,6 +991,7 @@ paths:
           required: true
       tags:
         - auth
+      deprecated: true
     parameters: []
   /v1/attachments:
     post:
@@ -994,6 +1033,7 @@ paths:
         description: ''
       tags:
         - attachments
+      deprecated: true
     parameters: []
   /v1/delivery-types:
     get:
@@ -1037,6 +1077,7 @@ paths:
       description: ''
       tags:
         - warehouses
+      deprecated: true
     parameters: []
 components:
   schemas:

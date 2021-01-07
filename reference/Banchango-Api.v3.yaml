@@ -59,9 +59,18 @@ paths:
       operationId: get-v3-warehouses
       responses:
         '200':
-          $ref: '#/components/responses/WarehouseSearchResponseDto'
-        '201':
-          description: Created
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  warehouses:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/WarehouseSearchDto'
+                required:
+                  - warehouses
         '204':
           description: 조회한 창고들이 아예 없을 경우
           content:
@@ -101,7 +110,7 @@ paths:
               - COSMETIC
               - ACCESSORY
           in: query
-          name: category
+          name: mainItemTypes
           description: 창고 주요 품목. 특정 품목들을 취금하는 창고들을  찾을 때 사용합니다
         - schema:
             type: integer
@@ -959,8 +968,8 @@ paths:
       summary: 견적 문의 생성 API
       operationId: post-v3-estimates
       responses:
-        '201':
-          description: Created
+        '200':
+          description: OK
           content:
             application/json:
               schema:
@@ -1000,6 +1009,146 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/WarehouseEstimateRequestDto'
+  '/v3/users/{userId}/estimates':
+    get:
+      summary: 사용자가 작성한 견적 문의 목록
+      operationId: get-v3-estimates
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estimates:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EstimateSearchDto'
+                required:
+                  - estimates
+        '204':
+          description: 견적 문의 내역이 없는 경우
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '401':
+          description: access token에 문제가 있는 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '403':
+          description: access token에 있는 userId와 쿼리 파라미터로 주어진 userId가 일치하지 않을 때
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+      parameters: []
+      description: ''
+      security:
+        - Authorization: []
+    parameters:
+      - schema:
+          type: integer
+        name: userId
+        in: path
+        required: true
+        description: 사용자 id
+  /v3/users/change-password:
+    patch:
+      summary: 비밀번호 변경하기
+      operationId: post-v3-users-change-password
+      responses:
+        '200':
+          description: 비밀번호 변경 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                example-1:
+                  value:
+                    message: 비밀번호를 성공적으로 변경했습니다
+        '204':
+          description: access token에 있는 사용자 id가 존재하지 않을 때
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '401':
+          description: access token에 문제가 있을 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+      description: ''
+      security:
+        - Authorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WarehouseChangeViewableRequestDto'
+        description: ''
+  '/v3/estimates/{estimateId}/items':
+    get:
+      summary: 특정 견적 문의에 포함된 상품 정보 목록 조회
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  estimateItems:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EstimateItemSearchDto'
+                required:
+                  - estimateItems
+        '204':
+          description: No Content
+        '400':
+          description: estimateId 값이 주어지지 않았을 때
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '401':
+          description: access token에 문제가 있는 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '403':
+          description: 남이 작성한 견적 문의의 상품 정보 목록을 조회하려할 때
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+      operationId: get-v3-estimate-items
+      description: ''
+      security:
+        - Authorization: []
+      parameters: []
+    parameters:
+      - schema:
+          type: integer
+        name: estimateId
+        in: path
+        required: true
+        description: 견적 문의 id
 components:
   schemas:
     NewWarehouseRequestDto:
@@ -1527,6 +1676,19 @@ components:
         name:
           type: string
           description: 주요 취급 품목 이름
+          enum:
+            - CLOTH
+            - COSMETIC
+            - ACCESSORY
+            - GENERAL_MERCHANDISE
+            - FOOD
+            - BOOK
+            - INTERIOR
+            - ELECTRONICS
+            - SPORTS
+            - COLD_STORAGE
+            - FREEZE_STORAGE
+            - LARGE_SIZE
         match:
           description: 검색한 주요 취급 품묵인지 여부
           type: boolean
@@ -1598,6 +1760,105 @@ components:
         - barcode
         - sku
         - url
+    ChangePasswordRequestDto:
+      title: ChangePasswordRequestDto
+      type: object
+      properties:
+        password:
+          type: string
+          description: 새로운 비밀번호
+      required:
+        - password
+    WarehouseSummaryDto:
+      title: WarehouseSummaryDto
+      type: object
+      properties:
+        warehouseId:
+          type: integer
+          description: 창고 id
+        name:
+          type: string
+          description: 창고 이름
+        address:
+          type: string
+          description: 창고 주소
+      required:
+        - warehouseId
+        - name
+        - address
+    EstimateSearchDto:
+      title: EstimateSearchDto
+      type: object
+      properties:
+        id:
+          description: 견적 문의 id
+          type: integer
+        warehouse:
+          $ref: '#/components/schemas/WarehouseSummaryDto'
+        status:
+          type: string
+          enum:
+            - IN_PROGRESS
+            - RECEPTED
+            - DONE
+          description: 견적 문의 처리 진행 상황
+        monthlyAverageRelease:
+          type: integer
+          description: 월 평균 출고량
+      required:
+        - id
+        - warehouse
+        - status
+        - monthlyAverageRelease
+    EstimateItemSearchDto:
+      title: EstimateItemSearchDto
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 상품 정보 id
+        name:
+          type: string
+          description: 상품 종류
+        keepingNumber:
+          type: integer
+          description: 보관 수량
+        weight:
+          description: 상품 무게
+          type: number
+        barcode:
+          type: string
+          description: 바코드 종류
+          enum:
+            - ALL
+            - NONE
+            - PARTIAL
+        sku:
+          description: sku
+          type: integer
+        url:
+          type: string
+          description: 상품 url
+        perimeter:
+          type: number
+          description: 상품 크기
+        keepingType:
+          type: string
+          description: 보관 형태
+          enum:
+            - WARM
+            - COLD
+            - FREEZE
+      required:
+        - id
+        - name
+        - keepingNumber
+        - weight
+        - barcode
+        - sku
+        - url
+        - perimeter
+        - keepingType
   responses:
     WarehouseSearchResponseDto:
       description: Example response
@@ -1632,6 +1893,31 @@ components:
                     mainItemTypes:
                       - name: COSMETIC
                         match: true
+    EstimateSearchResponseDto:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              estimates:
+                $ref: '#/components/schemas/EstimateSearchDto'
+            required:
+              - estimates
+    EstimateItemSearchResponseDto:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              estimateItems:
+                type: array
+                description: 상품 정보 목록
+                items:
+                  $ref: '#/components/schemas/EstimateItemSearchDto'
+            required:
+              - estimateItems
   securitySchemes:
     Authorization:
       type: http
