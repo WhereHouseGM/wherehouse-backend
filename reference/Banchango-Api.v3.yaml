@@ -642,37 +642,21 @@ paths:
               description: ''
               type: object
               properties:
-                email:
-                  type: string
-                  minLength: 1
-                password:
-                  type: string
-                  minLength: 1
                 name:
                   type: string
                   minLength: 1
-                type:
-                  type: string
-                  minLength: 1
-                  description: |-
-                    USER 또는 SHIPPER
-                    (이 정보는 수정할 수 없습니다. 기존 정보와 그대로 보내야 합니다.)
                 phoneNumber:
                   type: string
                   minLength: 1
-                role:
+                telephoneNumber:
                   type: string
-                  minLength: 1
-                  description: |-
-                    USER 또는 ADMIN
-                    (이 값은 수정할 수 없습니다. 기존 정보와 그대로 보내야 합니다.)
+                companyName:
+                  type: string
               required:
-                - email
-                - password
                 - name
-                - type
                 - phoneNumber
-                - role
+                - telephoneNumber
+                - companyName
         description: 회원의 정보를 수정 여부에 관계 없이 모두 입력합니다.
   /v3/users/password-lost:
     patch:
