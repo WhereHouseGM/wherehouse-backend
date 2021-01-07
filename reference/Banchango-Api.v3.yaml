@@ -1769,20 +1769,31 @@ components:
           type: integer
           description: 보관 수량
         weight:
-          type: string
           description: 상품 무게
+          type: number
         barcode:
           type: string
           description: 바코드 종류
+          enum:
+            - ALL
+            - NONE
+            - PARTIAL
         sku:
-          type: string
           description: sku
+          type: integer
         url:
           type: string
           description: 상품 url
         perimeter:
-          type: integer
+          type: number
           description: 상품 크기
+        keepingType:
+          type: string
+          description: 보관 형태
+          enum:
+            - WARM
+            - COLD
+            - FREEZE
       required:
         - id
         - name
@@ -1792,6 +1803,7 @@ components:
         - sku
         - url
         - perimeter
+        - keepingType
   responses:
     WarehouseSearchResponseDto:
       description: Example response
