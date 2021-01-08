@@ -451,6 +451,7 @@ paths:
                     name: TEST NAME
                     email: robbyra@gmail.com
                     type: SHIPPER
+                    companyName: 회사이름
                     telephoneNumber: '0229093199'
                     phoneNumber: '01029093199'
                     role: USER
@@ -752,8 +753,8 @@ paths:
                 properties:
                   message:
                     type: string
-              required:
-                - message
+                required:
+                  - message
               examples:
                 example-1:
                   value:
@@ -1249,6 +1250,65 @@ paths:
         in: path
         required: true
         description: 견적 문의 id
+  '/v3/admin/warehouses/{warehouseId}':
+    parameters:
+      - schema:
+          type: string
+        name: warehouseId
+        in: path
+        required: true
+        description: 창고 id
+    get:
+      summary: '[관리자] 창고 상세 정보 조회'
+      tags:
+        - 관리자
+        - v3
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WarehouseAdminDetailResponseDto'
+        '204':
+          description: 해당 창고가 없는 경우입니다
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '401':
+          description: access token에 문제가 있는 경우입니다
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '403':
+          description: 관리자가 아닌 경우입니다
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+      operationId: get-v3-admin-warehouses-warehouseId
+      description: |-
+        일반 사용자가 볼 수 있는 창고 정보와
+        창고 status와 창고 생성일까지 볼 수 있습니다
+      security:
+        - Authorization: []
+    put:
+      summary: '[관리자] 창고 수정'
+      operationId: put-v3-admin-warehouses-warehouseId
+      responses:
+        '200':
+          description: OK
+      tags:
+        - 관리자
+        - v3
 components:
   schemas:
     NewWarehouseRequestDto:
@@ -1336,20 +1396,11 @@ components:
           type: string
           minLength: 1
           description: 창고 사용 가능 시간에 대한 추가 설명
-        insurance:
-          type: string
-          description: 보험사 이름
         cctvExist:
           description: |-
             CCTV 존재 유무
             (존재 : 1, 없음 : 0)
           type: integer
-        securityCompanyName:
-          type:
-            - string
-            - 'null'
-          minLength: 1
-          description: 보안업체명(없다면 null)
         doorLockExist:
           description: |-
             도어락 존재 유무
@@ -1428,6 +1479,16 @@ components:
             (String 배열)
           items:
             type: string
+        insurances:
+          type: array
+          description: 보험 목록
+          items:
+            type: string
+        securityCompanies:
+          type: array
+          description: 보안 업체 목록
+          items:
+            type: string
       required:
         - name
         - space
@@ -1438,9 +1499,7 @@ components:
         - openAt
         - closeAt
         - availableTimeDetail
-        - insurance
         - cctvExist
-        - securityCompanyName
         - doorLockExist
         - airConditioningType
         - workerExist
@@ -1452,8 +1511,8 @@ components:
         - longitude
         - deliveryTypes
         - warehouseCondition
-        - warehouseFacilityUsages
-        - warehouseUsageCautions
+        - insurances
+        - securityCompanies
     WarehouseSearchDto:
       description: ''
       type: object
@@ -1623,18 +1682,9 @@ components:
           type: string
           minLength: 1
           description: ''
-        insurance:
-          type: string
-          minLength: 1
-          description: 보험 회사명
         cctvExist:
           description: cctv 유무 여부
           type: boolean
-        securityCompanyName:
-          description: 보안업체명(없으면 null)
-          type:
-            - string
-            - 'null'
         doorLockExist:
           description: '도어락 존재 유무 '
           type: boolean
@@ -1726,6 +1776,16 @@ components:
           items:
             type: string
             format: uri
+        insurances:
+          type: array
+          description: 보험 목록
+          items:
+            type: string
+        securityCompanies:
+          type: array
+          description: 보안 업체 목록
+          items:
+            type: string
       required:
         - warehouseId
         - ownerId
@@ -1738,9 +1798,7 @@ components:
         - openAt
         - closeAt
         - availableTimeDetail
-        - insurance
         - cctvExist
-        - securityCompanyName
         - doorLockExist
         - airConditioningType
         - workerExist
@@ -1756,6 +1814,8 @@ components:
         - warehouseFacilityUsages
         - warehouseUsageCautions
         - images
+        - insurances
+        - securityCompanies
     WarehouseChangeViewableRequestDto:
       title: WarehouseChangeViewableRequestDto
       type: object
@@ -2057,6 +2117,375 @@ components:
             - DONE
       required:
         - status
+    WarehouseAdminDetailResponseDto:
+      title: WarehouseAdminDetailResponseDto
+      type: object
+      properties:
+        warehouseId:
+          type: integer
+          description: 창고 id
+        ownerId:
+          description: 창고 소유한 유저 id
+          type: integer
+        name:
+          type: string
+          minLength: 1
+          description: 창고 이름
+        space:
+          type: integer
+          description: 창고 평 수
+        address:
+          type: string
+          minLength: 1
+          description: 창고 주소
+        addressDetail:
+          type: string
+          minLength: 1
+          description: 창고 상세 주소
+        description:
+          type: string
+          minLength: 1
+          description: 창고 설명
+        availableWeekdays:
+          description: 창고 여는 요일
+          type: integer
+        openAt:
+          type: string
+          minLength: 1
+          description: 창고 여는 시간
+        closeAt:
+          type: string
+          minLength: 1
+          description: 창고 닫는 시간
+        availableTimeDetail:
+          type: string
+          minLength: 1
+          description: ''
+        cctvExist:
+          description: cctv 유무 여부
+          type: boolean
+        doorLockExist:
+          description: '도어락 존재 유무 '
+          type: boolean
+        airConditioningType:
+          type: string
+          minLength: 1
+          enum:
+            - HEATING
+            - COOLING
+            - NONE
+            - BOTH
+          description: 냉난방 현황
+        workerExist:
+          description: ''
+          type: boolean
+        canPark:
+          description: 주차 가능 여부
+          type: boolean
+        mainItemTypes:
+          type: array
+          description: 창고가 가장 자신있게 보관할 수 있는 물품의 종류들
+          items:
+            type: string
+            enum:
+              - CLOTH
+              - COSMETIC
+              - ACCESSORY
+              - GENERAL_MERCHANDISE
+              - FOOD
+              - BOOK
+              - INTERIOR
+              - ELECTRONICS
+              - SPORTS
+              - COLD_STORAGE
+              - FREEZE_STORAGE
+              - LARGE_SIZE
+        warehouseType:
+          type: string
+          minLength: 1
+          description: 3PL 창고 vs 풀필먼트 차고
+          enum:
+            - THREEPL
+            - FULFILLMENT
+        minReleasePerMonth:
+          description: 월 최소 출고량
+          type: integer
+        latitude:
+          type: number
+          description: 창고 위치 위도
+        longitude:
+          type: number
+          description: 창고 위치 경도
+        mainImageUrl:
+          type: string
+          minLength: 1
+          description: 메인 이미지 url 주소
+          format: uri
+        deliveryTypes:
+          type: array
+          description: 택배 회사명
+          items:
+            type: string
+        warehouseCondition:
+          type: array
+          description: 상온창고 vs 저온창고 vs ...
+          items:
+            type: string
+            enum:
+              - ROOM_TEMPERATURE
+              - LOW_TEMPERATURE
+              - BONDED
+              - SAVAGE
+              - HAZARDOUS
+              - SELF_STORAGE
+              - CONTAINER
+        warehouseFacilityUsages:
+          type: array
+          description: 창고 시설 안내
+          items:
+            type: string
+        warehouseUsageCautions:
+          type: array
+          description: 창고 이용 시 주의사항
+          items:
+            type: string
+        images:
+          type: array
+          description: 창고 이미지 url 목록
+          items:
+            type: string
+            format: uri
+        status:
+          type: string
+          enum:
+            - IN_PROGRESS
+            - VIEWABLE
+            - DELETED
+            - REJECTED
+          description: 창고 상태
+        createdAt:
+          type: string
+          format: date-time
+          description: 창고 생성일
+        insurances:
+          type: array
+          description: 보험 목록
+          items:
+            type: string
+        securityCompanies:
+          type: array
+          description: 보안 업체 목록
+          items:
+            type: string
+      required:
+        - warehouseId
+        - ownerId
+        - name
+        - space
+        - address
+        - addressDetail
+        - description
+        - availableWeekdays
+        - openAt
+        - closeAt
+        - availableTimeDetail
+        - cctvExist
+        - doorLockExist
+        - airConditioningType
+        - workerExist
+        - canPark
+        - mainItemTypes
+        - warehouseType
+        - minReleasePerMonth
+        - latitude
+        - longitude
+        - mainImageUrl
+        - deliveryTypes
+        - warehouseCondition
+        - warehouseFacilityUsages
+        - warehouseUsageCautions
+        - images
+        - status
+        - createdAt
+        - insurances
+        - securityCompanies
+    WarehouseAdminUpdateRequestDto:
+      title: WarehouseAdminUpdateRequestDto
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: 창고 이름
+        space:
+          type: integer
+          description: 창고 평 수
+        address:
+          type: string
+          minLength: 1
+          description: 창고 주소
+        addressDetail:
+          type: string
+          minLength: 1
+          description: 창고 상세 주소
+        description:
+          type: string
+          minLength: 1
+          description: 창고 설명
+        availableWeekdays:
+          description: 창고 여는 요일
+          type: integer
+        openAt:
+          type: string
+          minLength: 1
+          description: 창고 여는 시간
+        closeAt:
+          type: string
+          minLength: 1
+          description: 창고 닫는 시간
+        availableTimeDetail:
+          type: string
+          minLength: 1
+          description: ''
+        cctvExist:
+          description: cctv 유무 여부
+          type: boolean
+        doorLockExist:
+          description: '도어락 존재 유무 '
+          type: boolean
+        airConditioningType:
+          type: string
+          minLength: 1
+          enum:
+            - HEATING
+            - COOLING
+            - NONE
+            - BOTH
+          description: 냉난방 현황
+        workerExist:
+          description: ''
+          type: boolean
+        canPark:
+          description: 주차 가능 여부
+          type: boolean
+        mainItemTypes:
+          type: array
+          description: 창고가 가장 자신있게 보관할 수 있는 물품의 종류들
+          items:
+            type: string
+            enum:
+              - CLOTH
+              - COSMETIC
+              - ACCESSORY
+              - GENERAL_MERCHANDISE
+              - FOOD
+              - BOOK
+              - INTERIOR
+              - ELECTRONICS
+              - SPORTS
+              - COLD_STORAGE
+              - FREEZE_STORAGE
+              - LARGE_SIZE
+        warehouseType:
+          type: string
+          minLength: 1
+          description: 3PL 창고 vs 풀필먼트 차고
+          enum:
+            - THREEPL
+            - FULFILLMENT
+        minReleasePerMonth:
+          description: 월 최소 출고량
+          type: integer
+        latitude:
+          type: number
+          description: 창고 위치 위도
+        longitude:
+          type: number
+          description: 창고 위치 경도
+        mainImageUrl:
+          type: string
+          minLength: 1
+          description: 메인 이미지 url 주소
+          format: uri
+        deliveryTypes:
+          type: array
+          description: 택배 회사명
+          items:
+            type: string
+        warehouseCondition:
+          type: array
+          description: 상온창고 vs 저온창고 vs ...
+          items:
+            type: string
+            enum:
+              - ROOM_TEMPERATURE
+              - LOW_TEMPERATURE
+              - BONDED
+              - SAVAGE
+              - HAZARDOUS
+              - SELF_STORAGE
+              - CONTAINER
+        warehouseFacilityUsages:
+          type: array
+          description: 창고 시설 안내
+          items:
+            type: string
+        warehouseUsageCautions:
+          type: array
+          description: 창고 이용 시 주의사항
+          items:
+            type: string
+        images:
+          type: array
+          description: 창고 이미지 url 목록
+          items:
+            type: string
+            format: uri
+        status:
+          type: string
+          enum:
+            - IN_PROGRESS
+            - VIEWABLE
+            - DELETED
+            - REJECTED
+          description: 창고 상태
+        insurances:
+          type: array
+          description: 보험 목록
+          items:
+            type: string
+        securityCompanies:
+          type: array
+          description: 보안 업체 목록
+          items:
+            type: string
+      required:
+        - name
+        - space
+        - address
+        - addressDetail
+        - description
+        - availableWeekdays
+        - openAt
+        - closeAt
+        - availableTimeDetail
+        - cctvExist
+        - doorLockExist
+        - airConditioningType
+        - workerExist
+        - canPark
+        - mainItemTypes
+        - warehouseType
+        - minReleasePerMonth
+        - latitude
+        - longitude
+        - mainImageUrl
+        - deliveryTypes
+        - warehouseCondition
+        - images
+        - status
+        - insurances
+        - securityCompanies
   responses:
     WarehouseSearchResponseDto:
       description: Example response
