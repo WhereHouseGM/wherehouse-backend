@@ -1139,7 +1139,7 @@ paths:
           description: 한 페이지 당 불러올 항목의 개수입니다.
       security:
         - Authorization: []
-  /v3/admin/estimates/status:
+  '/v3/admin/estimates/{estimateId}/status':
     patch:
       summary: 견적 문의 상태 변경
       operationId: patch-v3-estimates-status
@@ -1190,7 +1190,13 @@ paths:
       tags:
         - 관리자
         - v3
-    parameters: []
+    parameters:
+      - schema:
+          type: string
+        name: estimateId
+        in: path
+        required: true
+        description: 견적 문의 id
   '/v3/admin/estimates/{estimateId}/items':
     get:
       summary: (관리자용)특정 견적 문의에 포함된 상품 정보 목록 조회
