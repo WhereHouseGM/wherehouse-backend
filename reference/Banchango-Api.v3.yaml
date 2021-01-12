@@ -74,12 +74,6 @@ paths:
                       $ref: '#/components/schemas/WarehouseSearchDto'
                 required:
                   - warehouses
-        '204':
-          description: '조회한 창고들이 아예 없거나 창고 상태가 VIEWABLE이 아닌 경우 '
-          content:
-            application/json:
-              schema:
-                type: object
         '400':
           description: |-
             잘못된 요청을 보낸 경우
@@ -96,6 +90,12 @@ paths:
                     message: mainitem 또는 address 하나만 있어야합니다.
                     timestamp: 1608977704448
                     status: 400
+        '404':
+          description: 조회한 창고들이 아예 없을 경우
+          content:
+            application/json:
+              schema:
+                type: object
       parameters:
         - schema:
             type: string
@@ -167,8 +167,6 @@ paths:
                   - tokenType
                   - refreshToken
                   - user
-        '204':
-          description: 'No Content : 로그인 실패 시'
         '400':
           description: 'Bad Request : Request Body가 잘못된 경우'
           content:
@@ -204,6 +202,8 @@ paths:
                     error: Bad Request
                     message: Bad Request Exception.
                     path: /v3/users/sign-in
+        '404':
+          description: 'No Content : 로그인 실패 시'
       description: 회원 로그인을 진행합니다.
       requestBody:
         content:
@@ -431,6 +431,8 @@ paths:
                     error: Unauthorized
                     message: 잘못된 형식의 Jwt 토큰입니다.
                     path: /v3/users/15
+        '404':
+          description: 'Not Found : userId가 존재하지 않는 값인 경우'
       operationId: get-v3-users-userId
       description: 회원의 정보를 조회합니다.
       parameters: []
@@ -579,13 +581,6 @@ paths:
                 200_Example:
                   value:
                     message: 임시 비밀번호 이메일이 정상적으로 전송되었습니다.
-        '204':
-          description: 'No Content : 이메일이 회원가입이 되어 있지 않은 경우'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties: {}
         '400':
           description: 'Bad Request : Request Body가 잘못된 경우'
           content:
@@ -621,6 +616,13 @@ paths:
                     message: 'Validation failed for argument [0] in public com.banchango.common.dto.BasicMessageResponseDto com.banchango.users.controller.UsersApiController.sendTemporaryPasswordToEmail(com.banchango.users.dto.UserEmailSendRequestDto): [Field error in object ''userEmailSendRequestDto'' on field ''email'': rejected value [null]; codes [NotBlank.userEmailSendRequestDto.email,NotBlank.email,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [userEmailSendRequestDto.email,email]; arguments []; default message [email]]; default message [Email is required.]] '
                     timestamp: 1608979766248
                     status: 400
+        '404':
+          description: 'No Content : 이메일이 회원가입이 되어 있지 않은 경우'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
       description: 비밀번호 분실 시 임시 비밀번호가 담긴 이메일을 전송합니다.
       requestBody:
         content:
@@ -659,12 +661,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/WarehouseDetailDto'
-        '204':
-          description: 해당 창고가 존재하지 않는 경우
-          content:
-            application/json:
-              schema:
-                type: object
         '400':
           description: 찰못된 요청을 보낸 경우
           content:
@@ -672,6 +668,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorDto'
               examples: {}
+        '404':
+          description: 해당 창고가 존재하지 않는 경우
+          content:
+            application/json:
+              schema:
+                type: object
       operationId: get-v3-warehouses-warehouseId
     delete:
       summary: 창고 삭제
@@ -730,11 +732,11 @@ paths:
         - 창고
         - v3
     put:
-      summary: 창고 수정
+      summary: 창고 정보를 수정합니다.
       operationId: put-v3-warehouses-warehouseId
       responses:
         '200':
-          description: 창고 수정 성공한 경우
+          description: 'OK : 수정 완료 시'
           content:
             application/json:
               schema:
@@ -742,7 +744,7 @@ paths:
         '204':
           description: 창고가 없는 경우
         '400':
-          description: 요청 바디 형식이 잘못된 경우
+          description: 'Bad Request : Request Body가 잘못된 경우'
           content:
             application/json:
               schema:
@@ -761,13 +763,171 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorDto'
+          '404':
+            description: 창고가 삭제되었거나 기타 이유로 수정이 불가한 경우(warehouseId가 없는 경우 포함)
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          description: Bearer Token 값입니다.
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/WarehouseUpdateRequestDto'
-      security:
-        - Authorization: []
+              description: ''
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                space:
+                  type: number
+                address:
+                  type: string
+                  minLength: 1
+                addressDetail:
+                  type: string
+                  minLength: 1
+                description:
+                  type: string
+                  minLength: 1
+                availableWeekdays:
+                  type: number
+                openAt:
+                  type: string
+                  minLength: 1
+                closeAt:
+                  type: string
+                  minLength: 1
+                availableTimeDetail:
+                  type: string
+                  minLength: 1
+                cctvExist:
+                  type: boolean
+                doorLockExist:
+                  type: string
+                  minLength: 1
+                airConditioningType:
+                  type: string
+                  minLength: 1
+                workerExist:
+                  type: boolean
+                canPark:
+                  type: boolean
+                mainItemTypes:
+                  type: array
+                  items:
+                    required: []
+                    properties: {}
+                warehouseType:
+                  type: string
+                  minLength: 1
+                warehouseCondition:
+                  type: array
+                  items:
+                    required: []
+                    properties: {}
+                minReleasePerMonth:
+                  type: number
+                latitude:
+                  type: number
+                longitude:
+                  type: number
+                insurances:
+                  type: array
+                  items:
+                    required: []
+                    properties: {}
+                securityCompanies:
+                  type: array
+                  items:
+                    required: []
+                    properties: {}
+                deliveeryTypes:
+                  type: array
+                  items:
+                    required: []
+                    properties: {}
+                warehouseFacilityUsages:
+                  type: array
+                  items:
+                    required: []
+                    properties: {}
+                warehouseUsageCautions:
+                  type: array
+                  items:
+                    required: []
+                    properties: {}
+              required:
+                - name
+                - space
+                - address
+                - addressDetail
+                - description
+                - availableWeekdays
+                - openAt
+                - closeAt
+                - availableTimeDetail
+                - cctvExist
+                - doorLockExist
+                - airConditioningType
+                - workerExist
+                - canPark
+                - mainItemTypes
+                - warehouseType
+                - warehouseCondition
+                - minReleasePerMonth
+                - latitude
+                - longitude
+                - insurances
+                - securityCompanies
+                - deliveeryTypes
+                - warehouseFacilityUsages
+                - warehouseUsageCautions
+            examples:
+              Request Body Example:
+                value:
+                  name: NEW NAME
+                  space: 11
+                  address: NEW ADDRESS
+                  addressDetail: NEW ADDR DETAIL
+                  description: NEW DESC
+                  availableWeekdays: 111111
+                  openAt: NEW OPENAT
+                  closeAt: NEW CLOSEAT
+                  availableTimeDetail: NEW AVAILABLE TIME DETAIL
+                  cctvExist: false
+                  doorLockExist: 'false'
+                  airConditioningType: NONE
+                  workerExist: false
+                  canPark: false
+                  mainItemTypes:
+                    - COSMETIC
+                    - COLD_STORAGE
+                  warehouseType: FULFILLMENT
+                  warehouseCondition:
+                    - BONDED
+                    - ROOM_STORAGE
+                  minReleasePerMonth: 1000
+                  latitude: 11.11
+                  longitude: 22.22
+                  insurances:
+                    - 화재보험
+                    - 손해배상보험
+                  securityCompanies:
+                    - 보안업체1
+                    - 보안업체2
+                  deliveeryTypes:
+                    - 롯데택배
+                    - 한진택배
+                  warehouseFacilityUsages:
+                    - 유의사항1
+                    - 유의사항2
+                  warehouseUsageCautions:
+                    - 주의사항1
+                    - 주의사항2
+        description: 창고 정보 수정을 위해 변경 여부와 관계 없이 창고의 모든 정보를 입력합니다.
       tags:
         - 창고
         - v3
@@ -977,8 +1137,6 @@ paths:
                 example-1:
                   value:
                     message: 비밀번호를 성공적으로 변경했습니다
-        '204':
-          description: access token에 있는 사용자 id가 존재하지 않을 때
         '400':
           description: Bad Request
           content:
@@ -997,6 +1155,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorDto'
+        '404':
+          description: access token에 있는 사용자 id가 존재하지 않을 때
       description: ''
       security:
         - Authorization: []
