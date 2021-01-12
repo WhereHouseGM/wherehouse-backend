@@ -71,12 +71,6 @@ paths:
                       $ref: '#/components/schemas/WarehouseSearchDto'
                 required:
                   - warehouses
-        '204':
-          description: 조회한 창고들이 아예 없을 경우
-          content:
-            application/json:
-              schema:
-                type: object
         '400':
           description: |-
             잘못된 요청을 보낸 경우
@@ -93,6 +87,12 @@ paths:
                     message: mainitem 또는 address 하나만 있어야합니다.
                     timestamp: 1608977704448
                     status: 400
+        '404':
+          description: 조회한 창고들이 아예 없을 경우
+          content:
+            application/json:
+              schema:
+                type: object
       parameters:
         - schema:
             type: string
@@ -757,12 +757,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/WarehouseDetailDto'
-        '204':
-          description: 해당 창고가 존재하지 않는 경우
-          content:
-            application/json:
-              schema:
-                type: object
         '400':
           description: 찰못된 요청을 보낸 경우
           content:
@@ -770,6 +764,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorDto'
               examples: {}
+        '404':
+          description: 해당 창고가 존재하지 않는 경우
+          content:
+            application/json:
+              schema:
+                type: object
       operationId: get-v3-warehouses-warehouseId
     delete:
       summary: 창고 삭제
