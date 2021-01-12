@@ -921,7 +921,7 @@ paths:
         - Authorization: []
   /v3/estimates:
     post:
-      summary: 견적 문의 생성 API
+      summary: 견적 문의 생성
       operationId: post-v3-estimates
       responses:
         '200':
@@ -934,7 +934,7 @@ paths:
                   message:
                     type: string
               examples:
-                201 example:
+                200 example:
                   value:
                     message: 견적 문의가 성공적으로 생성되었습니다
         '400':
@@ -951,8 +951,8 @@ paths:
                 $ref: '#/components/schemas/ErrorDto'
         '403':
           description: |-
-            창고가 VIEWABLE이 아닌 경우
-            (DELETED 또는 IN_PROGRESS일 경우)
+            창고 상태가 VIEWABLE이 아닌 경우
+            (IN_PROGRESS 또는 REJECTED 또는 DELETED인 경우)
           content:
             application/json:
               schema:
@@ -989,7 +989,7 @@ paths:
         '204':
           description: 견적 문의 내역이 없는 경우
         '400':
-          description: Bad Request
+          description: 잘못된 요청을 보낸 경우
           content:
             application/json:
               schema:
@@ -1091,7 +1091,7 @@ paths:
                 required:
                   - estimateItems
         '204':
-          description: No Content
+          description: 견적 문의가 없는 경우
         '400':
           description: estimateId 값이 주어지지 않았을 때
           content:
@@ -1355,9 +1355,44 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WarehouseAdminDetailResponseDto'
+              examples:
+                example-1:
+                  value:
+                    message: ''
+        '204':
+          description: 수정할 창고가 없는 경우
+        '400':
+          description: 잘못된 요청을 보낸 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '401':
+          description: access token에 문제가 있는 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '403':
+          description: 관리자가 아닌 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
       tags:
         - 관리자
         - v3
+      security:
+        - Authorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WarehouseAdminUpdateRequestDto'
   '/v3/admin/images/delete/{warehouseId}':
     parameters:
       - schema:
@@ -1594,6 +1629,241 @@ paths:
 
                     openapi 3.0이 파일 타입을 제공하지 않아서 string으로 작성했습니다
                   format: binary
+              required:
+                - file
+  '/v3/images/delete/{warehouseId}':
+    parameters:
+      - schema:
+          type: string
+        name: warehouseId
+        in: path
+        required: true
+        description: 창고 id
+    delete:
+      summary: 창고 extra 이미지 삭제
+      operationId: delete-v3-images-delete-warehouseId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+              examples:
+                example-1:
+                  value:
+                    message: 삭제에 성공했습니다
+        '204':
+          description: 삭제할 사진이 없는 경우
+        '400':
+          description: 잘못된 요청을 보낸 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '401':
+          description: access token에 문제가 있는 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '403':
+          description: 다른 사용자의 창고인 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+      tags:
+        - 이미지
+        - v3
+      security:
+        - Authorization: []
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: file
+          description: 파일 이름
+          required: true
+      description: ''
+  '/v3/images/delete/main/{warehouseId}':
+    parameters:
+      - schema:
+          type: string
+        name: warehouseId
+        in: path
+        required: true
+        description: 창고 id
+    delete:
+      summary: 창고 메인 이미지 삭제
+      operationId: delete-v3-images-delete-main-warehouseId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                example-1:
+                  value:
+                    message: 삭제에 성공했습니다
+        '204':
+          description: 삭제할 이미지가 없는 경우
+        '400':
+          description: 잘못된 요청을 보낸 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '401':
+          description: access token에 문제가 있는 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '403':
+          description: 다른 사용자의 창고인 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+      security:
+        - Authorization: []
+      tags:
+        - 이미지
+        - v3
+  '/v3/images/upload/{warehouseId}':
+    parameters:
+      - schema:
+          type: string
+        name: warehouseId
+        in: path
+        required: true
+        description: 창고 id
+    post:
+      summary: 창고 extra 이미지 업로드
+      operationId: post-v3-images-upload-warehouseId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageInfoResponseDto'
+        '400':
+          description: 잘못된 요청 보냈을 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '401':
+          description: access token이 잘못된 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '403':
+          description: 다른 사용자의 창고인 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '406':
+          description: |-
+            extra 이미지 개수가 이미 5개인 경우
+            (최대 5개까지 올릴 수 있습니다)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+      tags:
+        - 이미지
+        - v3
+      security:
+        - Authorization: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: |-
+                    업로드할 파일입니다
+
+                    openapi 3.0에 파일 타입이 없어서 string으로 작성했습니다
+              required:
+                - file
+  '/v3/images/upload/main/{warehouseId}':
+    parameters:
+      - schema:
+          type: string
+        name: warehouseId
+        in: path
+        required: true
+        description: 창고 id
+    post:
+      summary: 창고 메인 이미지 업로드
+      operationId: post-v3-images-upload-main-warehouseId
+      responses:
+        '200':
+          description: 메인 이미지 업로드 성공한 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageInfoResponseDto'
+        '400':
+          description: 잘못된 요청을 보낸 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '403':
+          description: 다른 사용자의 창고인 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '406':
+          description: 이미 메인 이미지를 등록한 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+      tags:
+        - 이미지
+        - v3
+      description: ''
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: |-
+                    업로드할 파일입니다
+
+                    openapi 3.0에 파일 타입이 없어서 string으로 작성했습니다
               required:
                 - file
 components:
@@ -2157,10 +2427,14 @@ components:
         content:
           type: string
           description: 견적 요청 및 문의사항
+        monthlyAverageRelease:
+          type: integer
+          description: 월 평균 출고량
       required:
         - warehouseId
         - estimateItems
         - content
+        - monthlyAverageRelease
     WarehouseEstimateItemRequestDto:
       title: WarehouseEstimateItemDto
       type: object
@@ -2286,6 +2560,7 @@ components:
         url:
           type: string
           description: 상품 url
+          format: uri
         perimeter:
           type: number
           description: 상품 크기
@@ -2995,3 +3270,4 @@ tags:
   - name: 사용자
   - name: 관리자
   - name: 견적 문의
+  - name: 이미지
