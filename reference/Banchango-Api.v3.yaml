@@ -852,8 +852,8 @@ paths:
                   type: object
                   properties:
                     warehouseId:
-                      type: number
                       description: 해당 창고의 id 값입니다.
+                      type: integer
                     name:
                       type: string
                       minLength: 1
@@ -862,8 +862,6 @@ paths:
                       type: string
                       minLength: 1
                       description: 창고 요청이 등록된 날짜입니다.
-                    v3:
-                      type: string
                   required:
                     - warehouseId
                     - name
@@ -897,12 +895,6 @@ paths:
         창고 등록 요청이 온 창고들을 조회합니다.
       parameters:
         - schema:
-            type: string
-          in: header
-          name: Authorization
-          description: 관리자로 로그인한 계정의 JWT Token 값 입니다.
-          required: true
-        - schema:
             type: integer
           in: query
           name: page
@@ -914,6 +906,19 @@ paths:
           name: size
           description: 한 페이지 당 불러올 항목의 개수입니다.
           required: true
+        - schema:
+            type: string
+            enum:
+              - DELETED
+              - IN_PROGRESS
+              - REJECTED
+              - VIEWABLE
+          in: query
+          name: status
+          description: 창고 상태
+          required: true
+      security:
+        - Authorization: []
   /v3/estimates:
     post:
       summary: 견적 문의 생성 API
@@ -1353,6 +1358,244 @@ paths:
       tags:
         - 관리자
         - v3
+  '/v3/admin/images/delete/{warehouseId}':
+    parameters:
+      - schema:
+          type: string
+        name: warehouseId
+        in: path
+        required: true
+        description: 창고 id
+    delete:
+      summary: '[관리자] 창고 extra 이미지 삭제'
+      operationId: delete-v3-admin-images-delete-warehouseId
+      responses:
+        '200':
+          description: 창고 이미지 삭제 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+              examples:
+                example-1:
+                  value:
+                    message: 삭제에 성공했습니다
+        '204':
+          description: 삭제할 창고가 없는 경우
+        '400':
+          description: 잘못된 요청인 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '401':
+          description: access token에 문제가 있는 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '403':
+          description: '관리자가 아닌 경우  '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: file
+          description: 파일 이름
+          required: true
+      description: ''
+      tags:
+        - 관리자
+        - v3
+      security:
+        - Authorization: []
+  '/v3/admin/images/delete/main/{warehouseId}':
+    parameters:
+      - schema:
+          type: string
+        name: warehouseId
+        in: path
+        required: true
+        description: 창고 id
+    delete:
+      summary: '[관리자] 창고 메인 이미지 삭제'
+      operationId: delete-v3-admin-images-delete-main-warehouseId
+      responses:
+        '200':
+          description: 창고 이미지 삭제 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+              examples:
+                example-1:
+                  value:
+                    message: 삭제에 성공했습니다
+        '204':
+          description: 삭제할 창고가 없는 경우
+        '400':
+          description: 잘못된 요청인 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '401':
+          description: access token에 문제가 있는 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '403':
+          description: '관리자가 아닌 경우  '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+      security:
+        - Authorization: []
+      tags:
+        - 관리자
+        - v3
+  '/v3/admin/images/upload/{warehouseId}':
+    parameters:
+      - schema:
+          type: string
+        name: warehouseId
+        in: path
+        required: true
+        description: 창고 id
+    post:
+      summary: '[관리자] 창고 extra 이미지 업로드'
+      operationId: post-v3-admin-images-upload-warehouseId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageInfoResponseDto'
+        '400':
+          description: 잘못된 요청 보낸 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '401':
+          description: access token에 문제가 있는 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '403':
+          description: 관리자가 아닌 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '406':
+          description: extra 이미지 개수가 5개 이상인 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+      tags:
+        - 관리자
+        - v3
+      description: ''
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  description: |-
+                    업로드할 파일
+
+                    openapi 3.0이 파일 타입을 제공하지 않아서 string으로 작성했습니다
+                  format: binary
+              required:
+                - file
+        description: ''
+      security:
+        - Authorization: []
+  '/v3/admin/images/upload/main/{warehouseId}':
+    parameters:
+      - schema:
+          type: string
+        name: warehouseId
+        in: path
+        required: true
+        description: 창고 id
+    post:
+      summary: '[관리자] 창고 메인 이미지 업로드'
+      operationId: post-v3-admin-images-upload-main-warehouseId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageInfoResponseDto'
+        '400':
+          description: 잘못된 요청 보낸 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '401':
+          description: access token에 문제가 있는 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '403':
+          description: 관리자가 아닌 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '406':
+          description: 메인 이미지를 이미 등록한 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+      tags:
+        - 관리자
+        - v3
+      security:
+        - Authorization: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  description: |-
+                    업로드할 파일
+
+                    openapi 3.0이 파일 타입을 제공하지 않아서 string으로 작성했습니다
+                  format: binary
+              required:
+                - file
 components:
   schemas:
     NewWarehouseRequestDto:
@@ -2010,14 +2253,10 @@ components:
             - RECEPTED
             - DONE
           description: 견적 문의 처리 진행 상황
-        monthlyAverageRelease:
-          type: integer
-          description: 월 평균 출고량
       required:
         - id
         - warehouse
         - status
-        - monthlyAverageRelease
     EstimateItemSearchDto:
       title: EstimateItemSearchDto
       type: object
@@ -2412,24 +2651,6 @@ components:
         canPark:
           description: 주차 가능 여부
           type: boolean
-        mainItemTypes:
-          type: array
-          description: 창고가 가장 자신있게 보관할 수 있는 물품의 종류들
-          items:
-            type: string
-            enum:
-              - CLOTH
-              - COSMETIC
-              - ACCESSORY
-              - GENERAL_MERCHANDISE
-              - FOOD
-              - BOOK
-              - INTERIOR
-              - ELECTRONICS
-              - SPORTS
-              - COLD_STORAGE
-              - FREEZE_STORAGE
-              - LARGE_SIZE
         warehouseType:
           type: string
           minLength: 1
@@ -2446,11 +2667,6 @@ components:
         longitude:
           type: number
           description: 창고 위치 경도
-        mainImageUrl:
-          type: string
-          minLength: 1
-          description: 메인 이미지 url 주소
-          format: uri
         deliveryTypes:
           type: array
           description: 택배 회사명
@@ -2503,6 +2719,11 @@ components:
           description: 보안 업체 목록
           items:
             type: string
+        mainItemTypes:
+          type: array
+          description: 카테고리
+          items:
+            type: string
       required:
         - name
         - space
@@ -2518,18 +2739,17 @@ components:
         - airConditioningType
         - workerExist
         - canPark
-        - mainItemTypes
         - warehouseType
         - minReleasePerMonth
         - latitude
         - longitude
-        - mainImageUrl
         - deliveryTypes
         - warehouseCondition
         - images
         - status
         - insurances
         - securityCompanies
+        - mainItemTypes
     WarehouseUpdateRequestDto:
       title: WarehouseUpdateRequestDto
       type: object
@@ -2692,6 +2912,19 @@ components:
         - images
         - insurances
         - securityCompanies
+    ImageInfoResponseDto:
+      title: ImageInfoResponseDto
+      type: object
+      properties:
+        url:
+          type: string
+          description: 이미지 url
+        isMain:
+          type: boolean
+          description: '메인 이미지면 true, 아니면 false'
+      required:
+        - url
+        - isMain
   responses:
     WarehouseSearchResponseDto:
       description: Example response
