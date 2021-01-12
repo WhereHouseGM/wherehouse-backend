@@ -1801,6 +1801,34 @@ paths:
                     openapi 3.0에 파일 타입이 없어서 string으로 작성했습니다
               required:
                 - file
+  /v3/users/withdraw:
+    delete:
+      summary: 사용자 탈퇴
+      operationId: post-v3-users-withdraw
+      responses:
+        '200':
+          description: 성공적으로 탈퇴한 경우
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                example-1:
+                  value:
+                    message: 탈퇴했습니다
+        '401':
+          description: access token에 문제가 있는경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+      description: ''
+      security:
+        - Authorization: []
 components:
   schemas:
     NewWarehouseRequestDto:
