@@ -190,8 +190,6 @@ paths:
                   - tokenType
                   - refreshToken
                   - user
-        '204':
-          description: 'No Content : 로그인 실패 시'
         '400':
           description: 'Bad Request : Request Body가 잘못된 경우'
           content:
@@ -227,6 +225,8 @@ paths:
                     error: Bad Request
                     message: Bad Request Exception.
                     path: /v3/users/sign-in
+        '404':
+          description: 'No Content : 로그인 실패 시'
       description: 회원 로그인을 진행합니다.
       requestBody:
         content:
@@ -503,6 +503,8 @@ paths:
                     error: Unauthorized
                     message: 잘못된 형식의 Jwt 토큰입니다.
                     path: /v3/users/15
+        '404':
+          description: 'Not Found : userId가 존재하지 않는 값인 경우'
       operationId: get-v3-users-userId
       description: 회원의 정보를 조회합니다.
       parameters:
@@ -680,13 +682,6 @@ paths:
                 200_Example:
                   value:
                     message: 임시 비밀번호 이메일이 정상적으로 전송되었습니다.
-        '204':
-          description: 'No Content : 이메일이 회원가입이 되어 있지 않은 경우'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties: {}
         '400':
           description: 'Bad Request : Request Body가 잘못된 경우'
           content:
@@ -722,6 +717,13 @@ paths:
                     message: 'Validation failed for argument [0] in public com.banchango.common.dto.BasicMessageResponseDto com.banchango.users.controller.UsersApiController.sendTemporaryPasswordToEmail(com.banchango.users.dto.UserEmailSendRequestDto): [Field error in object ''userEmailSendRequestDto'' on field ''email'': rejected value [null]; codes [NotBlank.userEmailSendRequestDto.email,NotBlank.email,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [userEmailSendRequestDto.email,email]; arguments []; default message [email]]; default message [Email is required.]] '
                     timestamp: 1608979766248
                     status: 400
+        '404':
+          description: 'No Content : 이메일이 회원가입이 되어 있지 않은 경우'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
       description: 비밀번호 분실 시 임시 비밀번호가 담긴 이메일을 전송합니다.
       requestBody:
         content:
