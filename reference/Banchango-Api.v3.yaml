@@ -1087,8 +1087,6 @@ paths:
                       $ref: '#/components/schemas/EstimateSearchDto'
                 required:
                   - estimates
-        '204':
-          description: 견적 문의 내역이 없는 경우
         '400':
           description: 잘못된 요청을 보낸 경우
           content:
@@ -1191,8 +1189,6 @@ paths:
                       $ref: '#/components/schemas/EstimateItemSearchDto'
                 required:
                   - estimateItems
-        '204':
-          description: 견적 문의가 없는 경우
         '400':
           description: estimateId 값이 주어지지 않았을 때
           content:
@@ -1207,6 +1203,12 @@ paths:
                 $ref: '#/components/schemas/ErrorDto'
         '403':
           description: 남이 작성한 견적 문의의 상품 정보 목록을 조회하려할 때
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '404':
+          description: 견적 문의가 없거나 창고가 없는 경우(테이블에 진짜 없거나 상태가 DELETED인 경우)
           content:
             application/json:
               schema:
@@ -1243,8 +1245,6 @@ paths:
                       $ref: '#/components/schemas/EstimateSearchDto'
                 required:
                   - estimates
-        '204':
-          description: No Content
         '400':
           description: Bad Request
           content:
@@ -1368,8 +1368,6 @@ paths:
                       $ref: '#/components/schemas/EstimateItemSearchDto'
                 required:
                   - estimateItems
-        '204':
-          description: No Content
         '400':
           description: estimateId 값이 주어지지 않았을 때
           content:
@@ -1384,6 +1382,12 @@ paths:
                 $ref: '#/components/schemas/ErrorDto'
         '403':
           description: 관리자가 아닌 경우입니다
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '404':
+          description: 견적 문의가 없거나 창고가 없는 경우(테이블에 진짜 없거나 상태가 DELETED인 경우)
           content:
             application/json:
               schema:
