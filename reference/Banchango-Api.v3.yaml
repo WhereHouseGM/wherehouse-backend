@@ -75,7 +75,7 @@ paths:
                 required:
                   - warehouses
         '204':
-          description: 조회한 창고들이 아예 없을 경우
+          description: '조회한 창고들이 아예 없거나 창고 상태가 VIEWABLE이 아닌 경우 '
           content:
             application/json:
               schema:
