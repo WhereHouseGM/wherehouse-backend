@@ -1130,7 +1130,7 @@ paths:
         - Authorization: []
   '/v3/admin/estimates/{estimateId}/status':
     patch:
-      summary: 견적 문의 상태 변경
+      summary: '[관리자]견적 문의 상태 변경'
       operationId: patch-v3-estimates-status
       responses:
         '200':
@@ -1188,7 +1188,7 @@ paths:
         description: 견적 문의 id
   '/v3/admin/estimates/{estimateId}/items':
     get:
-      summary: (관리자용)특정 견적 문의에 포함된 상품 정보 목록 조회
+      summary: '[관리자]특정 견적 문의에 포함된 상품 정보 목록 조회'
       tags:
         - 관리자
         - v3
@@ -2005,6 +2005,8 @@ components:
         - warehouseCondition
         - insurances
         - securityCompanies
+      x-tags:
+        - dto
     WarehouseSearchDto:
       description: ''
       type: object
@@ -2102,6 +2104,8 @@ components:
           mainItemTypes:
             - name: COSMETIC
               match: true
+      x-tags:
+        - dto
     ErrorDto:
       description: ''
       type: object
@@ -2130,6 +2134,8 @@ components:
         - error
         - message
         - path
+      x-tags:
+        - dto
     WarehouseDetailDto:
       description: ''
       type: object
@@ -2308,6 +2314,8 @@ components:
         - images
         - insurances
         - securityCompanies
+      x-tags:
+        - dto
     WarehouseChangeViewableRequestDto:
       title: WarehouseChangeViewableRequestDto
       type: object
@@ -2321,6 +2329,8 @@ components:
       required:
         - warehouseId
         - viewable
+      x-tags:
+        - dto
     WarehouseMainItemTypeMatchDto:
       title: WarehouseMainItemTypeMatchDto
       type: object
@@ -2347,6 +2357,8 @@ components:
       required:
         - name
         - match
+      x-tags:
+        - dto
     WarehouseEstimateRequestDto:
       title: WarehouseEstimateRequestDto
       type: object
@@ -2370,6 +2382,8 @@ components:
         - estimateItems
         - content
         - monthlyAverageRelease
+      x-tags:
+        - dto
     WarehouseEstimateItemRequestDto:
       title: WarehouseEstimateItemDto
       type: object
@@ -2416,6 +2430,8 @@ components:
         - barcode
         - sku
         - url
+      x-tags:
+        - dto
     ChangePasswordRequestDto:
       title: ChangePasswordRequestDto
       type: object
@@ -2429,6 +2445,8 @@ components:
       required:
         - originalPassword
         - newPassword
+      x-tags:
+        - dto
     WarehouseSummaryDto:
       title: WarehouseSummaryDto
       type: object
@@ -2446,6 +2464,8 @@ components:
         - warehouseId
         - name
         - address
+      x-tags:
+        - dto
     EstimateSearchDto:
       title: EstimateSearchDto
       type: object
@@ -2466,6 +2486,8 @@ components:
         - id
         - warehouse
         - status
+      x-tags:
+        - dto
     EstimateItemSearchDto:
       title: EstimateItemSearchDto
       type: object
@@ -2516,6 +2538,8 @@ components:
         - url
         - perimeter
         - keepingType
+      x-tags:
+        - dto
     UserInfoResponseDto:
       title: UserInfoResponseDto
       type: object
@@ -2564,6 +2588,8 @@ components:
         - phoneNumber
         - telephoneNumber
         - role
+      x-tags:
+        - dto
     UserSignupRequestDto:
       title: UserSignupRequestDto
       type: object
@@ -2601,6 +2627,8 @@ components:
         - companyName
         - telephoneNumber
         - phoneNumber
+      x-tags:
+        - dto
     EstimateStatusUpdqteRequestDto:
       title: EstimateStatusUpdqteRequestDto
       type: object
@@ -2614,6 +2642,8 @@ components:
             - DONE
       required:
         - status
+      x-tags:
+        - dto
     WarehouseAdminDetailResponseDto:
       title: WarehouseAdminDetailResponseDto
       type: object
@@ -2806,6 +2836,8 @@ components:
         - createdAt
         - insurances
         - securityCompanies
+      x-tags:
+        - dto
     WarehouseAdminUpdateRequestDto:
       title: WarehouseAdminUpdateRequestDto
       type: object
@@ -2964,6 +2996,8 @@ components:
         - insurances
         - securityCompanies
         - mainItemTypes
+      x-tags:
+        - dto
     WarehouseUpdateRequestDto:
       title: WarehouseUpdateRequestDto
       type: object
@@ -3126,6 +3160,8 @@ components:
         - images
         - insurances
         - securityCompanies
+      x-tags:
+        - dto
     ImageInfoResponseDto:
       title: ImageInfoResponseDto
       type: object
@@ -3139,6 +3175,8 @@ components:
       required:
         - url
         - isMain
+      x-tags:
+        - dto
   responses:
     WarehouseSearchResponseDto:
       description: Example response
