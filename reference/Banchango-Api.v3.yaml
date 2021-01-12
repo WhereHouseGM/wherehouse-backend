@@ -1156,7 +1156,9 @@ paths:
         `/v3/admin/estimates`: 모든 견적 문의 보기
 
         `/v3/admin/estimates?status=RECEPTED`
+
         `/v3/admin/estimates?status=IN_PROGRESS`
+
         `/v3/admin/estimates?status=DONE`
       parameters:
         - schema:
