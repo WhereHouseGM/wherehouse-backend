@@ -11,7 +11,7 @@ paths:
       operationId: post-v3-warehouses
       responses:
         '200':
-          description: OK
+          description: 창고 등록 성공한 경우
           content:
             application/json:
               schema:
@@ -106,12 +106,18 @@ paths:
         - schema:
             type: string
             enum:
-              - CLOTH
-              - FOOD
-              - GENERAL_MERCHANDISE
-              - FURNITURE
-              - COSMETIC
               - ACCESSORY
+              - BOOK
+              - CLOTH
+              - COLD_STORAGE
+              - COSMETIC
+              - ELECTRONICS
+              - FOOD
+              - FREEZE_STORAGE
+              - GENERAL_MERCHANDISE
+              - INTERIOR
+              - LARGE_SIZE
+              - SPORTS
           in: query
           name: mainItemTypes
           description: 창고 주요 품목. 특정 품목들을 취금하는 창고들을  찾을 때 사용합니다
@@ -155,42 +161,7 @@ paths:
                     type: string
                     minLength: 1
                   user:
-                    type: object
-                    required:
-                      - userId
-                      - name
-                      - email
-                      - type
-                      - phoneNumber
-                      - role
-                    properties:
-                      userId:
-                        type: number
-                        description: DB상에 저장되어 있는 회원의 고유 ID 값입니다.
-                      name:
-                        type: string
-                        minLength: 1
-                        description: 회원 명
-                      email:
-                        type: string
-                        minLength: 1
-                        description: 회원 이메일
-                      type:
-                        type: string
-                        minLength: 1
-                        description: |-
-                          해당 회원이 창고주인지, 화주인지를 알려줍니다.
-                          'OWNER', 'SHIPPER' 중 하나의 값이 옵니다.
-                      phoneNumber:
-                        type: string
-                        minLength: 1
-                        description: 회원의 휴대폰 전화번호
-                      role:
-                        type: string
-                        minLength: 1
-                        description: |-
-                          회원의 권한값이 옵니다.
-                          'USER', 'ADMIN' 중 하나의 값이 옵니다.
+                    $ref: '#/components/schemas/UserInfoResponseDto'
                 required:
                   - accessToken
                   - tokenType
@@ -266,40 +237,7 @@ paths:
           content:
             application/json:
               schema:
-                description: ''
-                type: object
-                properties:
-                  userId:
-                    type: number
-                    description: DB상에 저장된 회원의 고유 ID값
-                  name:
-                    type: string
-                    minLength: 1
-                  email:
-                    type: string
-                    minLength: 1
-                  type:
-                    type: string
-                    minLength: 1
-                    description: |-
-                      SHIPPER, OWNER 중 하나의 값이 옵니다.
-                      (SHIPPER : 화주, OWNER : 창고주)
-                  phoneNumber:
-                    type: string
-                    minLength: 1
-                  role:
-                    type: string
-                    minLength: 1
-                    description: |-
-                      USER, ADMIN 중 하나의 값이 옵니다.
-                      (USER : 일반 회원, ADMIN : 관리자)
-                required:
-                  - userId
-                  - name
-                  - email
-                  - type
-                  - phoneNumber
-                  - role
+                $ref: '#/components/schemas/UserInfoResponseDto'
               examples:
                 200_Example:
                   value:
@@ -432,6 +370,7 @@ paths:
         name: userId
         in: path
         required: true
+        description: 사용자 id
     get:
       summary: 회원 정보 조회
       tags:
@@ -455,6 +394,8 @@ paths:
                     telephoneNumber: '0229093199'
                     phoneNumber: '01029093199'
                     role: USER
+        '204':
+          description: 사용자가 없는 경우
         '401':
           description: 'Unauthorized : Bearer 토큰 값에 문제가 있거나 토큰값과 다른 사용자의 정보를 보려고 하는 경우'
           content:
@@ -492,13 +433,9 @@ paths:
                     path: /v3/users/15
       operationId: get-v3-users-userId
       description: 회원의 정보를 조회합니다.
-      parameters:
-        - schema:
-            type: string
-          in: header
-          name: Authorization
-          description: 로그인 시 발급된 AccessToken값
-          required: true
+      parameters: []
+      security:
+        - Authorization: []
     patch:
       summary: 회원 정보 수정
       operationId: patch-v3-users-userId
@@ -591,13 +528,7 @@ paths:
                     message: 해당 사용자의 정보를 조회할 권한이 없습니다.
                     path: /v3/users/14
       description: 회원 정보를 수정합니다.
-      parameters:
-        - schema:
-            type: string
-          in: header
-          name: Authorization
-          description: 로그인 시 발급된 AccessToken값
-          required: true
+      parameters: []
       requestBody:
         content:
           application/json:
@@ -624,6 +555,8 @@ paths:
       tags:
         - 사용자
         - v3
+      security:
+        - Authorization: []
   /v3/users/password-lost:
     patch:
       summary: 임시 비밀번호 이메일 전송
@@ -785,6 +718,12 @@ paths:
                     error: Unauthorized
                     message: 잘못된 형식의 Jwt 토큰입니다.
                     path: /v3/users/15
+        '403':
+          description: 다른 사용자의 창고인 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
       security:
         - Authorization: []
       tags:
@@ -795,7 +734,7 @@ paths:
       operationId: put-v3-warehouses-warehouseId
       responses:
         '200':
-          description: OK
+          description: 창고 수정 성공한 경우
           content:
             application/json:
               schema:
@@ -1359,10 +1298,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/WarehouseAdminDetailResponseDto'
-              examples:
-                example-1:
-                  value:
-                    message: ''
         '204':
           description: 수정할 창고가 없는 경우
         '400':
@@ -2605,17 +2540,21 @@ components:
           type: string
           description: 회사명
         phoneNumber:
-          type: string
+          type:
+            - string
+            - 'null'
           description: 전화번호
         telephoneNumber:
-          type: string
+          type:
+            - string
+            - 'null'
           description: 사무실 번호
         role:
           type: string
-          description: 사용자 권한
           enum:
-            - USER
             - ADMIN
+            - USER
+          description: 사용자 권한
       required:
         - userId
         - name
