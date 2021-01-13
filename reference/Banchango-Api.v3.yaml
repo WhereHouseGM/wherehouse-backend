@@ -3077,6 +3077,8 @@ components:
     WarehouseAdminUpdateRequestDto:
       title: WarehouseAdminUpdateRequestDto
       type: object
+      x-tags:
+        - dto
       properties:
         name:
           type: string
@@ -3206,6 +3208,12 @@ components:
           description: 카테고리
           items:
             type: string
+        blogUrl:
+          type:
+            - string
+            - 'null'
+          description: 우리가 작성한 블로그 url
+          format: uri
       required:
         - name
         - space
@@ -3232,8 +3240,7 @@ components:
         - insurances
         - securityCompanies
         - mainItemTypes
-      x-tags:
-        - dto
+        - blogUrl
     WarehouseUpdateRequestDto:
       title: WarehouseUpdateRequestDto
       type: object
