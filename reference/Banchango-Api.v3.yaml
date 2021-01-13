@@ -2006,12 +2006,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorDto'
+        '409':
+          description: 이미 탈퇴한 사용자인 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
       description: ''
       security:
         - Authorization: []
       tags:
         - 사용자
         - v3
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserWithdrawRequestDto'
+        description: ''
 components:
   schemas:
     NewWarehouseRequestDto:
@@ -3388,6 +3400,16 @@ components:
         - isMain
       x-tags:
         - dto
+    UserWithdrawRequestDto:
+      title: UserWithdrawRequestDto
+      type: object
+      properties:
+        cause:
+          type: string
+          description: 사유
+          minLength: 1
+      required:
+        - cause
   responses:
     WarehouseSearchResponseDto:
       description: Example response
