@@ -205,7 +205,13 @@ paths:
                     message: Bad Request Exception.
                     path: /v3/users/sign-in
         '404':
-          description: 'No Content : 로그인 실패 시'
+          description: |-
+            No Content : 로그인 실패 시
+            (이메일과 비밀번호가 틀리거나 탈퇴한 사용자인 경우)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
       description: 회원 로그인을 진행합니다.
       requestBody:
         content:
