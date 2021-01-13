@@ -2698,6 +2698,8 @@ components:
     EstimateSearchDto:
       title: EstimateSearchDto
       type: object
+      x-tags:
+        - dto
       properties:
         id:
           description: 견적 문의 id
@@ -2711,12 +2713,14 @@ components:
             - RECEPTED
             - DONE
           description: 견적 문의 처리 진행 상황
+        montlyAverageRelease:
+          type: integer
+          description: 월 평균 출고량
       required:
         - id
         - warehouse
         - status
-      x-tags:
-        - dto
+        - montlyAverageRelease
     EstimateItemSearchDto:
       title: EstimateItemSearchDto
       type: object
