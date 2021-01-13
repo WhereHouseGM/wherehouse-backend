@@ -3240,7 +3240,6 @@ components:
         - insurances
         - securityCompanies
         - mainItemTypes
-        - blogUrl
     WarehouseUpdateRequestDto:
       title: WarehouseUpdateRequestDto
       type: object
