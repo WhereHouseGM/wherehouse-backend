@@ -1994,6 +1994,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorDto'
+        '404':
+          description: 탈퇴할 사용자가 없는 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
       description: ''
       security:
         - Authorization: []
