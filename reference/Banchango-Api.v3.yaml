@@ -1976,7 +1976,7 @@ paths:
               required:
                 - file
   /v3/users/withdraw:
-    delete:
+    post:
       summary: 사용자 탈퇴
       operationId: post-v3-users-withdraw
       responses:
