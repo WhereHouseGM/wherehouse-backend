@@ -2069,6 +2069,8 @@ components:
             deliveryTypes:
               - 한진 택배
               - 테스트 택배
+      x-tags:
+        - dto
       properties:
         name:
           type: string
@@ -2115,12 +2117,12 @@ components:
           description: |-
             CCTV 존재 유무
             (존재 : 1, 없음 : 0)
-          type: integer
+          type: boolean
         doorLockExist:
           description: |-
             도어락 존재 유무
             (존재 : 1, 없음 : 0)
-          type: integer
+          type: boolean
         airConditioningType:
           type: string
           minLength: 1
@@ -2131,12 +2133,12 @@ components:
           description: |-
             현장 인력 존재 유무
             (존재 : 1, 없음 : 0)
-          type: integer
+          type: boolean
         canPark:
           description: |-
             주차 가능 여부
             (가능 : 1, 불가 : 0)
-          type: integer
+          type: boolean
         mainItemTypes:
           type: array
           description: 창고가 가장 자신있게 보관할 수 있는 물품의 종류들
@@ -2228,8 +2230,6 @@ components:
         - warehouseCondition
         - insurances
         - securityCompanies
-      x-tags:
-        - dto
     WarehouseSearchDto:
       description: ''
       type: object
@@ -2537,21 +2537,6 @@ components:
         - images
         - insurances
         - securityCompanies
-      x-tags:
-        - dto
-    WarehouseChangeViewableRequestDto:
-      title: WarehouseChangeViewableRequestDto
-      type: object
-      properties:
-        warehouseId:
-          type: integer
-          description: 창고 id
-        viewable:
-          type: boolean
-          description: 창고 조회 가능 여부
-      required:
-        - warehouseId
-        - viewable
       x-tags:
         - dto
     WarehouseMainItemTypeMatchDto:
