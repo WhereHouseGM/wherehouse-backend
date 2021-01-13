@@ -1113,6 +1113,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorDto'
+        '404':
+          description: 견적 문의 목록이 없는 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
       parameters: []
       description: ''
       security:
@@ -1265,6 +1271,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorDto'
+        '404':
+          description: 견적 문의 목록 없는 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
       operationId: get-v3-admin-estimates
       description: |
         `/v3/admin/estimates`: 모든 견적 문의 보기
@@ -1395,7 +1407,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorDto'
         '404':
-          description: 견적 문의가 없거나 창고가 없는 경우(테이블에 진짜 없거나 상태가 DELETED인 경우)
+          description: |-
+            견적 문의가 없거나 창고가 없는 경우(테이블에 진짜 없거나 상태가 DELETED인 경우)
+            또는 견적 문의 목록이 없는 경우
           content:
             application/json:
               schema:
