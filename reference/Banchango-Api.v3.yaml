@@ -2376,6 +2376,8 @@ components:
     WarehouseDetailDto:
       description: ''
       type: object
+      x-tags:
+        - dto
       properties:
         warehouseId:
           type: integer
@@ -2521,6 +2523,12 @@ components:
           description: 보안 업체 목록
           items:
             type: string
+        blogUrl:
+          type:
+            - string
+            - 'null'
+          format: uri
+          description: 우리가 작성한 블로그 url
       required:
         - warehouseId
         - ownerId
@@ -2551,8 +2559,7 @@ components:
         - images
         - insurances
         - securityCompanies
-      x-tags:
-        - dto
+        - blogUrl
     WarehouseMainItemTypeMatchDto:
       title: WarehouseMainItemTypeMatchDto
       type: object
@@ -2869,6 +2876,8 @@ components:
     WarehouseAdminDetailResponseDto:
       title: WarehouseAdminDetailResponseDto
       type: object
+      x-tags:
+        - dto
       properties:
         warehouseId:
           type: integer
@@ -3026,6 +3035,12 @@ components:
           description: 보안 업체 목록
           items:
             type: string
+        blogUrl:
+          type:
+            - string
+            - 'null'
+          format: uri
+          description: 우리가 작성한 블로그 url
       required:
         - warehouseId
         - ownerId
@@ -3058,8 +3073,7 @@ components:
         - createdAt
         - insurances
         - securityCompanies
-      x-tags:
-        - dto
+        - blogUrl
     WarehouseAdminUpdateRequestDto:
       title: WarehouseAdminUpdateRequestDto
       type: object
