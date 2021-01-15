@@ -692,7 +692,7 @@ paths:
       operationId: delete-v3-warehouses-warehouseId
       responses:
         '200':
-          description: OK
+          description: 'OK '
           content:
             application/json:
               schema:
@@ -743,6 +743,7 @@ paths:
       tags:
         - 창고
         - v3
+      description: ''
     put:
       summary: 창고 정보를 수정합니다.
       operationId: put-v3-warehouses-warehouseId
