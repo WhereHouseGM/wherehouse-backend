@@ -577,7 +577,7 @@ paths:
       operationId: patch
       responses:
         '200':
-          description: 'OK : 이메일 전송이 완료된 경우'
+          description: 'OK : 이메일 전송이 완료된 경우 '
           content:
             application/json:
               schema:
