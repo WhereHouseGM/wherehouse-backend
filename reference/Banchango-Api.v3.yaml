@@ -402,8 +402,6 @@ paths:
                     telephoneNumber: '0229093199'
                     phoneNumber: '01029093199'
                     role: USER
-        '204':
-          description: 사용자가 없는 경우
         '401':
           description: 'Unauthorized : Bearer 토큰 값에 문제가 있거나 토큰값과 다른 사용자의 정보를 보려고 하는 경우'
           content:
@@ -537,6 +535,12 @@ paths:
                     error: Unauthorized
                     message: 해당 사용자의 정보를 조회할 권한이 없습니다.
                     path: /v3/users/14
+        '404':
+          description: 사용자가 없는 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
       description: 회원 정보를 수정합니다.
       parameters: []
       requestBody:
@@ -702,12 +706,6 @@ paths:
                 example-1:
                   value:
                     message: 창고를 정상적으로 삭제했습니다
-        '204':
-          description: 삭제할 창고가 없는 경우
-          content:
-            application/json:
-              schema:
-                type: object
         '400':
           description: 잘못된 요청을 보낸 경우
           content:
@@ -730,6 +728,12 @@ paths:
                     path: /v3/users/15
         '403':
           description: 다른 사용자의 창고인 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '404':
+          description: 삭제할 창고가 없는 경우
           content:
             application/json:
               schema:
@@ -984,8 +988,6 @@ paths:
                     - warehouseId: 10
                       name: 가야물류
                       createdAt: 2021년 1월 4일 19시 3분 0초
-        '204':
-          description: 'Not Found : 대기중인 창고 등록 요청이 없는 경우'
         '401':
           description: 'Unauthorized : 토큰 값이 잘못된 경우 입니다.'
           content:
@@ -999,6 +1001,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorDto'
               examples: {}
+        '404':
+          description: 'Not Found : 대기중인 창고 등록 요청이 없는 경우'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
       operationId: get-v3-admin-warehouses
       description: |
         창고 등록 요청이 온 창고들을 조회합니다.
@@ -1277,6 +1285,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorDto'
+        '403':
+          description: 관리자가 아닌 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
         '404':
           description: 견적 문의 목록 없는 경우
           content:
@@ -1351,6 +1365,12 @@ paths:
                 $ref: '#/components/schemas/ErrorDto'
         '403':
           description: 관리자가 아닌 경우입니다
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '404':
+          description: 견적 문의가 없는 경우
           content:
             application/json:
               schema:
@@ -1452,12 +1472,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/WarehouseAdminDetailResponseDto'
-        '204':
-          description: 해당 창고가 없는 경우입니다
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorDto'
         '400':
           description: Bad Request
           content:
@@ -1472,6 +1486,12 @@ paths:
                 $ref: '#/components/schemas/ErrorDto'
         '403':
           description: 관리자가 아닌 경우입니다
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '404':
+          description: 해당 창고가 없는 경우입니다
           content:
             application/json:
               schema:
@@ -1549,8 +1569,6 @@ paths:
                 example-1:
                   value:
                     message: 삭제에 성공했습니다
-        '204':
-          description: 삭제할 창고가 없는 경우
         '400':
           description: 잘못된 요청인 경우
           content:
@@ -1565,6 +1583,12 @@ paths:
                 $ref: '#/components/schemas/ErrorDto'
         '403':
           description: '관리자가 아닌 경우  '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '404':
+          description: 창고가 없는 경우
           content:
             application/json:
               schema:
@@ -1609,8 +1633,6 @@ paths:
                 example-1:
                   value:
                     message: 삭제에 성공했습니다
-        '204':
-          description: 삭제할 창고가 없는 경우
         '400':
           description: 잘못된 요청인 경우
           content:
@@ -1625,6 +1647,12 @@ paths:
                 $ref: '#/components/schemas/ErrorDto'
         '403':
           description: '관리자가 아닌 경우  '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '404':
+          description: 창고가 없는 경우
           content:
             application/json:
               schema:
@@ -1787,8 +1815,6 @@ paths:
                 example-1:
                   value:
                     message: 삭제에 성공했습니다
-        '204':
-          description: 삭제할 사진이 없는 경우
         '400':
           description: 잘못된 요청을 보낸 경우
           content:
@@ -1803,6 +1829,12 @@ paths:
                 $ref: '#/components/schemas/ErrorDto'
         '403':
           description: 다른 사용자의 창고인 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '404':
+          description: 삭제할 사진이 없는 경우
           content:
             application/json:
               schema:
@@ -1845,8 +1877,6 @@ paths:
                 example-1:
                   value:
                     message: 삭제에 성공했습니다
-        '204':
-          description: 삭제할 이미지가 없는 경우
         '400':
           description: 잘못된 요청을 보낸 경우
           content:
@@ -1861,6 +1891,12 @@ paths:
                 $ref: '#/components/schemas/ErrorDto'
         '403':
           description: 다른 사용자의 창고인 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '404':
+          description: 삭제할 이미지가 없는 경우
           content:
             application/json:
               schema:
