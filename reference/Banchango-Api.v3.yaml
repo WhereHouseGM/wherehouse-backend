@@ -2032,7 +2032,7 @@ paths:
                     openapi 3.0에 파일 타입이 없어서 string으로 작성했습니다
               required:
                 - file
-  /v3/users/withdraw:
+  '/v3/users/{userId}/withdraw':
     post:
       summary: 사용자 탈퇴
       operationId: post-v3-users-withdraw
@@ -2093,6 +2093,13 @@ paths:
             schema:
               $ref: '#/components/schemas/UserWithdrawRequestDto'
         description: ''
+    parameters:
+      - schema:
+          type: string
+        name: userId
+        in: path
+        required: true
+        description: 사용자 id
 components:
   schemas:
     NewWarehouseRequestDto:
