@@ -2051,6 +2051,12 @@ paths:
                 example-1:
                   value:
                     message: 탈퇴했습니다
+        '400':
+          description: 요청 바디 값이 잘못된 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
         '401':
           description: access token에 문제가 있는경우
           content:
