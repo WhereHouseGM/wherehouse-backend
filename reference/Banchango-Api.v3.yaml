@@ -2708,6 +2708,8 @@ components:
     WarehouseEstimateRequestDto:
       title: WarehouseEstimateRequestDto
       type: object
+      x-tags:
+        - dto
       properties:
         warehouseId:
           type: integer
@@ -2726,10 +2728,7 @@ components:
       required:
         - warehouseId
         - estimateItems
-        - content
         - monthlyAverageRelease
-      x-tags:
-        - dto
     WarehouseEstimateItemRequestDto:
       title: WarehouseEstimateItemDto
       type: object
@@ -2824,7 +2823,9 @@ components:
         warehouse:
           $ref: '#/components/schemas/WarehouseSummaryDto'
         status:
-          type: string
+          type:
+            - string
+            - 'null'
           enum:
             - IN_PROGRESS
             - RECEPTED
