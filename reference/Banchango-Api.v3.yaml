@@ -2823,9 +2823,7 @@ components:
         warehouse:
           $ref: '#/components/schemas/WarehouseSummaryDto'
         status:
-          type:
-            - string
-            - 'null'
+          type: string
           enum:
             - IN_PROGRESS
             - RECEPTED
