@@ -2110,7 +2110,6 @@ paths:
         description: 사용자 id
     get:
       summary: 내 창고 가져오기
-      tags: []
       responses:
         '200':
           description: OK
@@ -2156,6 +2155,8 @@ paths:
       operationId: get-v3-users-userId-warehouses
       security:
         - Authorization: []
+      tags:
+        - 사용자
 components:
   schemas:
     NewWarehouseRequestDto:
