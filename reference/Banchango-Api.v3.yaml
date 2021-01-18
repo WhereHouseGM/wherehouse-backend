@@ -2110,7 +2110,8 @@ paths:
         description: 사용자 id
     get:
       summary: 내 창고 가져오기
-      tags: []
+      tags:
+        - 사용자
       responses:
         '200':
           description: OK
@@ -2147,7 +2148,9 @@ paths:
         '404':
           description: |-
             창고가 없는 경우
+
             창고 상태가 DELETED인 경우
+
             사용자가 없는 경우
           content:
             application/json:
