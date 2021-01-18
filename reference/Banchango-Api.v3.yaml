@@ -2110,6 +2110,7 @@ paths:
         description: 사용자 id
     get:
       summary: 내 창고 가져오기
+      tags: []
       responses:
         '200':
           description: OK
@@ -2155,8 +2156,6 @@ paths:
       operationId: get-v3-users-userId-warehouses
       security:
         - Authorization: []
-      tags:
-        - 사용자
 components:
   schemas:
     NewWarehouseRequestDto:
@@ -3551,6 +3550,8 @@ components:
           minLength: 1
       required:
         - cause
+      x-tags:
+        - dto
     MyWarehouseDto:
       title: MyWarehouseDto
       type: object
@@ -3586,6 +3587,8 @@ components:
         - addressDetail
         - status
         - mainImageUrl
+      x-tags:
+        - dto
   responses:
     WarehouseSearchResponseDto:
       description: Example response
