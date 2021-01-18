@@ -2100,6 +2100,59 @@ paths:
         in: path
         required: true
         description: 사용자 id
+  '/v3/users/{userId}/warehouses':
+    parameters:
+      - schema:
+          type: string
+        name: userId
+        in: path
+        required: true
+        description: 사용자 id
+    get:
+      summary: 내 창고 가져오기
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  warehouses:
+                    type: array
+                    description: 내 창고 목록
+                    items:
+                      $ref: '#/components/schemas/MyWarehouseDto'
+                required:
+                  - warehouses
+        '400':
+          description: 잘못된 요청을 보낸 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '401':
+          description: access token에 문제가 있는 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '403':
+          description: 다른 사용자의 창고를 조회하려는 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '404':
+          description: 창고가 없는 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+      operationId: get-v3-users-userId-warehouses
+      security:
+        - Authorization: []
 components:
   schemas:
     NewWarehouseRequestDto:
@@ -3495,6 +3548,41 @@ components:
           minLength: 1
       required:
         - cause
+    MyWarehouseDto:
+      title: MyWarehouseDto
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 창고 id
+        name:
+          type: string
+          description: 창고 이름
+        address:
+          type: string
+          description: 창고 주소
+        addressDetail:
+          type: string
+          description: 창고 상세 주소
+        status:
+          type: string
+          description: 창고 상태
+          enum:
+            - IN_PROGRESS
+            - REJECTED
+            - VIEWABLE
+            - DELETED
+        mainImageUrl:
+          type: string
+          description: 창고 메인 이미지 url
+          format: uri
+      required:
+        - id
+        - name
+        - address
+        - addressDetail
+        - status
+        - mainImageUrl
   responses:
     WarehouseSearchResponseDto:
       description: Example response
