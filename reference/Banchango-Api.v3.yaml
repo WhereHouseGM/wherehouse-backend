@@ -2145,7 +2145,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorDto'
         '404':
-          description: 창고가 없는 경우
+          description: |-
+            창고가 없는 경우
+            사용자가 없는 경우
           content:
             application/json:
               schema:
