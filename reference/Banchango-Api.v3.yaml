@@ -45,7 +45,10 @@ paths:
                     error: Unauthorized
                     message: 잘못된 형식의 Jwt 토큰입니다.
                     path: /v3/users/15
-      description: 새로운 창고를 등록합니다.
+      description: |-
+        새로운 창고를 등록합니다.
+
+        호출 허용하는 사용자 타입: `SHIPPER`, `OWNER`
       requestBody:
         content:
           application/json:
@@ -138,6 +141,7 @@ paths:
       tags:
         - 창고
         - v3
+      description: '호출 허용하는 사용자 타입: `SHIPPER`, `OWNER`'
   /v3/users/sign-in:
     post:
       summary: 회원 로그인
@@ -440,7 +444,10 @@ paths:
         '404':
           description: 'Not Found : userId가 존재하지 않는 값인 경우'
       operationId: get-v3-users-userId
-      description: 회원의 정보를 조회합니다.
+      description: |-
+        회원의 정보를 조회합니다.
+
+        호출 허용하는 사용자 타입: `SHIPPER`, `OWNER`
       parameters: []
       security:
         - Authorization: []
@@ -541,7 +548,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorDto'
-      description: 회원 정보를 수정합니다.
+      description: |-
+        회원 정보를 수정합니다.
+
+        호출 허용하는 사용자 타입: `SHIPPER`, `OWNER`
       parameters: []
       requestBody:
         content:
@@ -687,6 +697,7 @@ paths:
               schema:
                 type: object
       operationId: get-v3-warehouses-warehouseId
+      description: '호출 허용하는 사용자 타입: `SHIPPER`, `OWNER`'
     delete:
       summary: 창고 삭제
       operationId: delete-v3-warehouses-warehouseId
@@ -743,7 +754,7 @@ paths:
       tags:
         - 창고
         - v3
-      description: ''
+      description: '호출 허용하는 사용자 타입: `OWNER`'
     put:
       summary: 창고 정보를 수정합니다.
       operationId: put-v3-warehouses-warehouseId
@@ -946,6 +957,7 @@ paths:
       tags:
         - 창고
         - v3
+      description: '호출 허용하는 사용자 타입: `OWNER`'
   /v3/admin/warehouses:
     get:
       summary: 관리자용 창고 조회
@@ -1009,8 +1021,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorDto'
       operationId: get-v3-admin-warehouses
-      description: |
+      description: |-
         창고 등록 요청이 온 창고들을 조회합니다.
+
+        호출 허용하는 사용자 타입: `SHIPPER`, `OWNER`
       parameters:
         - schema:
             type: integer
@@ -1081,7 +1095,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorDto'
-      description: ''
+      description: '호출 허용하는 사용자 타입: `SHIPPER`'
       security:
         - Authorization: []
       requestBody:
@@ -1135,7 +1149,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorDto'
       parameters: []
-      description: ''
+      description: '호출 허용하는 사용자 타입: `SHIPPER`'
       security:
         - Authorization: []
       tags:
@@ -1186,7 +1200,7 @@ paths:
                 $ref: '#/components/schemas/ErrorDto'
         '404':
           description: access token에 있는 사용자 id가 존재하지 않을 때
-      description: ''
+      description: '호출 허용하는 사용자 타입: `SHIPPER`, `OWNER`'
       security:
         - Authorization: []
       requestBody:
@@ -1243,7 +1257,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorDto'
       operationId: get-v3-estimate-items
-      description: ''
+      description: '호출 허용하는 사용자 타입: `SHIPPER`'
       security:
         - Authorization: []
       parameters: []
@@ -1307,6 +1321,8 @@ paths:
         `/v3/admin/estimates?status=IN_PROGRESS`
 
         `/v3/admin/estimates?status=DONE`
+
+        호출 허용하는 사용자 타입: `SHIPPER`, `OWNER`
       parameters:
         - schema:
             type: string
@@ -1384,7 +1400,7 @@ paths:
             schema:
               $ref: '#/components/schemas/EstimateStatusUpdqteRequestDto'
         description: ''
-      description: ''
+      description: '호출 허용하는 사용자 타입: `SHIPPER`, `OWNER`'
       tags:
         - 관리자
         - v3
@@ -1442,7 +1458,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorDto'
       operationId: get-v3-admin-estimate-items
-      description: ''
+      description: '호출 허용하는 사용자 타입: `SHIPPER`, `OWNER`'
       security:
         - Authorization: []
       parameters: []
@@ -1501,6 +1517,8 @@ paths:
       description: |-
         일반 사용자가 볼 수 있는 창고 정보와
         창고 status와 창고 생성일까지 볼 수 있습니다
+
+        호출 허용하는 사용자 타입: `SHIPPER`, `OWNER`
       security:
         - Authorization: []
     put:
@@ -1543,6 +1561,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/WarehouseAdminUpdateRequestDto'
+      description: '호출 허용하는 사용자 타입: `SHIPPER`, `OWNER`'
   '/v3/admin/images/delete/{warehouseId}':
     parameters:
       - schema:
@@ -1601,7 +1620,7 @@ paths:
           name: file
           description: 파일 이름
           required: true
-      description: ''
+      description: '호출 허용하는 사용자 타입: `SHIPPER`, `OWNER`'
       tags:
         - 관리자
         - v3
@@ -1663,6 +1682,7 @@ paths:
       tags:
         - 관리자
         - v3
+      description: '호출 허용하는 사용자 타입: `SHIPPER`, `OWNER`'
   '/v3/admin/images/upload/{warehouseId}':
     parameters:
       - schema:
@@ -1708,7 +1728,7 @@ paths:
       tags:
         - 관리자
         - v3
-      description: ''
+      description: '호출 허용하는 사용자 타입: `SHIPPER`, `OWNER`'
       requestBody:
         content:
           multipart/form-data:
@@ -1789,6 +1809,7 @@ paths:
                   format: binary
               required:
                 - file
+      description: '호출 허용하는 사용자 타입: `SHIPPER`, `OWNER`'
   '/v3/images/delete/{warehouseId}':
     parameters:
       - schema:
@@ -1852,7 +1873,7 @@ paths:
           name: file
           description: 파일 이름
           required: true
-      description: ''
+      description: '호출 허용하는 사용자 타입: `OWNER`'
   '/v3/images/delete/main/{warehouseId}':
     parameters:
       - schema:
@@ -1907,6 +1928,7 @@ paths:
       tags:
         - 이미지
         - v3
+      description: '호출 허용하는 사용자 타입: `OWNER`'
   '/v3/images/upload/{warehouseId}':
     parameters:
       - schema:
@@ -1971,6 +1993,7 @@ paths:
                     openapi 3.0에 파일 타입이 없어서 string으로 작성했습니다
               required:
                 - file
+      description: '호출 허용하는 사용자 타입: `OWNER`'
   '/v3/images/upload/main/{warehouseId}':
     parameters:
       - schema:
@@ -2016,7 +2039,7 @@ paths:
       tags:
         - 이미지
         - v3
-      description: ''
+      description: '호출 허용하는 사용자 타입: `OWNER`'
       requestBody:
         content:
           multipart/form-data:
@@ -2081,7 +2104,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorDto'
-      description: ''
+      description: '호출 허용하는 사용자 타입: `SHIPPER`, `OWNER`'
       security:
         - Authorization: []
       tags:
@@ -2159,6 +2182,7 @@ paths:
       operationId: get-v3-users-userId-warehouses
       security:
         - Authorization: []
+      description: '호출 허용하는 사용자 타입: `OWNER`'
 components:
   schemas:
     NewWarehouseRequestDto:
