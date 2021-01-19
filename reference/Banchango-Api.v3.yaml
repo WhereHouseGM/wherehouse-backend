@@ -1531,8 +1531,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/WarehouseAdminDetailResponseDto'
-        '204':
-          description: 수정할 창고가 없는 경우
         '400':
           description: 잘못된 요청을 보낸 경우
           content:
@@ -1547,6 +1545,12 @@ paths:
                 $ref: '#/components/schemas/ErrorDto'
         '403':
           description: 관리자가 아닌 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '404':
+          description: 수정할 창고가 없는 경우
           content:
             application/json:
               schema:
