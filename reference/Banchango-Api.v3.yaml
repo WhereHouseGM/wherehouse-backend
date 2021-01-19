@@ -141,7 +141,7 @@ paths:
       tags:
         - 창고
         - v3
-      description: '호출 허용하는 사용자 타입: `SHIPPER`, `OWNER`'
+      description: ''
   /v3/users/sign-in:
     post:
       summary: 회원 로그인
@@ -697,7 +697,7 @@ paths:
               schema:
                 type: object
       operationId: get-v3-warehouses-warehouseId
-      description: '호출 허용하는 사용자 타입: `SHIPPER`, `OWNER`'
+      description: ''
     delete:
       summary: 창고 삭제
       operationId: delete-v3-warehouses-warehouseId
@@ -2055,6 +2055,8 @@ paths:
                     openapi 3.0에 파일 타입이 없어서 string으로 작성했습니다
               required:
                 - file
+      security:
+        - Authorization: []
   '/v3/users/{userId}/withdraw':
     post:
       summary: 사용자 탈퇴
