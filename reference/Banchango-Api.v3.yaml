@@ -1566,127 +1566,6 @@ paths:
             schema:
               $ref: '#/components/schemas/WarehouseAdminUpdateRequestDto'
       description: '호출 허용하는 사용자 타입: `SHIPPER`, `OWNER`'
-  '/v3/admin/images/delete/{warehouseId}':
-    parameters:
-      - schema:
-          type: string
-        name: warehouseId
-        in: path
-        required: true
-        description: 창고 id
-    delete:
-      summary: '[관리자] 창고 extra 이미지 삭제'
-      operationId: delete-v3-admin-images-delete-warehouseId
-      responses:
-        '200':
-          description: 창고 이미지 삭제 성공
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                required:
-                  - message
-              examples:
-                example-1:
-                  value:
-                    message: 삭제에 성공했습니다
-        '400':
-          description: 잘못된 요청인 경우
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorDto'
-        '401':
-          description: access token에 문제가 있는 경우
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorDto'
-        '403':
-          description: '관리자가 아닌 경우  '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorDto'
-        '404':
-          description: 창고가 없는 경우
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorDto'
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: file
-          description: 파일 이름
-          required: true
-      description: '호출 허용하는 사용자 타입: `SHIPPER`, `OWNER`'
-      tags:
-        - 관리자
-        - v3
-      security:
-        - Authorization: []
-  '/v3/admin/images/delete/main/{warehouseId}':
-    parameters:
-      - schema:
-          type: string
-        name: warehouseId
-        in: path
-        required: true
-        description: 창고 id
-    delete:
-      summary: '[관리자] 창고 메인 이미지 삭제'
-      operationId: delete-v3-admin-images-delete-main-warehouseId
-      responses:
-        '200':
-          description: 창고 이미지 삭제 성공
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                required:
-                  - message
-              examples:
-                example-1:
-                  value:
-                    message: 삭제에 성공했습니다
-        '400':
-          description: 잘못된 요청인 경우
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorDto'
-        '401':
-          description: access token에 문제가 있는 경우
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorDto'
-        '403':
-          description: '관리자가 아닌 경우  '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorDto'
-        '404':
-          description: 창고가 없는 경우
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorDto'
-      security:
-        - Authorization: []
-      tags:
-        - 관리자
-        - v3
-      description: '호출 허용하는 사용자 타입: `SHIPPER`, `OWNER`'
   '/v3/admin/images/{warehouseId}':
     parameters:
       - schema:
@@ -1751,6 +1630,62 @@ paths:
         description: ''
       security:
         - Authorization: []
+    delete:
+      summary: '[관리자] 창고 extra 이미지 삭제'
+      operationId: delete-v3-admin-images-delete-warehouseId
+      responses:
+        '200':
+          description: 창고 이미지 삭제 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+              examples:
+                example-1:
+                  value:
+                    message: 삭제에 성공했습니다
+        '400':
+          description: 잘못된 요청인 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '401':
+          description: access token에 문제가 있는 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '403':
+          description: '관리자가 아닌 경우  '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '404':
+          description: 창고가 없는 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: file
+          description: 파일 이름
+          required: true
+      description: '호출 허용하는 사용자 타입: `SHIPPER`, `OWNER`'
+      tags:
+        - 관리자
+        - v3
+      security:
+        - Authorization: []
   '/v3/admin/images/main/{warehouseId}':
     parameters:
       - schema:
@@ -1813,6 +1748,55 @@ paths:
                   format: binary
               required:
                 - file
+      description: '호출 허용하는 사용자 타입: `SHIPPER`, `OWNER`'
+    delete:
+      summary: '[관리자] 창고 메인 이미지 삭제'
+      operationId: delete-v3-admin-images-delete-main-warehouseId
+      responses:
+        '200':
+          description: 창고 이미지 삭제 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+              examples:
+                example-1:
+                  value:
+                    message: 삭제에 성공했습니다
+        '400':
+          description: 잘못된 요청인 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '401':
+          description: access token에 문제가 있는 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '403':
+          description: '관리자가 아닌 경우  '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '404':
+          description: 창고가 없는 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+      security:
+        - Authorization: []
+      tags:
+        - 관리자
+        - v3
       description: '호출 허용하는 사용자 타입: `SHIPPER`, `OWNER`'
   '/v3/images/{warehouseId}':
     parameters:
