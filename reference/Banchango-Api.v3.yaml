@@ -1687,7 +1687,7 @@ paths:
         - 관리자
         - v3
       description: '호출 허용하는 사용자 타입: `SHIPPER`, `OWNER`'
-  '/v3/admin/images/upload/{warehouseId}':
+  '/v3/admin/images/{warehouseId}':
     parameters:
       - schema:
           type: string
@@ -1751,7 +1751,7 @@ paths:
         description: ''
       security:
         - Authorization: []
-  '/v3/admin/images/upload/main/{warehouseId}':
+  '/v3/admin/images/main/{warehouseId}':
     parameters:
       - schema:
           type: string
@@ -1814,7 +1814,7 @@ paths:
               required:
                 - file
       description: '호출 허용하는 사용자 타입: `SHIPPER`, `OWNER`'
-  '/v3/images/delete/{warehouseId}':
+  '/v3/images/{warehouseId}':
     parameters:
       - schema:
           type: string
@@ -1878,7 +1878,7 @@ paths:
           description: 파일 이름
           required: true
       description: '호출 허용하는 사용자 타입: `OWNER`'
-  '/v3/images/delete/main/{warehouseId}':
+  '/v3/images/main/{warehouseId}':
     parameters:
       - schema:
           type: string
