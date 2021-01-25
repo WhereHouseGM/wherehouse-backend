@@ -3726,16 +3726,12 @@ components:
       title: EstimateDetailDto
       type: object
       properties:
-        items:
-          type: array
-          description: 상품 목록
-          items:
-            $ref: '#/components/schemas/EstimateItemSearchDto'
+        id:
+          type: integer
+          description: 견적 문의 id
         content:
           type: string
           description: 요청 및 유의사항
-        user:
-          $ref: '#/components/schemas/UserInfoResponseDto'
         status:
           type: string
           enum:
@@ -3743,29 +3739,27 @@ components:
             - IN_PROGRESS
             - DONE
           description: 진행상태
-        id:
-          type: integer
-          description: 견적 문의 id
         monthlyAverageRelease:
           type: integer
           description: 월간 평균 출고량
-        warehouse:
-          type: object
-          description: 창고 정보
-          required:
-            - name
-          properties:
-            name:
-              type: string
-              description: 창고 이름
+        user:
+          $ref: '#/components/schemas/UserInfoResponseDto'
+        items:
+          type: array
+          description: 상품 목록
+          items:
+            $ref: '#/components/schemas/EstimateItemSearchDto'
+        warehouseName:
+          type: string
+          description: 창고 이름
       required:
-        - items
-        - content
-        - user
-        - status
         - id
+        - content
+        - status
         - monthlyAverageRelease
-        - warehouse
+        - user
+        - items
+        - warehouseName
     EstimateSummaryDto:
       title: EstimateSummaryDto
       type: object
