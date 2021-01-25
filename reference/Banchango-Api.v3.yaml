@@ -2997,6 +2997,8 @@ components:
     UserInfoResponseDto:
       title: UserInfoResponseDto
       type: object
+      x-tags:
+        - dto
       properties:
         userId:
           type: integer
@@ -3033,6 +3035,9 @@ components:
             - ADMIN
             - USER
           description: 사용자 권한
+        isDeleted:
+          type: boolean
+          description: 사용자 삭제됐는지 여부
       required:
         - userId
         - name
@@ -3042,8 +3047,7 @@ components:
         - phoneNumber
         - telephoneNumber
         - role
-      x-tags:
-        - dto
+        - isDeleted
     UserSignupRequestDto:
       title: UserSignupRequestDto
       type: object
