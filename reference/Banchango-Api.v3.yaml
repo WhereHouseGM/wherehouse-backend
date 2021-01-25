@@ -2228,6 +2228,10 @@ paths:
       responses:
         '200':
           description: 조회에 성공한 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EstimateDetailDto'
         '400':
           description: 잘못된 요청을 보낸 경우
           content:
@@ -3745,6 +3749,15 @@ components:
         monthlyAverageRelease:
           type: integer
           description: 월간 평균 출고량
+        warehouse:
+          type: object
+          description: 창고 정보
+          required:
+            - name
+          properties:
+            name:
+              type: string
+              description: 창고 이름
       required:
         - items
         - content
@@ -3752,6 +3765,7 @@ components:
         - status
         - id
         - monthlyAverageRelease
+        - warehouse
     EstimateSummaryDto:
       title: EstimateSummaryDto
       type: object
