@@ -261,6 +261,7 @@ paths:
                     phoneNumber: '01029093199'
                     companyName: TEST COMP
                     role: USER
+                    isDeleted: false
         '400':
           description: 'Bad Request : Request Body가 잘못된 경우'
           content:
@@ -406,6 +407,7 @@ paths:
                     telephoneNumber: '0229093199'
                     phoneNumber: '01029093199'
                     role: USER
+                    isDeleted: false
         '401':
           description: 'Unauthorized : Bearer 토큰 값에 문제가 있거나 토큰값과 다른 사용자의 정보를 보려고 하는 경우'
           content:
@@ -472,6 +474,7 @@ paths:
                     telephoneNumber: '027021033'
                     phoneNumber: '01029093199'
                     role: USER
+                    isDeleted: false
         '400':
           description: 'Bad Request : Request Body에 문제가 있는 경우'
           content:
@@ -970,28 +973,31 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                description: ''
-                minItems: 1
-                uniqueItems: true
-                items:
-                  type: object
-                  properties:
-                    warehouseId:
-                      description: 해당 창고의 id 값입니다.
-                      type: integer
-                    name:
-                      type: string
-                      minLength: 1
-                      description: 창고 이름입니다.
-                    createdAt:
-                      type: string
-                      minLength: 1
-                      description: 창고 요청이 등록된 날짜입니다.
-                  required:
-                    - warehouseId
-                    - name
-                    - createdAt
+                type: object
+                properties:
+                  requests:
+                    type: array
+                    description: ''
+                    minItems: 1
+                    uniqueItems: true
+                    items:
+                      type: object
+                      properties:
+                        warehouseId:
+                          description: 해당 창고의 id 값입니다.
+                          type: integer
+                        name:
+                          type: string
+                          minLength: 1
+                          description: 창고 이름입니다.
+                        lastModifiedAt:
+                          type: string
+                          minLength: 1
+                          description: 창고 요청이 수정된 날짜입니다.
+                      required:
+                        - warehouseId
+                        - name
+                        - lastModifiedAt
               examples:
                 200_Example:
                   value:
@@ -3778,9 +3784,9 @@ components:
         name:
           type: string
           description: 창고 이름
-        createdAt:
+        lastModifiedAt:
           type: string
-          description: 견적 문의 생성한 날짜
+          description: 견적 문의 수정한 날짜
         id:
           type: integer
           description: 견적 문의 id
@@ -3788,7 +3794,7 @@ components:
         - warehouseId
         - status
         - name
-        - createdAt
+        - lastModifiedAt
         - id
   responses:
     WarehouseSearchResponseDto:
