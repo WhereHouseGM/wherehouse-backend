@@ -2200,7 +2200,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorDto'
-      description: '호출 허용하는 사용자 타입: `OWNER`, `SHIPPER`'
+      description: |-
+        호출 허용하는 사용자 타입: `OWNER`, `SHIPPER`
+
+        관리자 로그인에서는 탈퇴한 사용자인지 검사하지 않습니다
       tags:
         - 관리자
         - v3
