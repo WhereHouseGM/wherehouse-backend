@@ -2266,6 +2266,54 @@ paths:
       security:
         - Authorization: []
       description: '호출 허용하는 사용자 타입: `OWNER`, `SHIPPER`'
+  '/v3/admin/warehouses/{warehouseId}/images':
+    parameters:
+      - schema:
+          type: string
+        name: warehouseId
+        in: path
+        required: true
+    get:
+      summary: '[관리자] 창고 이미지 조회'
+      tags:
+        - 관리자
+      responses:
+        '200':
+          description: 성공적으로 조회한 경우
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  images:
+                    type: array
+                    description: 이미지 목록
+                    items:
+                      $ref: '#/components/schemas/ImageInfoResponseDto'
+                required:
+                  - images
+        '401':
+          description: jwt 토큰에 문제가 있는 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '403':
+          description: 관리자가 아닌 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+        '404':
+          description: 창고가 없는 경우
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDto'
+      operationId: get-v3-admin-warehouses-warehouseId-images
+      description: '호출 허용하는 사용자 타입: `OWNER`, `SHIPPER`'
+      security:
+        - Authorization: []
 components:
   schemas:
     NewWarehouseRequestDto:
