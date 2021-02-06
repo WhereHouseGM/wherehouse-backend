@@ -2290,8 +2290,11 @@ paths:
                     description: 이미지 목록
                     items:
                       $ref: '#/components/schemas/ImageInfoResponseDto'
+                  warehouseName:
+                    type: string
                 required:
                   - images
+                  - warehouseName
         '401':
           description: jwt 토큰에 문제가 있는 경우
           content:
@@ -2300,12 +2303,6 @@ paths:
                 $ref: '#/components/schemas/ErrorDto'
         '403':
           description: 관리자가 아닌 경우
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorDto'
-        '404':
-          description: 창고가 없는 경우
           content:
             application/json:
               schema:
