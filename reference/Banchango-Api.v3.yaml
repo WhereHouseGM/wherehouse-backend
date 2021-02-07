@@ -1793,7 +1793,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorDto'
         '404':
-          description: 창고가 없는 경우
+          description: 창고가 없거나 삭제될 메인 이미지가 존재하지 않는 경우
           content:
             application/json:
               schema:
