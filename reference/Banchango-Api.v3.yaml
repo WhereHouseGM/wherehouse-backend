@@ -2315,7 +2315,15 @@ paths:
     get:
       summary: 관리자용 회원 정보 조회
       tags: []
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserInfoResponseDto'
       operationId: get-v3-admin-users
       description: 관리자 페이지에서 회원들의 정보를 조회합니다.
       parameters:
