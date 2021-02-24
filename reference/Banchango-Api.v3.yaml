@@ -2345,6 +2345,40 @@ paths:
           name: size
           description: 한 페이지 당 가져올 결과의 개수
           required: true
+  /v3/admin/users/search:
+    get:
+      summary: 관리자용 회원 검색(회사 명으로)
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserInfoResponseDto'
+      operationId: get-v3-admin-users-search
+      description: 회원을 창고명으로 검색합니다.
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          description: 로그인 시 발급받은 JWT Access Token
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: page
+          description: 페이징 처리를 위한 페이지 인덱스(0-based)
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: size
+          description: 한 페이지당 조회할 개수
+          required: true
 components:
   schemas:
     NewWarehouseRequestDto:
